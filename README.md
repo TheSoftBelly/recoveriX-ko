@@ -29,44 +29,10 @@ recoveriX 한국어 공식 웹사이트 - Next.js + Supabase + Vercel
 
 ## 🔧 개발 환경 설정
 
-### 1. 프로젝트 클론
-```bash
-git clone <repository-url>
-cd recoverix-website
-```
-
-### 2. 패키지 설치
-```bash
-npm install
-```
-
-### 3. 환경변수 설정
-`.env.local` 파일을 생성하고 다음 내용을 추가:
-
-```env
-# Supabase 설정
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-
-# 기타 설정
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
-### 4. Supabase 데이터베이스 설정
-
-Supabase 프로젝트를 생성한 후, `supabase/schema.sql` 파일의 SQL을 실행하여 데이터베이스를 초기화합니다.
-
-### 5. 개발 서버 실행
-```bash
-npm run dev
-```
-
-서버가 `http://localhost:3000`에서 실행됩니다.
-
 ## 🚀 배포
 
 ### Vercel 배포
+
 1. [Vercel](https://vercel.com/)에 로그인
 2. GitHub 리포지토리 연결
 3. 환경변수 설정:
@@ -78,15 +44,19 @@ npm run dev
 ## 📊 데이터베이스 스키마
 
 ### users
+
 - 사용자 정보 (이름, 이메일, 역할)
 
 ### qna_posts
+
 - QnA 게시글 (제목, 내용, 작성자, 비밀글 여부, 상태)
 
 ### qna_comments
+
 - QnA 댓글/답변 (내용, 작성자, 관리자 여부)
 
 ### notices
+
 - 공지사항 (관리자만 작성 가능)
 
 ## 🔐 보안 기능
@@ -117,5 +87,3 @@ npm run dev
 ## 📞 문의
 
 recoveriX Korea - [공식 웹사이트](https://recoverix-korea.vercel.app)
-
-프로젝트 링크: [https://github.com/your-username/recoverix-website](https://github.com/your-username/recoverix-website)
