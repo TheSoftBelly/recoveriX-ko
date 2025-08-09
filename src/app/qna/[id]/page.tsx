@@ -99,7 +99,7 @@ export default function QuestionDetailPage({ params }: PageProps) {
   return (
     <div className={styles.pageContainer}>
       <Header user={null} />
-      
+
       <main className={styles.detailMain}>
         {/* 상세페이지 헤더 */}
         <div className={styles.detailHeader}>
@@ -115,19 +115,27 @@ export default function QuestionDetailPage({ params }: PageProps) {
             <h2 className={styles.questionTitle}>{mockQuestion.title}</h2>
             <div
               className={`${styles.statusBadge} ${
-                mockQuestion.status === "answered" ? styles.answered : styles.pending
+                mockQuestion.status === "answered"
+                  ? styles.answered
+                  : styles.pending
               }`}
             >
               {mockQuestion.status === "answered" ? "답변완료" : "답변대기"}
             </div>
           </div>
-          
+
           <p className={styles.questionContent}>{mockQuestion.content}</p>
-          
+
           <div className={styles.questionMeta}>
-            <span className={styles.author}>👤 작성자: {mockQuestion.author}</span>
-            <span className={styles.date}>📅 작성일: {mockQuestion.createdAt}</span>
-            <span className={styles.views}>👁️ 조회수: {mockQuestion.views}회</span>
+            <span className={styles.author}>
+              👤 작성자: {mockQuestion.author}
+            </span>
+            <span className={styles.date}>
+              📅 작성일: {mockQuestion.createdAt}
+            </span>
+            <span className={styles.views}>
+              👁️ 조회수: {mockQuestion.views}회
+            </span>
           </div>
         </section>
 
@@ -137,7 +145,9 @@ export default function QuestionDetailPage({ params }: PageProps) {
             <div className={styles.answersHeader}>
               <span className={styles.answersIcon}>💬</span>
               <h3 className={styles.answersTitle}>답변</h3>
-              <div className={styles.answerCount}>{mockQuestion.answers.length}</div>
+              <div className={styles.answerCount}>
+                {mockQuestion.answers.length}
+              </div>
             </div>
 
             {/* 답변 목록 */}
@@ -149,18 +159,22 @@ export default function QuestionDetailPage({ params }: PageProps) {
                       <div className={styles.authorAvatar}>👨‍⚕️</div>
                       <div className={styles.authorDetails}>
                         <div className={styles.authorNameLine}>
-                          <span className={styles.authorName}>{answer.author.name}</span>
+                          <span className={styles.authorName}>
+                            {answer.author.name}
+                          </span>
                           {answer.author.role === "admin" && (
                             <span className={styles.adminBadge}>관리자</span>
                           )}
                         </div>
-                        <span className={styles.answerTime}>{answer.createdAt}</span>
+                        <span className={styles.answerTime}>
+                          {answer.createdAt}
+                        </span>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className={styles.answerContent}>
-                    {answer.content.split('\n').map((line, index) => (
+                    {answer.content.split("\n").map((line, index) => (
                       <p key={index}>{line}</p>
                     ))}
                   </div>
@@ -173,7 +187,7 @@ export default function QuestionDetailPage({ params }: PageProps) {
         {/* 답변 작성 영역 */}
         <section className={styles.answerForm}>
           <h3 className={styles.formTitle}>✍️ 답변 작성하기</h3>
-          
+
           <form onSubmit={handleSubmitAnswer}>
             <div className={styles.inputGroup}>
               <textarea
@@ -185,7 +199,7 @@ export default function QuestionDetailPage({ params }: PageProps) {
                 required
               />
             </div>
-            
+
             <button type="submit" className={styles.submitButton}>
               답변 등록
             </button>

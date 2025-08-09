@@ -19,7 +19,7 @@ export default function LoginPage() {
   return (
     <div className={styles.pageContainer}>
       <Header user={null} />
-      
+
       <main className={styles.loginMain}>
         {/* 왼쪽 이미지 영역 */}
         <div className={styles.imageContainer}>
@@ -33,12 +33,16 @@ export default function LoginPage() {
               {/* 폼 제목 */}
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>로그인</h1>
-                <p className={styles.formSubtitle}>계정에 액세스하려면 자격 증명을 입력하세요</p>
+                <p className={styles.formSubtitle}>
+                  계정에 액세스하려면 자격 증명을 입력하세요
+                </p>
               </div>
 
               {/* 이메일 필드 */}
               <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>Email address / 이메일 주소</label>
+                <label className={styles.inputLabel}>
+                  Email address / 이메일 주소
+                </label>
                 <div className={styles.inputWrapper}>
                   <input
                     type="email"
@@ -54,8 +58,13 @@ export default function LoginPage() {
               {/* 비밀번호 필드 */}
               <div className={styles.inputGroup}>
                 <div className={styles.passwordHeader}>
-                  <label className={styles.inputLabel}>Password / 비밀번호</label>
-                  <Link href="/forgot-password" className={styles.forgotPassword}>
+                  <label className={styles.inputLabel}>
+                    Password / 비밀번호
+                  </label>
+                  <Link
+                    href="/forgot-password"
+                    className={styles.forgotPassword}
+                  >
                     비밀번호 찾기
                   </Link>
                 </div>

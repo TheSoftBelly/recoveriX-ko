@@ -20,7 +20,7 @@ export default function SignupPage() {
   return (
     <div className={styles.pageContainer}>
       <Header user={null} />
-      
+
       <main className={styles.signupMain}>
         {/* 왼쪽 이미지 영역 */}
         <div className={styles.imageContainer}>
@@ -34,7 +34,9 @@ export default function SignupPage() {
               {/* 폼 제목 */}
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>회원가입</h1>
-                <p className={styles.formSubtitle}>Enter your Credentials to access your account</p>
+                <p className={styles.formSubtitle}>
+                  Enter your Credentials to access your account
+                </p>
               </div>
 
               {/* 닉네임 필드 */}
@@ -54,7 +56,9 @@ export default function SignupPage() {
 
               {/* 이메일 필드 */}
               <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>Email address / 이메일 주소</label>
+                <label className={styles.inputLabel}>
+                  Email address / 이메일 주소
+                </label>
                 <div className={styles.inputWrapper}>
                   <input
                     type="email"
@@ -70,7 +74,8 @@ export default function SignupPage() {
               {/* 비밀번호 필드 */}
               <div className={styles.inputGroup}>
                 <label className={styles.inputLabel}>
-                  Password / 비밀번호<br />
+                  Password / 비밀번호
+                  <br />
                   <span className={styles.passwordHint}>
                     ( 8~16자의 영문 대소문자, 숫자, 특수문자만 가능합니다. )
                   </span>
