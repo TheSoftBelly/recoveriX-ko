@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { createSupabaseClient } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/components/Header.module.scss";
@@ -32,8 +33,15 @@ export default function Header({ user }: HeaderProps) {
   return (
     <header className={styles.header}>
       {/* 로고 */}
-      <Link href="/" className={styles.logo}>
-        <span className="sr-only">recoveriX</span>
+      <Link href="/" className={styles.logoLink}>
+        <Image 
+          src="/recoveriX-logo.svg" 
+          alt="recoveriX" 
+          width={200} 
+          height={36}
+          priority
+          className={styles.logo}
+        />
       </Link>
 
       {/* 데스크톱 네비게이션 */}
