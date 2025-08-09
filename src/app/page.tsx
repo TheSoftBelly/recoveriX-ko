@@ -1,323 +1,453 @@
-import { createSupabaseServerClient } from "@/lib/supabase-server";
+// import { createSupabaseServerClient } from "@/lib/supabase-server";
 import Header from "@/components/layout/Header";
+import VideoCarousel from "@/components/VideoCarousel";
 import Link from "next/link";
-import { ArrowRight, Brain, Users, Award, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import styles from "@/styles/pages/HomePage.module.scss";
 
-export default async function HomePage() {
-  const supabase = createSupabaseServerClient();
+export default function MainPage() {
+  // 사용자 정보를 가져오는 부분을 임시로 비활성화하여 타입 에러 해결
+  const userData = null;
 
-  // 현재 사용자 정보 가져오기
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  let user = null;
-  if (session?.user) {
-    const { data: userData } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
-    user = userData;
-  }
-
-  // 최근 QnA 게시글 가져오기
-  const { data: recentQuestions } = await supabase
-    .from("qna_posts")
-    .select(
-      `
-      id,
-      title,
-      status,
-      created_at,
-      is_private,
-      users:author_id (name)
-    `
-    )
-    .eq("is_private", false) // 공개글만
-    .order("created_at", { ascending: false })
-    .limit(3);
+  // const supabase = await createSupabaseServerClient();
+  // const { data: { user } } = await supabase.auth.getUser();
+  // let userData = null;
+  // if (user) {
+  //   const { data, error } = await supabase
+  //     .from("users")
+  //     .select("*")
+  //     .eq("id", user.id)
+  //     .single();
+  //   if (!error && data) {
+  //     userData = data;
+  //   }
+  // }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header user={user} />
+    <div className={styles.pageContainer}>
+      <Header user={userData} />
 
-      {/* 히어로 섹션 */}
-      <section className="relative bg-gradient-to-r from-emerald-600 to-green-700 text-white">
-        <div className="absolute inset-0 bg-black opacity-10"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              recoveriX와 함께
-              <br />
-              <span className="text-emerald-200">새로운 회복의 길</span>을
-              걸어보세요
-            </h1>
-            <p className="text-xl md:text-2xl text-emerald-100 mb-8 max-w-3xl mx-auto">
-              recoveriX는 완전히 새롭고 혁신적인 치료법입니다. 뇌-컴퓨터
-              인터페이스 기술을 통해 재활의 새로운 가능성을 제시합니다.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/qna"
-                className="bg-white text-emerald-600 px-8 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors inline-flex items-center"
-              >
-                질문하기
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <Link
-                href="/about"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition-colors"
-              >
-                더 알아보기
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 주요 특징 섹션 */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              왜 recoveriX인가요?
+      <main>
+        {/* 메인 히어로 섹션 */}
+        <section className={styles.heroSection}>
+          <video className={styles.heroVideo} autoPlay muted loop playsInline>
+            <source
+              src="https://recoverix.com/wp-content/uploads/2024/07/Final-231110-Recoverix-Awareness-Full-Ohne-Deutsche-Einblendung-smaller.mp4"
+              type="video/mp4"
+            />
+          </video>
+          <div className={styles.heroOverlay}></div>
+          <div className={styles.heroContent}>
+            <h1 className={styles.heroTitle}>새로운 시작을 해보세요</h1>
+            <h2 className={`${styles.heroSubtitle} ${styles.noBreak}`}>
+              뇌졸중 및 다발성 경화증에 대한 신경 재활
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              혁신적인 기술과 입증된 효과로 재활치료의 새로운 표준을 제시합니다
+            <p className={styles.heroDescription}>
+              recoveriX는 뇌가 스스로 재구성하여 잃어버린 운동 기능을 다시
+              학습하도록 돕는 뇌-컴퓨터 인터페이스 기술입니다.
             </p>
           </div>
+        </section>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="w-8 h-8 text-emerald-600" />
+        {/* 뉴스 미디어 로고 섹션 */}
+        <section className={styles.mediaSection}>
+          <div className={styles.mediaContainer}>
+            <div className={styles.mediaLogos}>
+              <div className={styles.mediaLogo}>
+                <Image
+                  src="/forbes-1.svg"
+                  alt="Forbes"
+                  width={240}
+                  height={123}
+                  priority
+                />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                혁신적인 기술
-              </h3>
-              <p className="text-gray-600">
-                뇌-컴퓨터 인터페이스(BCI) 기술을 활용한 차세대 재활치료 시스템
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-emerald-600" />
+              <div className={styles.mediaLogo}>
+                <Image
+                  src="/newyorkweekly-1.svg"
+                  alt="New York Weekly"
+                  width={240}
+                  height={123}
+                  priority
+                />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                입증된 효과
-              </h3>
-              <p className="text-gray-600">
-                임상시험을 통해 검증된 안전하고 효과적인 치료 결과
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
-              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-emerald-600" />
+              <div className={styles.mediaLogo}>
+                <Image
+                  src="/thesciencetimes-1.svg"
+                  alt="The Science Times"
+                  width={240}
+                  height={123}
+                  priority
+                />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                전문가 지원
-              </h3>
-              <p className="text-gray-600">
-                숙련된 의료진과 함께하는 체계적이고 개인화된 치료 과정
-              </p>
+              <div className={styles.mediaLogo}>
+                <Image
+                  src="/benzinga-1.svg"
+                  alt="Benzinga"
+                  width={240}
+                  height={123}
+                  priority
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 최근 QnA 섹션 */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                최근 질문과 답변
-              </h2>
-              <p className="text-gray-600">사용자들의 궁금증을 확인해보세요</p>
-            </div>
-            <Link
-              href="/qna"
-              className="text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center"
-            >
-              전체보기
-              <ArrowRight className="ml-1 w-4 h-4" />
-            </Link>
-          </div>
-
-          {recentQuestions && recentQuestions.length > 0 ? (
-            <div className="grid md:grid-cols-3 gap-6">
-              {recentQuestions.map((question) => (
-                <Link
-                  key={question.id}
-                  href={`/qna/${question.id}`}
-                  className="bg-white p-6 rounded-lg border border-gray-200 hover:border-emerald-200 hover:shadow-md transition-all"
+        {/* 독립성 극대화 섹션 */}
+        <section className={styles.contentSection}>
+          <div className={styles.contentContainer}>
+            <div className={styles.contentGrid}>
+              <div className={styles.contentText}>
+                <h2 className={styles.contentTitle}>독립성을 극대화하세요</h2>
+                <h3 className={styles.contentSubtitle}>기능적 능력 향상</h3>
+                <p className={styles.contentDescription}>
+                  뇌졸중, 다발성 경화증 또는 외상성 뇌 손상이 움직이는 능력에
+                  영향을 미치더라도 반드시 상실되는 것은 아닙니다! 이러한 이유로
+                  g.tec 의료 공학에서는 뇌가 스스로 재연결되도록 돕는 뇌-컴퓨터
+                  인터페이스 기술을 기반으로 한 독특한 재활 접근 방식인
+                  recoveriX 신경기술을 개발했습니다.
+                </p>
+                <p className={styles.contentDescription}>
+                  recoveriX는 손이나 발의 움직임을 상상하는 작업을 제공하는
+                  동시에 근육 자극과 시각적 시뮬레이션을 통해 실시간으로
+                  피드백을 제공합니다. 이 과정은 뇌 내의 신경가소성을 유도하여
+                  잃어버린 운동 기능을 다시 학습합니다.
+                </p>
+                <button className={styles.contentButton}>
+                  다발성 경화증을 위한 recoveriX
+                </button>
+              </div>
+              <div className={styles.contentImage}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className={styles.contentVideo}
                 >
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`
-                      text-xs px-2 py-1 rounded-full
-                      ${
-                        question.status === "answered"
-                          ? "bg-emerald-100 text-emerald-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }
-                    `}
-                    >
-                      {question.status === "answered" ? "답변완료" : "답변대기"}
-                    </span>
-                    <MessageCircle className="w-4 h-4 text-gray-400" />
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
-                    {question.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {question.users?.name || "익명"} •{" "}
-                    {new Date(question.created_at).toLocaleDateString("ko-KR")}
-                  </p>
-                </Link>
-              ))}
+                  <source
+                    src="https://recoverix.com/wp-content/uploads/2024/04/web-Website-Video-1X1-Fuss.mp4?_=1"
+                    type="video/mp4"
+                  />
+                </video>
+              </div>
             </div>
-          ) : (
-            <div className="text-center py-12 bg-gray-50 rounded-lg">
-              <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                아직 질문이 없습니다
-              </h3>
-              <p className="text-gray-600 mb-4">첫 번째 질문을 올려보세요!</p>
-              <Link
-                href="/qna"
-                className="bg-emerald-600 text-white px-6 py-2 rounded-md hover:bg-emerald-700 transition-colors"
-              >
-                질문하러 가기
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CTA 섹션 */}
-      <section className="bg-emerald-600 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            recoveriX에 대해 더 궁금하신가요?
-          </h2>
-          <p className="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
-            전문가들이 여러분의 질문에 성심껏 답변해드립니다
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/qna"
-              className="bg-white text-emerald-600 px-8 py-3 rounded-lg font-semibold hover:bg-emerald-50 transition-colors inline-flex items-center justify-center"
-            >
-              질문하기
-              <MessageCircle className="ml-2 w-5 h-5" />
-            </Link>
-            <Link
-              href="/contact"
-              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-emerald-600 transition-colors"
-            >
-              직접 문의하기
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* 새로운 시작 섹션 */}
+        <section className={styles.contentSection}>
+          <div className={styles.contentContainer}>
+            <div className={`${styles.contentGrid} ${styles.reverse}`}>
+              <div className={styles.contentImage}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className={styles.contentVideo}
+                >
+                  <source
+                    src="https://recoverix.com/wp-content/uploads/2024/04/web-Website-Video-1X1-Hand.mp4?_=2"
+                    type="video/mp4"
+                  />
+                </video>
+              </div>
+              <div className={`${styles.contentText} ${styles.textRight}`}>
+                <h2 className={styles.contentTitle}>새로운 시작을 해보세요</h2>
+                <h3 className={styles.contentSubtitle}>
+                  재활에 늦은 때란 없습니다!
+                </h3>
+                <p className={styles.contentDescription}>
+                  recoveriX는 뇌졸중 또는 다발성 경화증 환자가 통증, 경직 및
+                  떨림을 감소시켜 운동 기능, 집중력, 수동적 관절 운동, 민감도,
+                  방광 조절, 성기능, 균형, 보행 및 얼굴, 신체 또는 사지의
+                  무감각을 더욱 개선하는 데 도움이 됩니다. 특히 환자가 피로를 덜
+                  느끼고 발이 얼거나 발이 떨어지는 현상이 감소한다는 점은
+                  놀랍습니다.
+                </p>
+                <p className={styles.contentDescription}>
+                  recoveriX는 더 빠르고 성공적인 회복을 위한 기회로 물리 및 작업
+                  치료를 보완합니다. 급성, 아급성, 만성 상태에서 사용할 수
+                  있습니다. 심지어 다발성 경화증 진단이나 뇌졸중 후 10년, 20년,
+                  30년 후에도 사용할 수 있습니다!
+                </p>
+                <button className={styles.contentButton}>
+                  뇌졸증을 위한 recoveriX
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 전문의의 의견 섹션 */}
+        <section className={styles.doctorSection}>
+          <div className={styles.contentContainer}>
+            <div className={styles.doctorGrid}>
+              <div className={styles.doctorText}>
+                <h2 className={styles.contentTitle}>
+                  recoveriX에 대한 신경과 전문의의 의견
+                </h2>
+                <h3 className={styles.contentSubtitle}>
+                  Tim von Oertzen 박사와의 인터뷰
+                </h3>
+                <p className={styles.contentDescription}>
+                  최근 인터뷰에서 유명한 신경학자인 Tim von Oertzen 박사는
+                  뇌졸중 및 다발성 경화증 환자를 위한 recoveriX 신경 재활의
+                  이점을 강조했습니다. 그는 장애가 있는 사람들의 상지와 하지를
+                  훈련할 수 있는 recoveriX의 잠재력을 강조하면서 직접 경험한
+                  운동, 보행, 균형 및 움직임 제어의 상당한 개선을 언급했습니다.
+                </p>
+                <button className={styles.contentButton}>
+                  뇌졸증을 위한 recoveriX
+                </button>
+              </div>
+              <div className={styles.doctorImage}>
+                <iframe
+                  src="https://www.youtube.com/embed/SPruWQz968U"
+                  title="Tim von Oertzen 박사 인터뷰"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 전후결과 섹션 */}
+        <section className={styles.resultsSection}>
+          <div className={styles.resultsContainer}>
+            <h2 className={styles.resultsTitle}>recoveriX 전후 결과</h2>
+            <p className={styles.resultsDescription}>
+              이 다발성 경화증 환자는 시간 제한 25피트 걷기 테스트(T25FW)를
+              실시했습니다. 이 검사는 환자가 25피트(즉, 7.62m)를 걷는 데 걸리는
+              시간(초)을 측정하여 보행 속도를 평가합니다. 이 검사는 다발성
+              경화증 환자를 평가하는 데 신뢰할 수 있고 권장되는 척도입니다.
+            </p>
+            <VideoCarousel />
+          </div>
+        </section>
+
+        {/* CEO 말 섹션 */}
+        <section className={styles.ceoSection}>
+          <div className={styles.ceoContainer}>
+            <div className={styles.ceoImage}>
+              <div className={styles.ceoAvatar}></div>
+              <div className={styles.ceoPhoto}></div>
+            </div>
+            <div className={styles.ceoText}>
+              <p className={styles.ceoQuote}>
+                recoveriX 연구에서 우리는 recoveriX 치료법이 뇌졸중 후 10년,
+                20년 또는 30년이 지나도 매우 효과적이 라는 것을 입증했습니다.
+              </p>
+              <p className={styles.ceoName}>
+                Dr. Christoph Guger
+                <br />
+                g.tec medical engineering GmbH의 CEO 겸 창립자
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 7가지 표준치료법 섹션 */}
+        <section className={styles.therapySection}>
+          <div className={styles.therapyContainer}>
+            <div className={styles.therapyHeading}>
+              <h2 className={styles.therapyTitle}>7가지 표준 치료법의 융합</h2>
+              <p className={styles.therapyDescription}>
+                신경 장애로 인해 움직이는 능력이 억제될 수도 있지만, 움직임을
+                상상하는 능력은 그렇지 않을 수도 있습니다! 손이나 발의 움직임을
+                상상해 보세요. 상상은 실제 손이나 발의 움직임과 거의 동일한 두뇌
+                활동을 촉발합니다. 이것이 바로 recoveriX가 치료에 사용하는
+                것입니다! 세 가지 종류의 뉴로피드백을 통해 recoveriX는 성공적인
+                치료 가능성을 높여줍니다.
+              </p>
+            </div>
+            <div className={styles.therapyListContainer}>
+              <div className={styles.therapyList}>
+                <div className={styles.therapyItem}>
+                  <div
+                    className={`${styles.therapyIcon} ${styles.therapy1}`}
+                  ></div>
+                  <h3 className={styles.therapyItemTitle}>모터 이미지(MI)</h3>
+                  <p className={styles.therapyItemDescription}>
+                    손이나 발의 움직임을 상상해 보세요. recoveriX는 운동
+                    이미지를 반영하는 뇌파를 측정하고 분석하여 운동 이미지가
+                    올바른지 판단합니다.
+                  </p>
+                  <p className={styles.therapyItemDescription}>
+                    운동 이미지가 인식되면 가상 현실과 기능적 전기 자극이
+                    활성화됩니다.
+                  </p>
+                  <h4 className={styles.therapyItemTitle}>긍정적인 영향</h4>
+                  <p className={styles.therapyItemDescription}>
+                    기존 물리치료와 달리 BCI는 사람들이 해당 동작을상상할 때만
+                    실제 움직임이 발생함을 보장합니다.
+                  </p>
+                </div>
+                <div className={styles.therapyItem}>
+                  <div
+                    className={`${styles.therapyIcon} ${styles.therapy2}`}
+                  ></div>
+                  <h3 className={styles.therapyItemTitle}>가상현실 (VR)</h3>
+                  <p className={styles.therapyItemDescription}>
+                    화면의 시뮬레이션을 통해 모터 이미지를 볼 수 있습니다.
+                    환자들은 화면 앞에 앉아 아바타의 손과 발을 봅니다. 이는
+                    환자에게 거울 앞에서 자신의 움직임을 지켜보는 듯한 느낌을
+                    줍니다.
+                  </p>
+                  <h4 className={styles.therapyItemTitle}>긍정적인 영향</h4>
+                  <p className={styles.therapyItemDescription}>
+                    recoveriX가 움직임의 운동 이미지(예: 오른손 움직임)를
+                    인식하면 아바타는 오른손을 움직입니다.
+                  </p>
+                </div>
+                <div className={styles.therapyItem}>
+                  <div
+                    className={`${styles.therapyIcon} ${styles.therapy3}`}
+                  ></div>
+                  <h3 className={styles.therapyItemTitle}>전기 자극(FES)</h3>
+                  <p className={styles.therapyItemDescription}>
+                    이 자극을 위해 예를 들어 손목의 배측 굴곡근이나 다리에 두
+                    개의 전극을 배치합니다. 시스템이 올바른 운동 이미지를
+                    인식하면 근육이 전기적으로 자극되어 실제 움직임이
+                    발생합니다.
+                  </p>
+                  <p className={styles.therapyItemDescription}>
+                    이는 움직임을 시작하는 방법을 다시 배우는 데 도움이 되어
+                    움직임을 다시 가능하게 만듭니다.
+                  </p>
+                  <h4 className={styles.therapyItemTitle}>긍정적인 영향</h4>
+                  <p className={styles.therapyItemDescription}>
+                    환자는 경험이 환자에게 원하는 목표, 즉 다시 움직일 수 있다는
+                    것을 반복적으로 상기시키기 때문에 동기를 부여받습니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 환자 후기 섹션 */}
+        <section className={styles.testimonialSection}>
+          <div className={styles.testimonialContainer}>
+            <div className={styles.testimonialImage}>
+              <div className={styles.testimonialAvatar}></div>
+              <div className={styles.testimonialPhoto}></div>
+            </div>
+            <div className={styles.testimonialText}>
+              <p className={styles.testimonialQuote}>
+                reoveriX는 내 하루를 다시 살 가치가 있게 만들어주었습니다. 치료
+                이후 오른손의 운동 기능이 많이 좋아졌습니다. 나는 다시 손을
+                움직이고 제어하는 법을 배웠고 심지어 미용사로서의 직업도
+                되찾았습니다. 나는 이것이 가능할 것이라고 결코 상상하지
+                못했습니다. 이제 내 팔과 손은 다시 내 몸에 속하게 되었습니다.
+              </p>
+              <p className={styles.testimonialName}>
+                Astrid Brandstätter
+                <br />
+                이전 recoveriX 환자, 오스트리아
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* recoveriX at Home 섹션 */}
+        <section className={styles.appSection}>
+          <div className={styles.appContainer}>
+            <div className={styles.appImage}>
+              <Image
+                src="/images/recoverix-at-home-app.png"
+                alt="recoveriX at Home 앱"
+                fill
+                sizes="(max-width: 768px) 350px, (max-width: 480px) 280px, 400px"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+            <div className={styles.appText}>
+              <p className={styles.appLabel}>Android 및 iOS 기기용 모바일 앱</p>
+              <h2 className={styles.appTitle}>recoveriX at Home</h2>
+              <p className={styles.appDescription}>
+                정기적인 운동 심상은 신경 경로를 재활성화하고, 신경 가소성을
+                촉진하며, 뇌졸중, 다발성 경화증 또는 외상성 뇌 손상과 같은 부상
+                후 회복 과정에 도움을 줄 수 있습니다.
+              </p>
+              <p className={styles.appDescription}>
+                g.tec 메디컬 엔지니어링에서 개발한 새로운 앱 recoveriX at Home을
+                만나보세요. 이 앱은 recoveriX 고객이 가정에서 운동 심상 훈련을
+                수행하여 운동 기능을 향상할 수 있도록 설계되었습니다.
+              </p>
+              <p className={styles.appLinks}>
+                이 앱은{" "}
+                <a href="#" className={styles.appLink}>
+                  Android
+                </a>{" "}
+                및{" "}
+                <a href="#" className={styles.appLink}>
+                  Apple
+                </a>{" "}
+                기기에서 이용할 수 있습니다!
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 세계지도 섹션 */}
+        <section className={styles.mapSection}>
+          <div className={styles.mapContainer}>
+            <div className={styles.mapImage}></div>
+            <a href="#" className={styles.mapLink}>
+              당신 근처의 recoveriX
+            </a>
+          </div>
+        </section>
+      </main>
 
       {/* 푸터 */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="w-32 h-8 bg-gradient-to-r from-emerald-500 to-green-600 rounded text-white flex items-center justify-center font-bold text-sm mb-4">
-                recoveriX
-              </div>
-              <p className="text-gray-400 text-sm">
-                recoveriX는 g.tec medical engineering GmbH의 제품입니다.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">서비스</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-white transition-colors"
-                  >
-                    회사소개
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/results"
-                    className="hover:text-white transition-colors"
-                  >
-                    치료결과
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/faq"
-                    className="hover:text-white transition-colors"
-                  >
-                    자주 묻는 질문
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/qna"
-                    className="hover:text-white transition-colors"
-                  >
-                    QnA 게시판
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">지원</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-white transition-colors"
-                  >
-                    문의하기
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="hover:text-white transition-colors"
-                  >
-                    개인정보처리방침
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="hover:text-white transition-colors"
-                  >
-                    이용약관
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">연락처</h3>
-              <p className="text-sm text-gray-400">
-                더 자세한 정보가 필요하시면
-                <br />
-                언제든지 문의해 주세요.
-              </p>
-            </div>
+      <footer className={styles.footer}>
+        <div className={styles.footerContent}>
+          <div className={styles.footerLogo}></div>
+          <div className={styles.footerLinks}>
+            <Link href="/news" className={styles.footerLink}>
+              소식
+            </Link>
+            <Link href="/faq" className={styles.footerLink}>
+              자주 묻는 질문
+            </Link>
+            <Link href="/results" className={styles.footerLink}>
+              치료결과
+            </Link>
+            <Link href="/about" className={styles.footerLink}>
+              회사소개
+            </Link>
+            <Link href="/contact" className={styles.footerLink}>
+              문의
+            </Link>
           </div>
 
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 recoveriX Korea. All rights reserved.</p>
+          <div className={styles.footerSocial}>
+            <a href="#" className={styles.socialIcon}>
+              f
+            </a>
+            <a href="#" className={styles.socialIcon}>
+              t
+            </a>
+            <a href="#" className={styles.socialIcon}>
+              in
+            </a>
+            <a href="#" className={styles.socialIcon}>
+              yt
+            </a>
+            <a href="#" className={styles.socialIcon}>
+              ig
+            </a>
+          </div>
+
+          <div className={styles.footerCopyright}>
+            recoveriX는 g.tec medical engineering
+            <br />
+            GmbH의 제품입니다. 2025 © 판권 소유
           </div>
         </div>
       </footer>

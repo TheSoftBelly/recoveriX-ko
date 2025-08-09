@@ -1,216 +1,250 @@
-import { createSupabaseServerClient } from "@/lib/supabase-server";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
 import Header from "@/components/layout/Header";
-import QuestionCard from "@/components/qna/QuestionCard";
-import QuestionForm from "@/components/qna/QuestionForm";
-import { Search, Filter } from "lucide-react";
+import styles from "@/styles/pages/QnAPage.module.scss";
 
-export const metadata = {
-  title: "QnA 게시판 | recoveriX",
-  description: "recoveriX 관련 질문과 답변을 확인하세요",
-};
+interface Question {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  createdAt: string;
+  views: number;
+  answers?: number;
+  status: "pending" | "answered";
+  isPrivate: boolean;
+}
 
-export default async function QnAPage({
-  searchParams,
-}: {
-  searchParams: { filter?: string; search?: string };
-}) {
-  const supabase = createSupabaseServerClient();
+const mockQuestions: Question[] = [
+  {
+    id: 1,
+    title: "recoveriX 치료 중 주의사항이 있나요?",
+    content: "치료를 받기 전에 미리 알아둬야 할 주의사항이나 준비사항이 있다면 알려주세요.",
+    author: "김환자",
+    createdAt: "2024.01.15",
+    views: 23,
+    status: "pending",
+    isPrivate: false,
+  },
+  {
+    id: 2,
+    title: "치료 비용과 보험 적용 여부를 알고 싶습니다",
+    content: "recoveriX 치료에 필요한 비용과 건강보험 적용 가능성에 대해 문의드립니다.",
+    author: "박치료",
+    createdAt: "2024.01.12",
+    views: 156,
+    answers: 2,
+    status: "answered",
+    isPrivate: false,
+  },
+  {
+    id: 3,
+    title: "치료 효과는 언제부터 나타나기 시작하나요?",
+    content: "치료를 시작한 지 얼마나 지나야 개선 효과를 느낄 수 있는지 궁금합니다.",
+    author: "이회복",
+    createdAt: "2024.01.10",
+    views: 89,
+    answers: 1,
+    status: "answered",
+    isPrivate: false,
+  },
+  {
+    id: 4,
+    title: "비밀글입니다 (관리자만 열람 가능)",
+    content: "이 질문은 작성자와 관리자만 볼 수 있습니다.",
+    author: "김비밀",
+    createdAt: "2024.01.14",
+    views: 0,
+    status: "pending",
+    isPrivate: true,
+  },
+];
 
-  // 현재 사용자 정보 가져오기
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+export default function QnAPage() {
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [questionContent, setQuestionContent] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filter, setFilter] = useState<"all" | "pending" | "answered">("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  let user = null;
-  if (session?.user) {
-    const { data: userData } = await supabase
-      .from("users")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
-    user = userData;
-  }
+  const handleSubmitQuestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    // 질문 등록 로직
+    console.log("New question:", { questionTitle, questionContent, isPrivate });
+    setQuestionTitle("");
+    setQuestionContent("");
+    setIsPrivate(false);
+  };
 
-  // 필터 및 검색 조건 설정
-  const filter = searchParams.filter || "all";
-  const searchQuery = searchParams.search || "";
-
-  // 질문 목록 쿼리 구성
-  let query = supabase.from("qna_posts").select(`
-      *,
-      users:author_id (name),
-      qna_comments (count)
-    `);
-
-  // 비밀글 필터링 (권한에 따라)
-  if (!user || user.role !== "admin") {
-    query = query.or(`is_private.eq.false,author_id.eq.${user?.id || "null"}`);
-  }
-
-  // 상태 필터
-  if (filter === "pending") {
-    query = query.eq("status", "pending");
-  } else if (filter === "answered") {
-    query = query.eq("status", "answered");
-  }
-
-  // 검색
-  if (searchQuery) {
-    query = query.or(
-      `title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`
-    );
-  }
-
-  // 정렬
-  query = query.order("created_at", { ascending: false });
-
-  const { data: questions, error } = await query;
-
-  if (error) {
-    console.error("질문 목록 조회 실패:", error);
-    return <div>질문 목록을 불러오는데 실패했습니다.</div>;
-  }
-
-  // 댓글 개수 계산을 위한 데이터 가공
-  const questionsWithCommentCount =
-    questions?.map((question) => ({
-      ...question,
-      author_name: question.users?.name || "익명",
-      comment_count: question.qna_comments?.[0]?.count || 0,
-    })) || [];
+  const filteredQuestions = mockQuestions.filter((question) => {
+    const matchesSearch = question.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = filter === "all" || question.status === filter;
+    return matchesSearch && matchesFilter;
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header user={user} />
-
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 페이지 헤더 */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">QnA 게시판</h1>
-          <p className="text-gray-600">
-            궁금한 것이 있으시면 언제든지 질문해 주세요! 전문가들이 빠르게
-            답변드립니다.
+    <div className={styles.pageContainer}>
+      <Header user={null} />
+      
+      <main className={styles.qnaMain}>
+        {/* 페이지 제목 */}
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>QnA 게시판</h1>
+          <p className={styles.pageDescription}>
+            궁금한 것이 있으시면 언제든지 질문해 주세요! 전문가들이 빠르게 답변드립니다.
           </p>
         </div>
 
-        {/* 질문 작성 폼 (로그인 사용자만) */}
-        {user && (
-          <div className="mb-8">
-            <QuestionForm user={user} />
-          </div>
-        )}
+        {/* 질문 작성 영역 */}
+        <section className={styles.questionForm}>
+          <h2 className={styles.formTitle}>새 질문 작성</h2>
+          
+          <form onSubmit={handleSubmitQuestion}>
+            {/* 제목 입력 */}
+            <div className={styles.inputGroup}>
+              <input
+                type="text"
+                value={questionTitle}
+                onChange={(e) => setQuestionTitle(e.target.value)}
+                placeholder="질문 제목을 입력해주세요..."
+                className={styles.titleInput}
+                required
+              />
+            </div>
 
-        {/* 검색 및 필터 */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
-          {/* 검색 박스 */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            {/* 내용 입력 */}
+            <div className={styles.inputGroup}>
+              <textarea
+                value={questionContent}
+                onChange={(e) => setQuestionContent(e.target.value)}
+                placeholder="질문 내용을 자세히 작성해주세요..."
+                className={styles.contentInput}
+                rows={4}
+                required
+              />
+            </div>
+
+            {/* 공개설정 및 등록 버튼 */}
+            <div className={styles.formActions}>
+              <div className={styles.privacySettings}>
+                <div className={styles.privacyLabel}>
+                  <span className={styles.lockIcon}>🔒</span>
+                  <span>공개 설정</span>
+                </div>
+                <div className={styles.toggleGroup}>
+                  <button
+                    type="button"
+                    className={`${styles.toggleButton} ${!isPrivate ? styles.active : ""}`}
+                    onClick={() => setIsPrivate(false)}
+                  >
+                    공개
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.toggleButton} ${isPrivate ? styles.active : ""}`}
+                    onClick={() => setIsPrivate(true)}
+                  >
+                    비밀
+                  </button>
+                </div>
+              </div>
+              
+              <button type="submit" className={styles.submitButton}>
+                질문 등록
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* 검색 및 필터 영역 */}
+        <section className={styles.searchAndFilter}>
+          <div className={styles.searchBox}>
+            <span className={styles.searchIcon}>🔍</span>
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="질문 검색..."
-              defaultValue={searchQuery}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+              className={styles.searchInput}
             />
           </div>
-
-          {/* 필터 버튼들 */}
-          <div className="flex items-center space-x-2">
-            <Filter className="w-5 h-5 text-gray-400" />
-            <div className="flex rounded-lg overflow-hidden border border-gray-300">
-              <a
-                href="/qna"
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  filter === "all"
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                전체
-              </a>
-              <a
-                href="/qna?filter=pending"
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  filter === "pending"
-                    ? "bg-yellow-500 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                답변대기
-              </a>
-              <a
-                href="/qna?filter=answered"
-                className={`px-4 py-2 text-sm font-medium transition-colors ${
-                  filter === "answered"
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white text-gray-700 hover:bg-gray-50"
-                }`}
-              >
-                답변완료
-              </a>
-            </div>
+          
+          <div className={styles.filterButtons}>
+            <button
+              className={`${styles.filterButton} ${filter === "all" ? styles.active : ""}`}
+              onClick={() => setFilter("all")}
+            >
+              전체
+            </button>
+            <button
+              className={`${styles.filterButton} ${filter === "pending" ? styles.active : ""}`}
+              onClick={() => setFilter("pending")}
+            >
+              답변대기
+            </button>
+            <button
+              className={`${styles.filterButton} ${filter === "answered" ? styles.active : ""}`}
+              onClick={() => setFilter("answered")}
+            >
+              답변완료
+            </button>
           </div>
-        </div>
+        </section>
 
-        {/* 질문 목록 */}
-        <div className="space-y-4">
-          {questionsWithCommentCount.length > 0 ? (
-            questionsWithCommentCount.map((question) => (
-              <QuestionCard
-                key={question.id}
-                question={question}
-                currentUser={user}
-              />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-500 mb-4">
-                {searchQuery
-                  ? "검색 결과가 없습니다."
-                  : "아직 질문이 없습니다."}
-              </div>
-              {!user && (
-                <p className="text-sm text-gray-400 mb-4">
-                  질문을 작성하려면 로그인이 필요합니다.
-                </p>
-              )}
-              {searchQuery && (
-                <a
-                  href="/qna"
-                  className="text-emerald-600 hover:text-emerald-700 text-sm font-medium"
+        {/* 질문 리스트 */}
+        <section className={styles.questionList}>
+          {filteredQuestions.map((question) => (
+            <div
+              key={question.id}
+              className={`${styles.questionCard} ${question.isPrivate ? styles.privateCard : ""}`}
+            >
+              <div className={styles.questionHeader}>
+                <div className={styles.questionTitleArea}>
+                  {question.isPrivate && (
+                    <span className={styles.privateIcon}>🔒</span>
+                  )}
+                  <h3 className={styles.questionTitle}>
+                    <Link href={`/qna/${question.id}`}>
+                      {question.title}
+                    </Link>
+                  </h3>
+                </div>
+                <div
+                  className={`${styles.statusBadge} ${
+                    question.status === "answered" ? styles.answered : styles.pending
+                  } ${question.isPrivate ? styles.privateBadge : ""}`}
                 >
-                  전체 목록 보기
-                </a>
-              )}
+                  {question.isPrivate ? "비밀글" : question.status === "answered" ? "답변완료" : "답변대기"}
+                </div>
+              </div>
+              
+              <p className={styles.questionContent}>
+                {question.isPrivate ? "이 질문은 작성자와 관리자만 볼 수 있습니다." : question.content}
+              </p>
+              
+              <div className={styles.questionMeta}>
+                <span className={styles.author}>작성자: {question.author}</span>
+                <span className={styles.date}>작성일: {question.createdAt}</span>
+                <span className={styles.views}>
+                  조회수: {question.views}
+                  {question.answers && ` | 답변: ${question.answers}개`}
+                </span>
+              </div>
             </div>
-          )}
-        </div>
+          ))}
+        </section>
 
-        {/* 로그인 안내 (비로그인 사용자) */}
-        {!user && (
-          <div className="mt-8 bg-emerald-50 border border-emerald-200 rounded-lg p-6 text-center">
-            <h3 className="text-lg font-medium text-emerald-800 mb-2">
-              질문을 작성하고 싶으신가요?
-            </h3>
-            <p className="text-emerald-600 mb-4">
-              로그인하시면 질문을 작성하고 전문가의 답변을 받을 수 있습니다.
-            </p>
-            <div className="space-x-3">
-              <a
-                href="/login"
-                className="bg-emerald-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-emerald-700 transition-colors"
-              >
-                로그인
-              </a>
-              <a
-                href="/signup"
-                className="bg-white text-emerald-600 px-4 py-2 rounded-md text-sm font-medium border border-emerald-300 hover:bg-emerald-50 transition-colors"
-              >
-                회원가입
-              </a>
-            </div>
-          </div>
-        )}
+        {/* 페이지네이션 */}
+        <section className={styles.pagination}>
+          <button className={styles.pageButton}>‹</button>
+          <button className={`${styles.pageButton} ${styles.activePage}`}>1</button>
+          <button className={styles.pageButton}>2</button>
+          <button className={styles.pageButton}>3</button>
+          <button className={styles.pageButton}>›</button>
+        </section>
       </main>
     </div>
   );

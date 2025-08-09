@@ -1,0 +1,474 @@
+// 헤더 SCSS 모듈 - 피그마 디자인 완전 복사
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 127px;
+  background: #ffffff;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 1200px) {
+    padding: 0 24px;
+  }
+
+  @media (max-width: 1024px) {
+    height: 100px;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 768px) {
+    height: 80px;
+    padding: 0 16px;
+  }
+
+  @media (max-width: 480px) {
+    height: 70px;
+    padding: 0 12px;
+  }
+}
+
+.logo {
+  width: 257px;
+  height: 48px;
+  background-image: url("/recoveriX-logo.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 1200px) {
+    width: 220px;
+    height: 42px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 200px;
+    height: 38px;
+  }
+
+  @media (max-width: 768px) {
+    width: 160px;
+    height: 30px;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    height: 23px;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: 1440px) {
+    gap: 6px;
+  }
+
+  @media (max-width: 1200px) {
+    gap: 4px;
+  }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  height: 44px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 28px;
+  color: #1e1e1e;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #f5f5f5;
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: #f5f5f5;
+  }
+
+  @media (max-width: 1440px) {
+    font-size: 24px;
+    line-height: 24px;
+    padding: 6px 12px;
+    height: 38px;
+  }
+
+  @media (max-width: 1200px) {
+    font-size: 20px;
+    line-height: 20px;
+    padding: 4px 8px;
+    height: 32px;
+  }
+
+  // 특정 네비게이션 아이템 크기 조정
+  &.news {
+    min-width: 68px;
+  }
+
+  &.faq {
+    min-width: 186px;
+
+    @media (max-width: 1440px) {
+      min-width: 160px;
+    }
+
+    @media (max-width: 1200px) {
+      min-width: 140px;
+    }
+  }
+
+  &.qna,
+  &.results,
+  &.about,
+  &.contact {
+    min-width: 120px;
+
+    @media (max-width: 1440px) {
+      min-width: 100px;
+    }
+
+    @media (max-width: 1200px) {
+      min-width: 80px;
+    }
+  }
+}
+
+.authSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 1200px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 1024px) {
+    gap: 8px;
+  }
+
+  @media (max-width: 768px) {
+    gap: 6px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 4px;
+  }
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 142px;
+  height: 50px;
+  background: #1fb184;
+  border-radius: 8px;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 28px;
+  color: #fafafa;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #15845e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(31, 177, 132, 0.3);
+  }
+
+  @media (max-width: 1200px) {
+    width: 120px;
+    height: 45px;
+    font-size: 24px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 110px;
+    height: 42px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    width: 90px;
+    height: 36px;
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  @media (max-width: 480px) {
+    width: 70px;
+    height: 32px;
+    font-size: 14px;
+    line-height: 14px;
+  }
+}
+
+.signupButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 168px;
+  height: 50px;
+  background: #4d4d4d;
+  border-radius: 8px;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 28px;
+  color: #f5f5f5;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #333333;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(77, 77, 77, 0.3);
+  }
+
+  @media (max-width: 1200px) {
+    width: 140px;
+    height: 45px;
+    font-size: 24px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 130px;
+    height: 42px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 36px;
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 32px;
+    font-size: 14px;
+    line-height: 14px;
+  }
+}
+
+.userMenu {
+  position: relative;
+}
+
+.userButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e5e5e5;
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}
+
+.userDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #1e1e1e;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
+// 모바일 메뉴
+.mobileMenuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  @media (max-width: 1024px) {
+    display: flex;
+  }
+
+  span {
+    width: 20px;
+    height: 2px;
+    background: #1e1e1e;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+  }
+
+  &.open {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    span:nth-child(2) {
+      opacity: 0;
+    }
+
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+  }
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 100px;
+  left: 0;
+  right: 0;
+  background: white;
+  border-bottom: 1px solid #d9d9d9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 999;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 768px) {
+    top: 80px;
+    max-height: calc(100vh - 80px);
+  }
+
+  @media (max-width: 480px) {
+    top: 70px;
+    max-height: calc(100vh - 70px);
+  }
+}
+
+.mobileNavList {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 16px;
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    gap: 12px;
+  }
+}
+
+.mobileNavItem {
+  display: block;
+  padding: 12px 16px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #1e1e1e;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f5f5f5;
+    transform: translateX(4px);
+  }
+
+  &:active {
+    background: #e5e5e5;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+}
+
+.mobileAuthButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+
+  .loginButton,
+  .signupButton {
+    flex: 1;
+    min-width: 120px;
+  }
+}

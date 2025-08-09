@@ -26,7 +26,9 @@ interface QuestionFormProps {
   user: {
     id: string;
     name: string;
-  };
+    email: string;
+    role: "user" | "admin";
+  } | null;
   onSuccess?: () => void;
 }
 
@@ -49,6 +51,11 @@ export default function QuestionForm({ user, onSuccess }: QuestionFormProps) {
   });
 
   const onSubmit = async (data: QuestionFormData) => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -193,7 +200,11 @@ export default function QuestionForm({ user, onSuccess }: QuestionFormProps) {
           </button>
         </div>
 
-        <input type="hidden" {...register("is_private")} value={isPrivate} />
+        <input
+          type="hidden"
+          {...register("is_private")}
+          value={isPrivate ? "true" : "false"}
+        />
       </form>
     </div>
   );

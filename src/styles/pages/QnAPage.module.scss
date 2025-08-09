@@ -1,0 +1,520 @@
+@import "../globals.scss";
+
+.pageContainer {
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.qnaMain {
+  max-width: 1522px;
+  margin: 0 auto;
+  padding: 24px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+// 페이지 헤더
+.pageHeader {
+  text-align: center;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+}
+
+.pageTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 43.57px;
+  background: linear-gradient(90deg, #7bc11b 0%, #0bad90 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 16px 0;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    line-height: 34px;
+  }
+}
+
+.pageDescription {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19.36px;
+  color: #808080;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+// 질문 작성 폼
+.questionForm {
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.formTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21.78px;
+  color: #333333;
+  margin: 0 0 20px 0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 19px;
+    margin-bottom: 16px;
+  }
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.titleInput {
+  width: 100%;
+  height: 40px;
+  padding: 11.5px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #000000;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #999999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1fb085;
+    background-color: #ffffff;
+  }
+}
+
+.contentInput {
+  width: 100%;
+  min-height: 80px;
+  padding: 11.5px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #000000;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #999999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1fb085;
+    background-color: #ffffff;
+  }
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+}
+
+.privacySettings {
+  display: flex;
+  align-items: center;
+  gap: 240px;
+
+  @media (max-width: 768px) {
+    gap: 16px;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.privacyLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #4d4d4d;
+}
+
+.lockIcon {
+  font-size: 18px;
+}
+
+.toggleGroup {
+  display: flex;
+  gap: 0;
+}
+
+.toggleButton {
+  width: 100px;
+  height: 40px;
+  border: 1px solid #cccccc;
+  background-color: #f2f2f2;
+  color: #666666;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.94px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:first-child {
+    border-radius: 0;
+    border-right: none;
+  }
+
+  &:last-child {
+    border-radius: 0;
+    border-left: none;
+  }
+
+  &.active {
+    background-color: #1fb085;
+    color: #ffffff;
+    border-color: #1fb085;
+  }
+
+  &:hover:not(.active) {
+    background-color: #e9ecef;
+  }
+}
+
+.submitButton {
+  width: 120px;
+  height: 40px;
+  background-color: #1fb085;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16.94px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #1a9d75;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+// 검색 및 필터
+.searchAndFilter {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 15px 10px;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.searchBox {
+  position: relative;
+  width: 400px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #999999;
+}
+
+.searchInput {
+  width: 100%;
+  height: 40px;
+  padding: 11.5px 12px 11.5px 40px;
+  border: 1px solid #cccccc;
+  border-radius: 20px;
+  background-color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #000000;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #999999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1fb085;
+  }
+}
+
+.filterButtons {
+  display: flex;
+  gap: 8px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.filterButton {
+  padding: 8px 20px;
+  border: 1px solid #cccccc;
+  border-radius: 16px;
+  background-color: #f2f2f2;
+  color: #666666;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.52px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: #1fb085;
+    color: #ffffff;
+    border-color: #1fb085;
+  }
+
+  &:hover:not(.active) {
+    background-color: #e9ecef;
+  }
+}
+
+// 질문 리스트
+.questionList {
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.questionCard {
+  padding: 10px 24px;
+  border-bottom: 1px solid #e6e6e6;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &.privateCard {
+    background-color: #faf7f2;
+    border: 1px solid rgba(229, 191, 102, 0.3);
+
+    &:hover {
+      background-color: #f5f1ea;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.questionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.questionTitleArea {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.privateIcon {
+  font-size: 16px;
+  color: #cc994d;
+}
+
+.questionTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21.78px;
+  margin: 0;
+
+  a {
+    color: #333333;
+    text-decoration: none;
+
+    &:hover {
+      color: #1fb085;
+    }
+  }
+
+  .privateCard & a {
+    color: #80664d;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 19px;
+  }
+}
+
+.statusBadge {
+  padding: 4px 16px;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14.52px;
+
+  &.pending {
+    background-color: rgba(255, 196, 13, 0.1);
+    color: #ffa600;
+  }
+
+  &.answered {
+    background-color: rgba(31, 176, 133, 0.1);
+    color: #1fb085;
+  }
+
+  &.privateBadge {
+    background-color: rgba(229, 191, 102, 0.2);
+    color: #cc994d;
+  }
+}
+
+.questionContent {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16.94px;
+  color: #808080;
+  margin: 0 0 12px 0;
+
+  .privateCard & {
+    color: #998066;
+  }
+}
+
+.questionMeta {
+  display: flex;
+  gap: 16px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14.52px;
+  color: #999999;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 4px;
+  }
+}
+
+.author,
+.date,
+.views {
+  white-space: nowrap;
+}
+
+// 페이지네이션
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.pageButton {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #f2f2f2;
+  color: #666666;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16.94px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.activePage {
+    background-color: #1fb085;
+    color: #ffffff;
+    border-color: #1fb085;
+  }
+
+  &:hover:not(.activePage) {
+    background-color: #e9ecef;
+  }
+}

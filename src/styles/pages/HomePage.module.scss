@@ -1,0 +1,1750 @@
+// 메인페이지 SCSS 모듈 - 피그마 디자인 완전 복사
+
+// 줄바꿈 방지 유틸리티
+.noBreak {
+  word-break: keep-all !important;
+  white-space: nowrap;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    white-space: normal;
+    word-break: keep-all;
+    line-height: 1.4;
+  }
+
+  @media (max-width: 480px) {
+    line-height: 1.5;
+  }
+}
+
+.pageContainer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  padding-top: 127px;
+  overflow-x: hidden;
+  max-width: 100vw;
+
+  @media (max-width: 1024px) {
+    padding-top: 100px;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 80px;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 70px;
+  }
+}
+
+// 헤더 스타일 (Header 컴포넌트에서 처리)
+
+// 메인 히어로 섹션
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 824px;
+  background: #333a43;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+
+  @media (max-width: 1440px) {
+    height: 720px;
+  }
+
+  @media (max-width: 1024px) {
+    height: 600px;
+  }
+
+  @media (max-width: 768px) {
+    height: 500px;
+    padding: 2rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    height: 400px;
+    padding: 1.5rem 0.5rem;
+  }
+}
+
+.heroVideo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+.heroOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(51, 58, 67, 0.6);
+  z-index: 2;
+}
+
+.heroContent {
+  position: relative;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  z-index: 3;
+
+  @media (max-width: 1200px) {
+    padding: 0 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0.75rem;
+  }
+}
+
+.heroTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 60px;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 50px;
+  word-break: keep-all;
+  text-align: center;
+  letter-spacing: -0.02em;
+
+  @media (max-width: 1024px) {
+    font-size: 48px;
+    line-height: 1.25;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+    line-height: 1.3;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 1.3;
+  }
+}
+
+.heroSubtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 80px;
+  line-height: 1.15;
+  background: linear-gradient(0deg, #bcd800 0%, #10ad90 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 50px;
+  word-break: keep-all;
+  text-align: center;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 1024px) {
+    font-size: 64px;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 48px;
+    line-height: 1.25;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 32px;
+    line-height: 1.3;
+  }
+}
+
+.heroDescription {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33.89px;
+  color: #ffffff;
+  max-width: 1348px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+// 뉴스 미디어 로고 섹션
+.mediaSection {
+  position: relative;
+  width: 100%;
+  height: 243px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 40px 0;
+  }
+}
+
+.mediaContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
+}
+
+.mediaLogos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 120px;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1440px) {
+    gap: 80px;
+  }
+
+  @media (max-width: 1200px) {
+    gap: 60px;
+  }
+
+  @media (max-width: 1024px) {
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 320px) {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+.mediaLogo {
+  width: 240px;
+  height: 123px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.6;
+    transition: all 0.3s ease;
+  }
+
+  &:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 1200px) {
+    width: 200px;
+    height: 102px;
+  }
+
+  @media (max-width: 1024px) {
+    width: 180px;
+    height: 92px;
+  }
+
+  @media (max-width: 768px) {
+    width: 140px;
+    height: 72px;
+  }
+
+  @media (max-width: 480px) {
+    width: 120px;
+    height: 62px;
+  }
+
+  @media (max-width: 320px) {
+    width: 100px;
+    height: 51px;
+  }
+}
+
+// 독립성 극대화 섹션
+.contentSection {
+  position: relative;
+  width: 100%;
+  height: 1000px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 1440px) {
+    height: 900px;
+  }
+
+  @media (max-width: 1200px) {
+    height: 800px;
+  }
+
+  @media (max-width: 1024px) {
+    height: auto;
+    padding: 80px 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 60px 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 40px 0;
+  }
+}
+
+.contentContainer {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+
+  @media (max-width: 1440px) {
+    max-width: 1200px;
+    padding: 0 50px;
+  }
+
+  @media (max-width: 1200px) {
+    max-width: 1000px;
+    padding: 0 40px;
+  }
+
+  @media (max-width: 1024px) {
+    max-width: 900px;
+    padding: 0 30px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 100%;
+
+  @media (max-width: 1440px) {
+    gap: 50px;
+  }
+
+  @media (max-width: 1200px) {
+    gap: 40px;
+  }
+
+  @media (max-width: 1024px) {
+    gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 30px;
+  }
+
+  &.reverse {
+    @media (min-width: 769px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+.contentText {
+  padding: 0 10px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+
+  &.textRight {
+    @media (min-width: 769px) {
+      text-align: right;
+    }
+  }
+}
+
+.contentTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.3;
+  color: #1a1a1a;
+  margin-bottom: 40px;
+  word-break: keep-all;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 768px) {
+    font-size: 32px;
+    line-height: 1.35;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 1.4;
+  }
+}
+
+.contentSubtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 64px;
+  line-height: 1.2;
+  background: linear-gradient(90deg, #bad702 0%, #11ad8e 59.1%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+  word-break: keep-all;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 1024px) {
+    font-size: 48px;
+    line-height: 1.25;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+    line-height: 1.3;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 1.35;
+  }
+}
+
+.contentDescription {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 40px;
+  color: #666666;
+  margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 36px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 32px;
+  }
+}
+
+.contentButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 453px;
+  height: 60px;
+  background: #1fb184;
+  border-radius: 8px;
+  border: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #f5f5f5;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #15845e;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 400px;
+    font-size: 20px;
+  }
+
+  @media (max-width: 480px) {
+    height: 50px;
+    font-size: 18px;
+  }
+}
+
+.contentImage {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 500px;
+  background: #f5fcf7;
+  border-radius: 30px;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    max-width: 400px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 300px;
+    aspect-ratio: 1.2;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 250px;
+  }
+}
+
+// 전문의의 의견 섹션
+.doctorSection {
+  position: relative;
+  width: 100%;
+  height: 809px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.doctorGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 100%;
+
+  @media (max-width: 1024px) {
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+.doctorText {
+  padding: 0 10px;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.doctorImage {
+  width: 100%;
+  aspect-ratio: 16/9;
+  max-width: 700px;
+  background: #f5fcf7;
+  border-radius: 30px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 30px;
+  }
+
+  @media (max-width: 1024px) {
+    max-width: 550px;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 450px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+  }
+}
+
+// 전후결과 섹션
+.resultsSection {
+  position: relative;
+  width: 100%;
+  height: 956.52px;
+  background: #323a42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.resultsContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0.75rem;
+  }
+}
+
+.resultsTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 74.88px;
+  background: linear-gradient(
+    89.95deg,
+    #bbd700 28.95%,
+    #00974d 62.09%,
+    #0bad90 99.66%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 40px;
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+    line-height: 56px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 44px;
+  }
+}
+
+.resultsDescription {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+    line-height: 26px;
+    margin-bottom: 24px;
+  }
+}
+
+.resultsVideoCarousel {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.videoSlider {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.prevArrow,
+.nextArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(187, 215, 0, 0.9);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #bbd700;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+.prevArrow {
+  left: 20px;
+
+  @media (max-width: 768px) {
+    left: 10px;
+  }
+}
+
+.nextArrow {
+  right: 20px;
+
+  @media (max-width: 768px) {
+    right: 10px;
+  }
+}
+
+.videoSlide {
+  display: none;
+  padding: 30px;
+
+  &:first-child {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
+.videoDescription {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(0, 10, 20, 0.8);
+  margin-bottom: 20px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+}
+
+.videoWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+  }
+}
+
+.carouselControls {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.slideCounter {
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0, 10, 20, 0.7);
+  background: rgba(187, 215, 0, 0.1);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(187, 215, 0, 0.3);
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+
+.carouselDots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    gap: 6px;
+    padding: 0 10px;
+  }
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(187, 215, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(187, 215, 0, 0.6);
+  }
+
+  &.active {
+    background: #bbd700;
+    transform: scale(1.3);
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+  }
+
+  @media (max-width: 768px) {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+
+    &.active {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+    }
+  }
+}
+
+// CEO 말 섹션
+.ceoSection {
+  position: relative;
+  width: 100%;
+  height: 343.47px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.ceoContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 40px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+    gap: 30px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+    gap: 24px;
+  }
+}
+
+.ceoImage {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 250px;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.ceoAvatar {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #5f6e78;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.ceoPhoto {
+  position: absolute;
+  width: 85%;
+  height: 85%;
+  background-image: url("/images/christoph-guger-monochrom.jpg");
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ceoText {
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.ceoQuote {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.7;
+  color: rgba(0, 10, 20, 0.65);
+  margin-bottom: 20px;
+  word-break: keep-all;
+  text-align: justify;
+  text-justify: inter-word;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 1.75;
+    text-align: left;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+}
+
+.ceoName {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.5;
+  color: rgba(0, 10, 20, 0.65);
+  word-break: keep-all;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+// 7가지 표준치료법 섹션
+.therapySection {
+  position: relative;
+  width: 100%;
+  height: 1095.27px;
+  background-image: url("/images/therapy-bg.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 80px 0;
+  }
+}
+
+.therapyContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+
+  @media (max-width: 1440px) {
+    padding: 0 50px;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
+}
+
+.therapyHeading {
+  text-align: center;
+  margin-bottom: 80px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 50px;
+  }
+}
+
+.therapyTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 75px;
+  background: linear-gradient(
+    89.95deg,
+    #bbd700 28.95%,
+    #00974d 62.09%,
+    #0bad90 99.66%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 28.39px;
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+    line-height: 56px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 28px;
+    line-height: 44px;
+  }
+}
+
+.therapyDescription {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: #ffffff;
+  max-width: 888px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+  }
+}
+
+.therapyListContainer {
+  position: relative;
+  overflow: visible;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+}
+
+.therapyList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 24px;
+  }
+}
+
+.therapyItem {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.therapyIcon {
+  width: 128px;
+  height: 128px;
+  margin: 0 auto 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &.therapy1 {
+    background-image: url("/images/therapy1.png");
+  }
+
+  &.therapy2 {
+    background-image: url("/images/therapy2.png");
+  }
+
+  &.therapy3 {
+    background-image: url("/images/therapy3.png");
+  }
+}
+
+.therapyItemTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 25px;
+  margin-bottom: 15px;
+  padding-top: 20px;
+  border-top: 2px solid rgba(187, 215, 0, 0.6);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+    line-height: 1.3;
+    margin-top: 20px;
+    padding-top: 15px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin-top: 15px;
+    padding-top: 12px;
+  }
+}
+
+.therapyItemDescription {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: #ffffff;
+  max-width: 357px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+  }
+}
+
+// 환자 후기 섹션
+.testimonialSection {
+  position: relative;
+  width: 100%;
+  height: 355.83px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.testimonialContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 60px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+    gap: 24px;
+  }
+}
+
+.testimonialImage {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+    height: 250px;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.testimonialAvatar {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #bbd700;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.testimonialPhoto {
+  position: absolute;
+  width: 85%;
+  height: 85%;
+  background-image: url("/images/review-image.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.testimonialText {
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.testimonialQuote {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 26px;
+  color: rgba(0, 10, 20, 0.65);
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+.testimonialName {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 26px;
+  color: rgba(0, 10, 20, 0.65);
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+
+// recoveriX at Home 섹션
+.appSection {
+  position: relative;
+  width: 100%;
+  height: 649.83px;
+  background: #f3f1f0;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.appContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 60px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+    gap: 24px;
+  }
+}
+
+.appImage {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 250px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    max-width: 350px;
+    height: 220px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 280px;
+    height: 180px;
+  }
+}
+
+.appText {
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+}
+
+.appLabel {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 14.4px;
+  letter-spacing: 1.56px;
+  color: #5f6e78;
+  margin-bottom: 11px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+}
+
+.appTitle {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 56.16px;
+  background: linear-gradient(
+    89.95deg,
+    #bbd700 28.95%,
+    #00974d 62.09%,
+    #0bad90 99.66%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 33px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+    line-height: 44px;
+    margin-bottom: 25px;
+  }
+}
+
+.appDescription {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: rgba(0, 10, 20, 0.65);
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+    margin-bottom: 25px;
+  }
+}
+
+.appLinks {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: rgba(0, 10, 20, 0.65);
+
+  .appLink {
+    color: #00944c;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+  }
+}
+
+// 세계지도 섹션
+.mapSection {
+  position: relative;
+  width: 100%;
+  height: 648px;
+  background: #242a2d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 60px 0;
+  }
+}
+
+.mapContainer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  text-align: center;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+  }
+}
+
+.mapImage {
+  width: 100%;
+  max-width: 900px;
+  aspect-ratio: 2;
+  background-image: url("/images/new-worldmap-2024-new.png");
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto 40px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 24px;
+  }
+}
+
+.mapLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 283.41px;
+  height: 51.59px;
+  background: #1fb184;
+  border-radius: 6px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 21.6px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #15845e;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 300px;
+    font-size: 16px;
+  }
+}
+
+// 푸터
+.footer {
+  position: relative;
+  width: 100%;
+  height: 226px;
+  background: #242a2d;
+  color: white;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 40px 0;
+  }
+}
+
+.footerContent {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 60px;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  gap: 60px;
+  align-items: center;
+  height: 100%;
+
+  @media (max-width: 1024px) {
+    padding: 0 40px;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 16px;
+    gap: 24px;
+  }
+}
+
+.footerLogo {
+  width: 160px;
+  height: 32px;
+  background-image: url("https://recoverix.com/wp-content/themes/recoverix/img/recoverix-logo-white.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  @media (max-width: 768px) {
+    margin: 0 auto;
+  }
+}
+
+.footerLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    align-items: center;
+  }
+}
+
+.footerLink {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 27px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #1fb184;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+.footerSocial {
+  display: flex;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+}
+
+.socialIcon {
+  width: 37.2px;
+  height: 40px;
+  background: #5f6e78;
+  border-radius: 19.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #1fb184;
+    transform: translateY(-2px);
+  }
+}
+
+.footerCopyright {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 32px;
+  color: #ffffff;
+  text-align: right;
+
+  @media (max-width: 1024px) {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 28px;
+  }
+}
