@@ -118,23 +118,54 @@
 .heroTitle {
   font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 60px;
+  font-size: 42px;
   line-height: 1.2;
   color: #ffffff;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   word-break: keep-all;
   text-align: center;
   letter-spacing: -0.02em;
 
   @media (max-width: 1024px) {
-    font-size: 48px;
+    font-size: 36px;
     line-height: 1.25;
   }
 
   @media (max-width: 768px) {
-    font-size: 36px;
+    font-size: 30px;
     line-height: 1.3;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
+    line-height: 1.3;
+  }
+}
+
+.heroSubtitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.15;
+  background: linear-gradient(0deg, #bcd800 0%, #10ad90 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 30px;
+  word-break: keep-all;
+  text-align: center;
+  letter-spacing: -0.01em;
+
+  @media (max-width: 1024px) {
+    font-size: 42px;
+    line-height: 1.2;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+    line-height: 1.25;
+    margin-bottom: 20px;
   }
 
   @media (max-width: 480px) {
@@ -143,59 +174,28 @@
   }
 }
 
-.heroSubtitle {
-  font-family: "Inter", sans-serif;
-  font-weight: 700;
-  font-size: 80px;
-  line-height: 1.15;
-  background: linear-gradient(0deg, #bcd800 0%, #10ad90 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 50px;
-  word-break: keep-all;
-  text-align: center;
-  letter-spacing: -0.01em;
-
-  @media (max-width: 1024px) {
-    font-size: 64px;
-    line-height: 1.2;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 48px;
-    line-height: 1.25;
-    margin-bottom: 30px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 32px;
-    line-height: 1.3;
-  }
-}
-
 .heroDescription {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: 28px;
-  line-height: 33.89px;
+  font-size: 20px;
+  line-height: 24px;
   color: #ffffff;
-  max-width: 1348px;
+  max-width: 1000px;
   margin: 0 auto;
 
   @media (max-width: 1024px) {
-    font-size: 24px;
-    line-height: 29px;
+    font-size: 18px;
+    line-height: 22px;
   }
 
   @media (max-width: 768px) {
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 16px;
+    line-height: 20px;
   }
 
   @media (max-width: 480px) {
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
+    line-height: 18px;
   }
 }
 
