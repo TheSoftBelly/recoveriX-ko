@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import styles from "@/styles/pages/QuestionDetailPage.module.scss";
@@ -67,14 +67,28 @@ const mockQuestion: QuestionDetail = {
   ],
 };
 
-export default function QuestionDetailPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function QuestionDetailPage({ params }: PageProps) {
   const router = useRouter();
   const [answerContent, setAnswerContent] = useState("");
+  const [questionId, setQuestionId] = useState<string>("");
+
+  // Next.js 15에서 params가 Promise이므로 useEffect에서 처리
+  React.useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setQuestionId(resolvedParams.id);
+    };
+    getParams();
+  }, [params]);
 
   const handleSubmitAnswer = (e: React.FormEvent) => {
     e.preventDefault();
     // 답변 등록 로직
-    console.log("New answer:", answerContent);
+    console.log("New answer:", answerContent, "for question:", questionId);
     setAnswerContent("");
   };
 

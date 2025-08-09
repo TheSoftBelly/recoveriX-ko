@@ -68,7 +68,7 @@ export default function QnAPage() {
   const [isPrivate, setIsPrivate] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState<"all" | "pending" | "answered">("all");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1); // 추후 페이지네이션 구현 시 사용
 
   const handleSubmitQuestion = (e: React.FormEvent) => {
     e.preventDefault();
