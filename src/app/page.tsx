@@ -60,6 +60,7 @@ export default function MainPage() {
                   width={240}
                   height={123}
                   priority
+                  unoptimized
                 />
               </div>
               <div className={styles.mediaLogo}>
@@ -69,6 +70,7 @@ export default function MainPage() {
                   width={240}
                   height={123}
                   priority
+                  unoptimized
                 />
               </div>
               <div className={styles.mediaLogo}>
@@ -78,6 +80,7 @@ export default function MainPage() {
                   width={240}
                   height={123}
                   priority
+                  unoptimized
                 />
               </div>
               <div className={styles.mediaLogo}>
@@ -87,6 +90,7 @@ export default function MainPage() {
                   width={240}
                   height={123}
                   priority
+                  unoptimized
                 />
               </div>
             </div>
@@ -363,6 +367,7 @@ export default function MainPage() {
                 fill
                 sizes="(max-width: 768px) 350px, (max-width: 480px) 280px, 400px"
                 style={{ objectFit: "contain" }}
+                unoptimized
               />
             </div>
             <div className={styles.appText}>
