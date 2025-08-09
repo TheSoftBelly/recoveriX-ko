@@ -1,37 +1,37 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { User, LogOut, Menu, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { createSupabaseClient } from '@/lib/supabase'
+import Link from "next/link";
+import { useState } from "react";
+import { User, LogOut, Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createSupabaseClient } from "@/lib/supabase";
 
 interface HeaderProps {
   user?: {
-    id: string
-    name: string
-    email: string
-    role: 'user' | 'admin'
-  } | null
+    id: string;
+    name: string;
+    email: string;
+    role: "user" | "admin";
+  } | null;
 }
 
 export default function Header({ user }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const router = useRouter()
-  const supabase = createSupabaseClient()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-  }
+    await supabase.auth.signOut();
+    router.refresh();
+  };
 
   const navigationItems = [
-    { name: '소식', href: '/news' },
-    { name: '자주 묻는 질문', href: '/faq' },
-    { name: '치료결과', href: '/results' },
-    { name: '게시판', href: '/qna' },
-    { name: '문의', href: '/contact' },
-  ]
+    { name: "소식", href: "/news" },
+    { name: "자주 묻는 질문", href: "/faq" },
+    { name: "치료결과", href: "/results" },
+    { name: "게시판", href: "/qna" },
+    { name: "문의", href: "/contact" },
+  ];
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
@@ -66,7 +66,7 @@ export default function Header({ user }: HeaderProps) {
                 <div className="flex items-center space-x-2">
                   <User className="w-5 h-5 text-gray-400" />
                   <span className="text-sm text-gray-700">{user.name}</span>
-                  {user.role === 'admin' && (
+                  {user.role === "admin" && (
                     <span className="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full">
                       관리자
                     </span>
@@ -104,7 +104,11 @@ export default function Header({ user }: HeaderProps) {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="text-gray-700 hover:text-emerald-600 transition-colors"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
         </div>
@@ -123,13 +127,13 @@ export default function Header({ user }: HeaderProps) {
                   {item.name}
                 </Link>
               ))}
-              
+
               <div className="border-t border-gray-200 pt-4 mt-4">
                 {user ? (
                   <div className="space-y-2">
                     <div className="px-3 py-2 text-sm text-gray-700">
                       안녕하세요, {user.name}님
-                      {user.role === 'admin' && (
+                      {user.role === "admin" && (
                         <span className="ml-2 bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full">
                           관리자
                         </span>
@@ -166,5 +170,5 @@ export default function Header({ user }: HeaderProps) {
         )}
       </div>
     </header>
-  )
+  );
 }

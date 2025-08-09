@@ -1,119 +1,119 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export const createSupabaseClient = () => {
-  return createClientComponentClient()
-}
+  return createClientComponentClient();
+};
 
 export const createSupabaseServerClient = () => {
-  return createServerComponentClient({ cookies })
-}
+  return createServerComponentClient({ cookies });
+};
 
 export type Database = {
   public: {
     Tables: {
       users: {
         Row: {
-          id: string
-          name: string
-          email: string
-          role: 'user' | 'admin'
-          created_at: string
-        }
+          id: string;
+          name: string;
+          email: string;
+          role: "user" | "admin";
+          created_at: string;
+        };
         Insert: {
-          id: string
-          name: string
-          email: string
-          role?: 'user' | 'admin'
-          created_at?: string
-        }
+          id: string;
+          name: string;
+          email: string;
+          role?: "user" | "admin";
+          created_at?: string;
+        };
         Update: {
-          id?: string
-          name?: string
-          email?: string
-          role?: 'user' | 'admin'
-          created_at?: string
-        }
-      }
+          id?: string;
+          name?: string;
+          email?: string;
+          role?: "user" | "admin";
+          created_at?: string;
+        };
+      };
       qna_posts: {
         Row: {
-          id: number
-          title: string
-          content: string
-          author_id: string
-          is_private: boolean
-          status: 'pending' | 'answered'
-          views: number
-          created_at: string
-          updated_at: string
-        }
+          id: number;
+          title: string;
+          content: string;
+          author_id: string;
+          is_private: boolean;
+          status: "pending" | "answered";
+          views: number;
+          created_at: string;
+          updated_at: string;
+        };
         Insert: {
-          title: string
-          content: string
-          author_id: string
-          is_private?: boolean
-          status?: 'pending' | 'answered'
-          views?: number
-          created_at?: string
-          updated_at?: string
-        }
+          title: string;
+          content: string;
+          author_id: string;
+          is_private?: boolean;
+          status?: "pending" | "answered";
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
         Update: {
-          id?: number
-          title?: string
-          content?: string
-          author_id?: string
-          is_private?: boolean
-          status?: 'pending' | 'answered'
-          views?: number
-          created_at?: string
-          updated_at?: string
-        }
-      }
+          id?: number;
+          title?: string;
+          content?: string;
+          author_id?: string;
+          is_private?: boolean;
+          status?: "pending" | "answered";
+          views?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       qna_comments: {
         Row: {
-          id: number
-          post_id: number
-          content: string
-          author_id: string
-          is_admin: boolean
-          created_at: string
-        }
+          id: number;
+          post_id: number;
+          content: string;
+          author_id: string;
+          is_admin: boolean;
+          created_at: string;
+        };
         Insert: {
-          post_id: number
-          content: string
-          author_id: string
-          is_admin?: boolean
-          created_at?: string
-        }
+          post_id: number;
+          content: string;
+          author_id: string;
+          is_admin?: boolean;
+          created_at?: string;
+        };
         Update: {
-          id?: number
-          post_id?: number
-          content?: string
-          author_id?: string
-          is_admin?: boolean
-          created_at?: string
-        }
-      }
+          id?: number;
+          post_id?: number;
+          content?: string;
+          author_id?: string;
+          is_admin?: boolean;
+          created_at?: string;
+        };
+      };
       notices: {
         Row: {
-          id: number
-          title: string
-          content: string
-          created_at: string
-        }
+          id: number;
+          title: string;
+          content: string;
+          created_at: string;
+        };
         Insert: {
-          title: string
-          content: string
-          created_at?: string
-        }
+          title: string;
+          content: string;
+          created_at?: string;
+        };
         Update: {
-          id?: number
-          title?: string
-          content?: string
-          created_at?: string
-        }
-      }
-    }
-  }
-}
+          id?: number;
+          title?: string;
+          content?: string;
+          created_at?: string;
+        };
+      };
+    };
+  };
+};

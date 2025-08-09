@@ -1,44 +1,49 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { createSupabaseClient } from '@/lib/supabase'
-import { Mail, Lock, User, UserPlus, ArrowLeft } from 'lucide-react'
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createSupabaseClient } from "@/lib/supabase";
+import { Mail, Lock, User, UserPlus, ArrowLeft } from "lucide-react";
 
-const signupSchema = z.object({
-  name: z.string().min(2, '이름은 2자 이상 입력해주세요').max(50, '이름은 50자 이하로 입력해주세요'),
-  email: z.string().email('올바른 이메일 주소를 입력해주세요'),
-  password: z.string().min(6, '비밀번호는 6자 이상 입력해주세요'),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  message: '비밀번호가 일치하지 않습니다',
-  path: ['confirmPassword']
-})
+const signupSchema = z
+  .object({
+    name: z
+      .string()
+      .min(2, "이름은 2자 이상 입력해주세요")
+      .max(50, "이름은 50자 이하로 입력해주세요"),
+    email: z.string().email("올바른 이메일 주소를 입력해주세요"),
+    password: z.string().min(6, "비밀번호는 6자 이상 입력해주세요"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "비밀번호가 일치하지 않습니다",
+    path: ["confirmPassword"],
+  });
 
-type SignupFormData = z.infer<typeof signupSchema>
+type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const router = useRouter()
-  const supabase = createSupabaseClient()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema)
-  })
+    resolver: zodResolver(signupSchema),
+  });
 
   const onSubmit = async (data: SignupFormData) => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
       const { error } = await supabase.auth.signUp({
@@ -46,33 +51,32 @@ export default function SignupPage() {
         password: data.password,
         options: {
           data: {
-            name: data.name
-          }
-        }
-      })
+            name: data.name,
+          },
+        },
+      });
 
       if (error) {
-        if (error.message.includes('User already registered')) {
-          setError('이미 가입된 이메일입니다.')
+        if (error.message.includes("User already registered")) {
+          setError("이미 가입된 이메일입니다.");
         } else {
-          setError('회원가입에 실패했습니다. 다시 시도해주세요.')
+          setError("회원가입에 실패했습니다. 다시 시도해주세요.");
         }
-        return
+        return;
       }
 
-      setSuccess(true)
+      setSuccess(true);
       // 몇 초 후 로그인 페이지로 리다이렉트
       setTimeout(() => {
-        router.push('/login')
-      }, 3000)
-
+        router.push("/login");
+      }, 3000);
     } catch (error) {
-      console.error('회원가입 오류:', error)
-      setError('회원가입 중 오류가 발생했습니다.')
+      console.error("회원가입 오류:", error);
+      setError("회원가입 중 오류가 발생했습니다.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -82,9 +86,12 @@ export default function SignupPage() {
             <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <UserPlus className="w-8 h-8 text-emerald-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">회원가입 완료!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              회원가입 완료!
+            </h2>
             <p className="text-gray-600 mb-6">
-              회원가입이 성공적으로 완료되었습니다.<br />
+              회원가입이 성공적으로 완료되었습니다.
+              <br />
               로그인 페이지로 이동합니다...
             </p>
             <Link
@@ -96,7 +103,7 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -133,7 +140,10 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* 이름 */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700"
+              >
                 이름
               </label>
               <div className="mt-1 relative">
@@ -143,19 +153,24 @@ export default function SignupPage() {
                 <input
                   type="text"
                   id="name"
-                  {...register('name')}
+                  {...register("name")}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   placeholder="이름을 입력하세요"
                 />
               </div>
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
             {/* 이메일 */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 이메일
               </label>
               <div className="mt-1 relative">
@@ -165,19 +180,24 @@ export default function SignupPage() {
                 <input
                   type="email"
                   id="email"
-                  {...register('email')}
+                  {...register("email")}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   placeholder="이메일을 입력하세요"
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
             {/* 비밀번호 */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 비밀번호
               </label>
               <div className="mt-1 relative">
@@ -187,19 +207,24 @@ export default function SignupPage() {
                 <input
                   type="password"
                   id="password"
-                  {...register('password')}
+                  {...register("password")}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   placeholder="비밀번호를 입력하세요"
                 />
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
 
             {/* 비밀번호 확인 */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-gray-700"
+              >
                 비밀번호 확인
               </label>
               <div className="mt-1 relative">
@@ -209,13 +234,15 @@ export default function SignupPage() {
                 <input
                   type="password"
                   id="confirmPassword"
-                  {...register('confirmPassword')}
+                  {...register("confirmPassword")}
                   className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500"
                   placeholder="비밀번호를 다시 입력하세요"
                 />
               </div>
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.confirmPassword.message}
+                </p>
               )}
             </div>
 
@@ -259,7 +286,7 @@ export default function SignupPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
-                이미 계정이 있으신가요?{' '}
+                이미 계정이 있으신가요?{" "}
                 <Link
                   href="/login"
                   className="font-medium text-emerald-600 hover:text-emerald-500 transition-colors"
@@ -272,5 +299,5 @@ export default function SignupPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
