@@ -32,15 +32,14 @@ export default function Header({ user }: HeaderProps) {
 
   return (
     <header className={styles.header}>
-            {/* 로고 */}
+      {/* 로고 */}
       <Link href="/" className={styles.logoLink}>
-        <Image 
+                <Image 
           src="/recoveriX-logo.svg" 
           alt="recoveriX" 
           width={200} 
           height={36}
           priority
-          unoptimized
           className={styles.logo}
         />
       </Link>
