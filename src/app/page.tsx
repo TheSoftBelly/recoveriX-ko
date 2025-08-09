@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
 import Header from "@/components/layout/Header";
 import Link from "next/link";
 import { ArrowRight, Brain, Users, Award, MessageCircle } from "lucide-react";

@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from "@/lib/supabase";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
 import { redirect } from "next/navigation";
 import Header from "@/components/layout/Header";
 import QuestionCard from "@/components/qna/QuestionCard";
