@@ -79,16 +79,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkUser = async () => {
       try {
+        console.log("초기 사용자 확인 시작");
         const {
           data: { user: authUser },
         } = await supabase.auth.getUser();
 
         if (authUser) {
+          console.log("인증된 사용자 발견:", authUser.id);
           await fetchUserData(authUser);
+        } else {
+          console.log("인증된 사용자 없음");
         }
       } catch (error) {
         console.error("Error checking user:", error);
       } finally {
+        console.log("초기 로딩 완료, loading을 false로 설정");
         setLoading(false);
       }
     };
@@ -99,13 +104,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state change:", event, session?.user?.id);
+
       if (event === "SIGNED_IN" && session?.user) {
+        console.log("사용자 로그인됨:", session.user.id);
         await fetchUserData(session.user);
         setLoading(false);
       } else if (event === "SIGNED_OUT") {
+        console.log("사용자 로그아웃됨");
         setUser(null);
         setLoading(false);
       } else if (event === "TOKEN_REFRESHED") {
+        console.log("토큰 갱신됨");
+        setLoading(false);
+      } else if (event === "INITIAL_SESSION") {
+        console.log("초기 세션 확인됨");
+        if (session?.user) {
+          await fetchUserData(session.user);
+        }
         setLoading(false);
       }
     });

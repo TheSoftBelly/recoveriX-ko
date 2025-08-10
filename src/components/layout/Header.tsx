@@ -16,6 +16,11 @@ export default function Header() {
     setMounted(true);
   }, []);
 
+  // 디버깅을 위한 로그
+  useEffect(() => {
+    console.log("Header - loading:", loading, "user:", user?.name);
+  }, [loading, user]);
+
   const handleLogout = async () => {
     await signOut();
     setShowUserMenu(false);
@@ -62,7 +67,9 @@ export default function Header() {
 
       {/* 인증 섹션 */}
       <div className={styles.authSection}>
-        {loading ? (
+        {!mounted ? (
+          <div className={styles.authLoading}>초기화 중...</div>
+        ) : loading ? (
           <div className={styles.authLoading}>로딩 중...</div>
         ) : user ? (
           <div className={styles.userMenu}>

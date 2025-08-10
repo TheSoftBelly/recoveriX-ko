@@ -19,6 +19,23 @@ const nextConfig = {
   },
   // 정적 파일 서빙 최적화
   trailingSlash: false,
+  // CSS preload 경고 해결
+  experimental: {
+    optimizeCss: false,
+  },
+  // CSS 최적화 비활성화
+  webpack: (config) => {
+    config.optimization.splitChunks.cacheGroups = {
+      ...config.optimization.splitChunks.cacheGroups,
+      styles: {
+        name: "styles",
+        test: /\.(css|scss)$/,
+        chunks: "all",
+        enforce: true,
+      },
+    };
+    return config;
+  },
 };
 
 module.exports = nextConfig;
