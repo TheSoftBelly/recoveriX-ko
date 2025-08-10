@@ -25,55 +25,38 @@ export default function LoginPage() {
     console.warn("Supabase not configured:", err);
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    try {
-      if (!supabase) {
-        setError("인증 시스템이 설정되지 않았습니다.");
-        return;
-      }
+    if (!supabase) {
+      setError("인증 시스템이 설정되지 않았습니다.");
+      setIsLoading(false);
+      return;
+    }
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+    try {
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (typeof window !== "undefined"
+          ? window.location.origin
+          : "http://localhost:3000");
+
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
         setError(error.message);
-        return;
-      }
-
-      if (data.user) {
-        // 사용자 정보를 users 테이블에서 확인/생성
-        const { data: userData, error: userError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", data.user.id)
-          .single();
-
-        if (userError && userError.code === "PGRST116") {
-          // 사용자가 users 테이블에 없으면 생성
-          await supabase.from("users").insert({
-            id: data.user.id,
-            email: data.user.email || "",
-            name:
-              data.user.user_metadata?.name ||
-              data.user.email?.split("@")[0] ||
-              "",
-            role: "user",
-          });
-        }
-
+      } else {
         if (mounted) {
           window.location.href = "/";
         }
       }
-    } catch (err) {
+    } catch (error) {
       setError("로그인 중 오류가 발생했습니다.");
-      console.error("Login error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -120,7 +103,7 @@ export default function LoginPage() {
         {/* 오른쪽 로그인 폼 영역 */}
         <div className={styles.loginContainer}>
           <div className={styles.loginForm}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleLogin}>
               {/* 폼 제목 */}
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>로그인</h1>

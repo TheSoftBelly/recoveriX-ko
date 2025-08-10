@@ -159,12 +159,16 @@ export default function Header({ user: initialUser }: HeaderProps) {
               className={styles.userButton}
               onClick={() => setShowUserMenu(!showUserMenu)}
             >
-              {user.name}
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{user.name}</span>
+                <span className={styles.userEmail}>{user.email}</span>
+              </div>
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="currentColor"
+                className={showUserMenu ? styles.rotated : ""}
               >
                 <path d="M7 10l5 5 5-5z" />
               </svg>
@@ -172,12 +176,16 @@ export default function Header({ user: initialUser }: HeaderProps) {
 
             {showUserMenu && (
               <div className={styles.userDropdown}>
+                <div className={styles.userDropdownHeader}>
+                  <span className={styles.dropdownUserName}>{user.name}</span>
+                  <span className={styles.dropdownUserEmail}>{user.email}</span>
+                </div>
                 <Link
                   href="/profile"
                   className={styles.dropdownItem}
                   onClick={() => setShowUserMenu(false)}
                 >
-                  프로필
+                  프로필 관리
                 </Link>
                 <Link
                   href="/qna"
@@ -192,9 +200,10 @@ export default function Header({ user: initialUser }: HeaderProps) {
                     className={styles.dropdownItem}
                     onClick={() => setShowUserMenu(false)}
                   >
-                    관리자
+                    관리자 페이지
                   </Link>
                 )}
+                <div className={styles.dropdownDivider}></div>
                 <button className={styles.dropdownItem} onClick={handleLogout}>
                   로그아웃
                 </button>
@@ -202,14 +211,14 @@ export default function Header({ user: initialUser }: HeaderProps) {
             )}
           </div>
         ) : (
-          <>
+          <div className={styles.authButtons}>
             <Link href="/login" className={styles.loginButton}>
               로그인
             </Link>
             <Link href="/signup" className={styles.signupButton}>
               회원가입
             </Link>
-          </>
+          </div>
         )}
 
         {/* 모바일 메뉴 버튼 */}

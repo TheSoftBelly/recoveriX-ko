@@ -33,81 +33,56 @@ export default function SignupPage() {
     return passwordRegex.test(password);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     setSuccess("");
 
-    // 유효성 검사
-    if (!nickname.trim()) {
-      setError("닉네임을 입력해주세요.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      setError(
-        "비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다."
-      );
+    if (!supabase) {
+      setError("인증 시스템이 설정되지 않았습니다.");
       setIsLoading(false);
       return;
     }
 
     if (!agreeToTerms) {
-      setError("개인정보 제공 동의가 필요합니다.");
+      setError("이용약관에 동의해주세요.");
       setIsLoading(false);
       return;
     }
 
     try {
-      if (!supabase) {
-        setError("인증 시스템이 설정되지 않았습니다.");
-        return;
-      }
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (typeof window !== "undefined"
+          ? window.location.origin
+          : "http://localhost:3000");
 
-      // Supabase Auth로 회원가입
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             name: nickname,
           },
+          emailRedirectTo: `${siteUrl}/login`,
         },
       });
 
       if (error) {
         setError(error.message);
-        return;
-      }
-
-      if (data.user) {
-        // 사용자 정보를 users 테이블에 저장
-        const { error: insertError } = await supabase.from("users").insert({
-          id: data.user.id,
-          email: data.user.email || "",
-          name: nickname,
-          role: "user",
-        });
-
-        if (insertError) {
-          console.error("User table insert error:", insertError);
-          // 에러가 있어도 회원가입은 성공으로 처리 (Auth는 이미 완료됨)
-        }
-
-        setSuccess("회원가입이 완료되었습니다! 이메일 인증 후 로그인해주세요.");
-
-        // 3초 후 로그인 페이지로 이동
+      } else {
+        setSuccess(
+          "회원가입이 완료되었습니다! 이메일을 확인하여 계정을 활성화해주세요."
+        );
         setTimeout(() => {
           if (mounted) {
             window.location.href = "/login";
           }
         }, 3000);
       }
-    } catch (err) {
+    } catch (error) {
       setError("회원가입 중 오류가 발생했습니다.");
-      console.error("Signup error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -154,7 +129,7 @@ export default function SignupPage() {
         {/* 오른쪽 회원가입 폼 영역 */}
         <div className={styles.signupContainer}>
           <div className={styles.signupForm}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSignup}>
               {/* 폼 제목 */}
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>회원가입</h1>

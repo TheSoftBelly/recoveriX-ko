@@ -302,24 +302,47 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: #f5f5f5;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  color: #1e1e1e;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
 
   &:hover {
-    background: #e5e5e5;
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
-  @media (max-width: 768px) {
-    padding: 6px 12px;
-    font-size: 14px;
+  svg {
+    transition: transform 0.2s ease;
+
+    &.rotated {
+      transform: rotate(180deg);
+    }
   }
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.userEmail {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.2;
+  opacity: 0.8;
 }
 
 .userDropdown {
@@ -327,29 +350,82 @@
   top: 100%;
   right: 0;
   margin-top: 8px;
-  background: white;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  min-width: 240px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  z-index: 1001;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+.userDropdownHeader {
+  padding: 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dropdownUserName {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.dropdownUserEmail {
+  display: block;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: #666666;
 }
 
 .dropdownItem {
   display: block;
   width: 100%;
   padding: 12px 16px;
-  font-family: "Inter", sans-serif;
-  font-size: 14px;
-  color: #1e1e1e;
-  text-decoration: none;
+  text-align: left;
   background: none;
   border: none;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  text-decoration: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background: #f5f5f5;
+    background: #f8f9fa;
+  }
+
+  &:active {
+    background: #e9ecef;
+  }
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #e9ecef;
+  margin: 8px 0;
+}
+
+.authButtons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

@@ -8,7 +8,14 @@ export const createSupabaseClient = () => {
     throw new Error("Missing Supabase environment variables");
   }
 
-  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      flowType: "pkce",
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      persistSession: true,
+    },
+  });
 };
 
 export type Database = {
