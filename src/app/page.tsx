@@ -1,10 +1,12 @@
+"use client";
+
 import Header from "@/components/layout/Header";
 import VideoCarousel from "@/components/VideoCarousel";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/pages/HomePage.module.scss";
 
-export default async function MainPage() {
+export default function MainPage() {
   return (
     <div className={styles.pageContainer}>
       <Header />

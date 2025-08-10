@@ -15,11 +15,18 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [mounted, setMounted] = useState(false);
-  const { signUp } = useAuth();
+  const { signUp, user, loading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 이미 로그인된 사용자는 홈으로 리다이렉트
+  useEffect(() => {
+    if (mounted && user && !loading) {
+      window.location.href = "/";
+    }
+  }, [user, loading, mounted]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,20 +49,35 @@ export default function SignupPage() {
 
       if (error) {
         setError(error);
+        setIsLoading(false);
       } else if (successMessage) {
-        setSuccess(successMessage);
+        setSuccess("회원가입이 완료되었습니다! 자동으로 로그인됩니다.");
+        // 회원가입 성공 후 자동 로그인
         setTimeout(() => {
-          if (mounted) {
-            window.location.href = "/login";
-          }
-        }, 3000);
+          window.location.href = "/";
+        }, 2000);
       }
     } catch (error) {
       setError("회원가입 중 오류가 발생했습니다.");
-    } finally {
       setIsLoading(false);
     }
   };
+
+  // 이미 로그인된 경우 로딩 표시
+  if (loading || (mounted && user)) {
+    return (
+      <div className={styles.pageContainer}>
+        <Header />
+        <main className={styles.main}>
+          <div className={styles.signupContainer}>
+            <div className={styles.signupForm}>
+              <div className={styles.loadingMessage}>로그인 중...</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.pageContainer}>

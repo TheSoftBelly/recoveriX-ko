@@ -13,11 +13,18 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, user, loading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 이미 로그인된 사용자는 홈으로 리다이렉트
+  useEffect(() => {
+    if (mounted && user && !loading) {
+      window.location.href = "/";
+    }
+  }, [user, loading, mounted]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,17 +36,32 @@ export default function LoginPage() {
 
       if (error) {
         setError(error);
+        setIsLoading(false);
       } else {
-        if (mounted) {
-          window.location.href = "/";
-        }
+        // 로그인 성공 시 홈으로 리다이렉트
+        window.location.href = "/";
       }
     } catch (error) {
       setError("로그인 중 오류가 발생했습니다.");
-    } finally {
       setIsLoading(false);
     }
   };
+
+  // 이미 로그인된 경우 로딩 표시
+  if (loading || (mounted && user)) {
+    return (
+      <div className={styles.pageContainer}>
+        <Header />
+        <main className={styles.main}>
+          <div className={styles.loginContainer}>
+            <div className={styles.loginForm}>
+              <div className={styles.loadingMessage}>로그인 중...</div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.pageContainer}>

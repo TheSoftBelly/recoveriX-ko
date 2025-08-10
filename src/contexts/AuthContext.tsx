@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 사용자 정보 가져오기
   const fetchUserData = async (authUser: User) => {
     try {
+      console.log("사용자 정보 가져오기 시도:", authUser.id);
       const { data: userData, error } = await supabase
         .from("users")
         .select("*")
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error && error.code === "PGRST116") {
+        console.log("사용자가 users 테이블에 없음, 새로 생성");
         // 사용자가 users 테이블에 없으면 생성
         const newUser = {
           id: authUser.id,
@@ -57,10 +59,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .from("users")
           .insert(newUser);
         if (!insertError) {
+          console.log("새 사용자 생성 성공:", newUser);
           setUser(newUser);
+        } else {
+          console.error("새 사용자 생성 실패:", insertError);
         }
       } else if (userData) {
+        console.log("기존 사용자 정보 가져오기 성공:", userData);
         setUser(userData);
+      } else if (error) {
+        console.error("사용자 정보 가져오기 실패:", error);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -108,19 +116,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 로그인 함수
   const signIn = async (email: string, password: string) => {
     try {
+      console.log("로그인 시도:", email);
       setLoading(true);
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        console.error("로그인 에러:", error);
         setLoading(false);
         return { error: error.message };
       }
 
+      console.log("로그인 성공:", data.user);
+      // 로그인 성공 시 사용자 정보 가져오기
+      if (data.user) {
+        await fetchUserData(data.user);
+      }
+
+      setLoading(false);
       return { error: null };
     } catch (error) {
+      console.error("로그인 예외:", error);
       setLoading(false);
       return { error: "로그인 중 오류가 발생했습니다." };
     }
