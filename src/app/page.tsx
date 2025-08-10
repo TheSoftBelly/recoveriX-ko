@@ -1,4 +1,3 @@
-import { createSupabaseServerClient } from "@/lib/supabase-server";
 import Header from "@/components/layout/Header";
 import VideoCarousel from "@/components/VideoCarousel";
 import Link from "next/link";
@@ -6,33 +5,9 @@ import Image from "next/image";
 import styles from "@/styles/pages/HomePage.module.scss";
 
 export default async function MainPage() {
-  // 사용자 정보 가져오기
-  let userData = null;
-
-  try {
-    const supabase = await createSupabaseServerClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (user) {
-      const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", user.id)
-        .single();
-      if (!error && data) {
-        userData = data;
-      }
-    }
-  } catch (error) {
-    console.warn("Supabase not configured or error fetching user data:", error);
-    userData = null;
-  }
-
   return (
     <div className={styles.pageContainer}>
-      <Header user={userData} />
+      <Header />
 
       <main>
         {/* 메인 히어로 섹션 */}
@@ -445,14 +420,7 @@ export default async function MainPage() {
       {/* 푸터 */}
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
-          <div className={styles.footerLogo}>
-            <Image
-              src="https://recoverix.com/wp-content/themes/recoverix/img/recoverix-logo-white.svg"
-              alt="recoveriX Logo"
-              width={200}
-              height={36}
-            />
-          </div>
+          <div className={styles.footerLogo} />
           <div className={styles.footerLinks}>
             <Link href="/news" className={styles.footerLink}>
               소식

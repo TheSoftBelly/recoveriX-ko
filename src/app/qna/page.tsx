@@ -92,7 +92,7 @@ export default function QnAPage() {
 
   return (
     <div className={styles.pageContainer}>
-      <Header user={null} />
+      <Header />
 
       <main className={styles.qnaMain}>
         {/* 페이지 제목 */}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
-import { createSupabaseClient } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 import styles from "@/styles/pages/LoginPage.module.scss";
 
 export default function LoginPage() {
@@ -13,43 +13,22 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
+  const { signIn } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  let supabase = null;
-  try {
-    supabase = createSupabaseClient();
-  } catch (err) {
-    console.warn("Supabase not configured:", err);
-  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    if (!supabase) {
-      setError("인증 시스템이 설정되지 않았습니다.");
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      const siteUrl =
-        process.env.NEXT_PUBLIC_SITE_URL ||
-        (typeof window !== "undefined"
-          ? window.location.origin
-          : "http://localhost:3000");
-
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await signIn(email, password);
 
       if (error) {
-        setError(error.message);
+        setError(error);
       } else {
         if (mounted) {
           window.location.href = "/";
@@ -62,45 +41,11 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      if (!supabase) {
-        setError("인증 시스템이 설정되지 않았습니다.");
-        return;
-      }
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err) {
-      setError("Google 로그인 중 오류가 발생했습니다.");
-      console.error("Google login error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className={styles.pageContainer}>
-      <Header user={null} />
+      <Header />
 
-      <main className={styles.loginMain}>
-        {/* 왼쪽 이미지 영역 */}
-        <div className={styles.imageContainer}>
-          <div className={styles.backgroundImage}></div>
-        </div>
-
-        {/* 오른쪽 로그인 폼 영역 */}
+      <main className={styles.main}>
         <div className={styles.loginContainer}>
           <div className={styles.loginForm}>
             <form onSubmit={handleLogin}>
@@ -108,65 +53,62 @@ export default function LoginPage() {
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>로그인</h1>
                 <p className={styles.formSubtitle}>
-                  계정에 액세스하려면 자격 증명을 입력하세요
+                  recoveriX 계정으로 로그인하세요
                 </p>
-                {error && <div className={styles.errorMessage}>{error}</div>}
               </div>
 
-              {/* 이메일 필드 */}
+              {/* 에러 메시지 */}
+              {error && <div className={styles.errorMessage}>{error}</div>}
+
+              {/* 이메일 입력 */}
               <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>
-                  Email address / 이메일 주소
+                <label htmlFor="email" className={styles.inputLabel}>
+                  이메일
                 </label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="이메일 주소를 입력해주세요"
-                    className={styles.inputField}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* 비밀번호 필드 */}
-              <div className={styles.inputGroup}>
-                <div className={styles.passwordHeader}>
-                  <label className={styles.inputLabel}>
-                    Password / 비밀번호
-                  </label>
-                  <Link
-                    href="/forgot-password"
-                    className={styles.forgotPassword}
-                  >
-                    비밀번호 찾기
-                  </Link>
-                </div>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="비밀번호를 입력해주세요."
-                    className={styles.inputField}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* 기억하기 체크박스 */}
-              <div className={styles.checkboxGroup}>
                 <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className={styles.checkbox}
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={styles.inputField}
+                  placeholder="이메일을 입력하세요"
+                  required
+                  disabled={isLoading}
                 />
-                <label htmlFor="rememberMe" className={styles.checkboxLabel}>
-                  30일동안 기억하기
+              </div>
+
+              {/* 비밀번호 입력 */}
+              <div className={styles.inputGroup}>
+                <label htmlFor="password" className={styles.inputLabel}>
+                  비밀번호
                 </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={styles.inputField}
+                  placeholder="비밀번호를 입력하세요"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+
+              {/* 로그인 옵션 */}
+              <div className={styles.loginOptions}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className={styles.checkbox}
+                    disabled={isLoading}
+                  />
+                  <span className={styles.checkboxText}>로그인 상태 유지</span>
+                </label>
+                <Link href="/forgot-password" className={styles.forgotPassword}>
+                  비밀번호를 잊으셨나요?
+                </Link>
               </div>
 
               {/* 로그인 버튼 */}
@@ -175,40 +117,15 @@ export default function LoginPage() {
                 className={styles.loginButton}
                 disabled={isLoading}
               >
-                {isLoading ? "로그인 중..." : "Login / 로그인"}
+                {isLoading ? "로그인 중..." : "로그인"}
               </button>
-
-              {/* 구분선 */}
-              <div className={styles.divider}>
-                <div className={styles.dividerLine}></div>
-                <span className={styles.dividerText}>Or</span>
-              </div>
-
-              {/* 소셜 로그인 버튼들 */}
-              <div className={styles.socialButtons}>
-                <button
-                  type="button"
-                  className={styles.googleButton}
-                  onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                >
-                  <div className={styles.socialIcon}></div>
-                  구글로 간편 로그인하기
-                </button>
-                <button
-                  type="button"
-                  className={styles.appleButton}
-                  disabled={isLoading}
-                >
-                  <div className={styles.socialIcon}></div>
-                  애플로 간편 로그인하기 (준비중)
-                </button>
-              </div>
 
               {/* 회원가입 링크 */}
               <div className={styles.signupLink}>
                 <span>계정이 없으신가요? </span>
-                <Link href="/signup">회원가입</Link>
+                <Link href="/signup" className={styles.signupText}>
+                  회원가입
+                </Link>
               </div>
             </form>
           </div>

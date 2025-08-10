@@ -98,7 +98,7 @@ export default function QuestionDetailPage({ params }: PageProps) {
 
   return (
     <div className={styles.pageContainer}>
-      <Header user={null} />
+      <Header />
 
       <main className={styles.detailMain}>
         {/* 상세페이지 헤더 */}

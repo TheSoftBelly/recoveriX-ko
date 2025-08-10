@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
-import { createSupabaseClient } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 import styles from "@/styles/pages/SignupPage.module.scss";
 
 export default function SignupPage() {
@@ -15,35 +15,17 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [mounted, setMounted] = useState(false);
+  const { signUp } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  let supabase = null;
-  try {
-    supabase = createSupabaseClient();
-  } catch (err) {
-    console.warn("Supabase not configured:", err);
-  }
-
-  const validatePassword = (password: string) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
-    return passwordRegex.test(password);
-  };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
     setSuccess("");
-
-    if (!supabase) {
-      setError("인증 시스템이 설정되지 않았습니다.");
-      setIsLoading(false);
-      return;
-    }
 
     if (!agreeToTerms) {
       setError("이용약관에 동의해주세요.");
@@ -52,29 +34,16 @@ export default function SignupPage() {
     }
 
     try {
-      const siteUrl =
-        process.env.NEXT_PUBLIC_SITE_URL ||
-        (typeof window !== "undefined"
-          ? window.location.origin
-          : "http://localhost:3000");
-
-      const { error } = await supabase.auth.signUp({
+      const { error, success: successMessage } = await signUp(
         email,
         password,
-        options: {
-          data: {
-            name: nickname,
-          },
-          emailRedirectTo: `${siteUrl}/login`,
-        },
-      });
+        nickname
+      );
 
       if (error) {
-        setError(error.message);
-      } else {
-        setSuccess(
-          "회원가입이 완료되었습니다! 이메일을 확인하여 계정을 활성화해주세요."
-        );
+        setError(error);
+      } else if (successMessage) {
+        setSuccess(successMessage);
         setTimeout(() => {
           if (mounted) {
             window.location.href = "/login";
@@ -88,45 +57,11 @@ export default function SignupPage() {
     }
   };
 
-  const handleGoogleSignup = async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      if (!supabase) {
-        setError("인증 시스템이 설정되지 않았습니다.");
-        return;
-      }
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/`,
-        },
-      });
-
-      if (error) {
-        setError(error.message);
-      }
-    } catch (err) {
-      setError("Google 회원가입 중 오류가 발생했습니다.");
-      console.error("Google signup error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div className={styles.pageContainer}>
-      <Header user={null} />
+      <Header />
 
-      <main className={styles.signupMain}>
-        {/* 왼쪽 이미지 영역 */}
-        <div className={styles.imageContainer}>
-          <div className={styles.backgroundImage}></div>
-        </div>
-
-        {/* 오른쪽 회원가입 폼 영역 */}
+      <main className={styles.main}>
         <div className={styles.signupContainer}>
           <div className={styles.signupForm}>
             <form onSubmit={handleSignup}>
@@ -134,81 +69,86 @@ export default function SignupPage() {
               <div className={styles.formHeader}>
                 <h1 className={styles.formTitle}>회원가입</h1>
                 <p className={styles.formSubtitle}>
-                  Enter your Credentials to access your account
+                  recoveriX 계정을 만들어보세요
                 </p>
-                {error && <div className={styles.errorMessage}>{error}</div>}
-                {success && (
-                  <div className={styles.successMessage}>{success}</div>
-                )}
               </div>
 
-              {/* 닉네임 필드 */}
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>Nickname / 닉네임</label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type="text"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
-                    placeholder="활동하실 닉네임을 입력해주세요."
-                    className={styles.inputField}
-                    required
-                  />
-                </div>
-              </div>
+              {/* 에러 메시지 */}
+              {error && <div className={styles.errorMessage}>{error}</div>}
 
-              {/* 이메일 필드 */}
+              {/* 성공 메시지 */}
+              {success && (
+                <div className={styles.successMessage}>{success}</div>
+              )}
+
+              {/* 닉네임 입력 */}
               <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>
-                  Email address / 이메일 주소
+                <label htmlFor="nickname" className={styles.inputLabel}>
+                  닉네임
                 </label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="이메일 주소를 입력해주세요."
-                    className={styles.inputField}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* 비밀번호 필드 */}
-              <div className={styles.inputGroup}>
-                <label className={styles.inputLabel}>
-                  Password / 비밀번호
-                  <br />
-                  <span className={styles.passwordHint}>
-                    ( 8~16자의 영문 대소문자, 숫자, 특수문자만 가능합니다. )
-                  </span>
-                </label>
-                <div className={styles.inputWrapper}>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="비밀번호를 입력해주세요."
-                    className={styles.inputField}
-                    minLength={8}
-                    maxLength={16}
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* 동의 체크박스 */}
-              <div className={styles.checkboxGroup}>
                 <input
-                  type="checkbox"
-                  id="agreeToTerms"
-                  checked={agreeToTerms}
-                  onChange={(e) => setAgreeToTerms(e.target.checked)}
-                  className={styles.checkbox}
+                  type="text"
+                  id="nickname"
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  className={styles.inputField}
+                  placeholder="닉네임을 입력하세요"
                   required
+                  disabled={isLoading}
                 />
-                <label htmlFor="agreeToTerms" className={styles.checkboxLabel}>
-                  서비스 이용을 위해 개인정보를 제공하는 것에 대해 동의
+              </div>
+
+              {/* 이메일 입력 */}
+              <div className={styles.inputGroup}>
+                <label htmlFor="email" className={styles.inputLabel}>
+                  이메일
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={styles.inputField}
+                  placeholder="이메일을 입력하세요"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+
+              {/* 비밀번호 입력 */}
+              <div className={styles.inputGroup}>
+                <label htmlFor="password" className={styles.inputLabel}>
+                  비밀번호
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={styles.inputField}
+                  placeholder="비밀번호를 입력하세요 (8자 이상)"
+                  required
+                  minLength={8}
+                  disabled={isLoading}
+                />
+              </div>
+
+              {/* 이용약관 동의 */}
+              <div className={styles.termsGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={agreeToTerms}
+                    onChange={(e) => setAgreeToTerms(e.target.checked)}
+                    className={styles.checkbox}
+                    disabled={isLoading}
+                  />
+                  <span className={styles.checkboxText}>
+                    <Link href="/terms" className={styles.termsLink}>
+                      이용약관
+                    </Link>
+                    에 동의합니다
+                  </span>
                 </label>
               </div>
 
@@ -218,40 +158,15 @@ export default function SignupPage() {
                 className={styles.signupButton}
                 disabled={isLoading}
               >
-                {isLoading ? "회원가입 중..." : "Sign up / 회원가입"}
+                {isLoading ? "회원가입 중..." : "회원가입"}
               </button>
-
-              {/* 구분선 */}
-              <div className={styles.divider}>
-                <div className={styles.dividerLine}></div>
-                <span className={styles.dividerText}>Or</span>
-              </div>
-
-              {/* 소셜 로그인 버튼들 */}
-              <div className={styles.socialButtons}>
-                <button
-                  type="button"
-                  className={styles.googleButton}
-                  onClick={handleGoogleSignup}
-                  disabled={isLoading}
-                >
-                  <div className={styles.socialIcon}></div>
-                  구글로 간편 회원가입하기
-                </button>
-                <button
-                  type="button"
-                  className={styles.appleButton}
-                  disabled={isLoading}
-                >
-                  <div className={styles.socialIcon}></div>
-                  애플로 간편 회원가입하기 (준비중)
-                </button>
-              </div>
 
               {/* 로그인 링크 */}
               <div className={styles.loginLink}>
                 <span>이미 계정이 있으신가요? </span>
-                <Link href="/login">로그인</Link>
+                <Link href="/login" className={styles.loginText}>
+                  로그인
+                </Link>
               </div>
             </form>
           </div>

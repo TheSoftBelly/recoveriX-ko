@@ -3,110 +3,21 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { createSupabaseClient } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 import styles from "@/styles/components/Header.module.scss";
-import type { User } from "@supabase/supabase-js";
 
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-  role: "user" | "admin";
-}
-
-interface HeaderProps {
-  user?: UserData | null;
-}
-
-export default function Header({ user: initialUser }: HeaderProps) {
+export default function Header() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [user, setUser] = useState<UserData | null>(initialUser || null);
-  const [isLoading, setIsLoading] = useState(!initialUser);
   const [mounted, setMounted] = useState(false);
-
-  const supabase = createSupabaseClient();
+  const { user, loading, signOut } = useAuth();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    // 현재 사용자 상태 확인
-    const checkUser = async () => {
-      try {
-        if (!supabase) {
-          setUser(null);
-          setIsLoading(false);
-          return;
-        }
-
-        const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
-
-        if (authUser) {
-          // users 테이블에서 사용자 정보 가져오기
-          const { data: userData } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", authUser.id)
-            .single();
-
-          if (userData) {
-            setUser(userData);
-          } else {
-            // users 테이블에 사용자 정보가 없으면 생성
-            const newUser = {
-              id: authUser.id,
-              email: authUser.email || "",
-              name:
-                authUser.user_metadata?.name ||
-                authUser.email?.split("@")[0] ||
-                "",
-              role: "user" as const,
-            };
-
-            const { error } = await supabase.from("users").insert(newUser);
-
-            if (!error) {
-              setUser(newUser);
-            }
-          }
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Error checking user:", error);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    // 초기 사용자가 없는 경우에만 확인
-    if (!initialUser) {
-      checkUser();
-    }
-
-    // 인증 상태 변경 감지
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN" && session?.user) {
-        // 로그인 시 사용자 정보 가져오기
-        checkUser();
-      } else if (event === "SIGNED_OUT") {
-        // 로그아웃 시 사용자 정보 제거
-        setUser(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase, initialUser]);
-
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    await signOut();
     setShowUserMenu(false);
     if (mounted) {
       window.location.href = "/";
@@ -151,7 +62,7 @@ export default function Header({ user: initialUser }: HeaderProps) {
 
       {/* 인증 섹션 */}
       <div className={styles.authSection}>
-        {isLoading ? (
+        {loading ? (
           <div className={styles.authLoading}>로딩 중...</div>
         ) : user ? (
           <div className={styles.userMenu}>
