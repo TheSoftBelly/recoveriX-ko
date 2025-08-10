@@ -77,25 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("사용자 정보 가져오기 시도:", authUser.id);
       setLoading(true);
 
-      console.log("Supabase 쿼리 실행 중...");
-
-      let userData, error;
-      try {
-        const result = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", authUser.id)
-          .single();
-        userData = result.data;
-        error = result.error;
-      } catch (fetchError) {
-        console.error("Supabase 쿼리 실행 중 예외 발생:", fetchError);
-        error = { code: "FETCH_ERROR", message: "쿼리 실행 실패" };
-      }
-
-      console.log("Supabase 쿼리 결과:", { userData, error });
-
-      // 기본 사용자 정보 생성
+      // 기본 사용자 정보 생성 (인증 정보에서 추출)
       const fallbackUser = {
         id: authUser.id,
         email: authUser.email || "",
@@ -104,40 +86,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         role: "user" as const,
       };
 
-      if (error && error.code === "PGRST116") {
-        console.log("사용자가 users 테이블에 없음, 새로 생성");
-        // 사용자가 users 테이블에 없으면 생성
-        try {
-          const { error: insertError } = await supabase
-            .from("users")
-            .insert(fallbackUser);
-          if (!insertError) {
-            console.log("새 사용자 생성 성공:", fallbackUser);
-            setUser(fallbackUser);
-          } else {
-            console.error("새 사용자 생성 실패:", insertError);
-            setUser(fallbackUser);
-          }
-        } catch (insertError) {
-          console.error("사용자 생성 중 예외 발생:", insertError);
-          setUser(fallbackUser);
+      // 데이터베이스 연결 문제로 인한 무한 로딩 방지를 위해 즉시 fallback 사용자 정보로 설정
+      console.log("즉시 fallback 사용자 정보로 설정:", fallbackUser);
+      setUser(fallbackUser);
+      setLoading(false);
+
+      // 백그라운드에서 데이터베이스 쿼리 시도 (선택사항, 에러 무시)
+      console.log("백그라운드에서 데이터베이스 쿼리 시도...");
+      try {
+        const result = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", authUser.id)
+          .single();
+
+        if (result.data) {
+          console.log(
+            "백그라운드에서 기존 사용자 정보 가져오기 성공:",
+            result.data
+          );
+          setUser(result.data);
+        } else if (result.error && result.error.code === "PGRST116") {
+          console.log("백그라운드에서 새 사용자 생성 시도");
+          await supabase.from("users").insert(fallbackUser);
+          console.log("백그라운드에서 새 사용자 생성 완료");
         }
-      } else if (userData) {
-        console.log("기존 사용자 정보 가져오기 성공:", userData);
-        setUser(userData);
-      } else {
-        // 모든 에러 상황에서 fallback 사용자 정보 사용
-        console.error("사용자 정보 가져오기 실패:", error);
-        if (error) {
-          console.error("에러 상세 정보:", {
-            code: error.code,
-            message: error.message,
-            details: error.details,
-            hint: error.hint,
-          });
-        }
-        console.log("Fallback 사용자 정보로 설정:", fallbackUser);
-        setUser(fallbackUser);
+      } catch (backgroundError) {
+        console.log(
+          "백그라운드 데이터베이스 작업 실패 (무시됨):",
+          backgroundError
+        );
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
