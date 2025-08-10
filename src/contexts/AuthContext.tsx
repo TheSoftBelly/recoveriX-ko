@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { createSupabaseClient } from "@/lib/supabase";
-import type { User } from "@supabase/supabase-js";
+import type { User, SupabaseClient, Session } from "@supabase/supabase-js";
 
 interface UserData {
   id: string;
@@ -32,10 +32,47 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createSupabaseClient();
+
+  // 환경 변수 검증
+  useEffect(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    console.log("환경 변수 확인:", {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseAnonKey,
+      url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : "없음",
+      key: supabaseAnonKey ? `${supabaseAnonKey.substring(0, 20)}...` : "없음",
+    });
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error("Supabase 환경 변수가 설정되지 않았습니다!");
+      setLoading(false);
+      return;
+    }
+  }, []);
+
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+
+  // Supabase 클라이언트 초기화
+  useEffect(() => {
+    try {
+      const client = createSupabaseClient();
+      setSupabase(client);
+    } catch (error) {
+      console.error("Supabase 클라이언트 초기화 실패:", error);
+      setLoading(false);
+    }
+  }, []);
 
   // 사용자 정보 가져오기
   const fetchUserData = async (authUser: User) => {
+    if (!supabase) {
+      console.error("Supabase 클라이언트가 초기화되지 않았습니다.");
+      setLoading(false);
+      return;
+    }
+
     try {
       console.log("사용자 정보 가져오기 시도:", authUser.id);
       setLoading(true);
@@ -81,6 +118,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 초기 인증 상태 확인
   useEffect(() => {
+    if (!supabase) return;
+
     const checkUser = async () => {
       try {
         console.log("초기 사용자 확인 시작");
@@ -107,34 +146,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // 인증 상태 변경 감지
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log("Auth state change:", event, session?.user?.id);
+    } = supabase.auth.onAuthStateChange(
+      async (event: string, session: Session | null) => {
+        console.log("Auth state change:", event, session?.user?.id);
 
-      if (event === "SIGNED_IN" && session?.user) {
-        console.log("사용자 로그인됨:", session.user.id);
-        await fetchUserData(session.user);
-      } else if (event === "SIGNED_OUT") {
-        console.log("사용자 로그아웃됨");
-        setUser(null);
-        setLoading(false);
-      } else if (event === "TOKEN_REFRESHED") {
-        console.log("토큰 갱신됨");
-        setLoading(false);
-      } else if (event === "INITIAL_SESSION") {
-        console.log("초기 세션 확인됨");
-        if (session?.user) {
+        if (event === "SIGNED_IN" && session?.user) {
+          console.log("사용자 로그인됨:", session.user.id);
           await fetchUserData(session.user);
-        } else {
+        } else if (event === "SIGNED_OUT") {
+          console.log("사용자 로그아웃됨");
+          setUser(null);
           setLoading(false);
+        } else if (event === "TOKEN_REFRESHED") {
+          console.log("토큰 갱신됨");
+          setLoading(false);
+        } else if (event === "INITIAL_SESSION") {
+          console.log("초기 세션 확인됨");
+          if (session?.user) {
+            await fetchUserData(session.user);
+          } else {
+            setLoading(false);
+          }
         }
       }
-    });
+    );
 
     return () => subscription.unsubscribe();
   }, [supabase]);
 
   // 로그인 함수
   const signIn = async (email: string, password: string) => {
+    if (!supabase) {
+      return { error: "Supabase 클라이언트가 초기화되지 않았습니다." };
+    }
+
     try {
       console.log("로그인 시도:", email);
       setLoading(true);
@@ -165,12 +210,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 회원가입 함수
   const signUp = async (email: string, password: string, name: string) => {
+    if (!supabase) {
+      return { error: "Supabase 클라이언트가 초기화되지 않았습니다." };
+    }
+
     try {
       const siteUrl =
         process.env.NEXT_PUBLIC_SITE_URL ||
         (typeof window !== "undefined"
           ? window.location.origin
-          : "http://localhost:3000");
+          : "https://recoverix.vercel.app");
 
       const { error } = await supabase.auth.signUp({
         email,
@@ -199,6 +248,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 로그아웃 함수
   const signOut = async () => {
+    if (!supabase) {
+      console.error("Supabase 클라이언트가 초기화되지 않았습니다.");
+      return;
+    }
+
     try {
       setLoading(true);
       await supabase.auth.signOut();
@@ -212,6 +266,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // 사용자 정보 업데이트 함수
   const updateUser = async (updates: Partial<UserData>) => {
+    if (!supabase) {
+      return { error: "Supabase 클라이언트가 초기화되지 않았습니다." };
+    }
+
     if (!user) {
       return { error: "사용자가 로그인되지 않았습니다." };
     }
