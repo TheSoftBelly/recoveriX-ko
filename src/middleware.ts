@@ -15,14 +15,16 @@ export async function middleware(req: NextRequest) {
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
-      get(name: string) {
-        return req.cookies.get(name)?.valueOf() || null;
+      getAll() {
+        return Array.from(req.cookies.entries()).map(([name, value]) => ({
+          name,
+          value: value.valueOf(),
+        }));
       },
-      set(name: string, value: string, options: { path?: string }) {
-        if (typeof options === "string") {
-          options = { path: options };
-        }
-        res.cookies.set(name, value, options);
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          res.cookies.set(name, value, options);
+        });
       },
     },
   });
