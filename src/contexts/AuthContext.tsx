@@ -38,6 +38,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const fetchUserData = async (authUser: User) => {
     try {
       console.log("사용자 정보 가져오기 시도:", authUser.id);
+      setLoading(true);
+
       const { data: userData, error } = await supabase
         .from("users")
         .select("*")
@@ -72,6 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,7 +113,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (event === "SIGNED_IN" && session?.user) {
         console.log("사용자 로그인됨:", session.user.id);
         await fetchUserData(session.user);
-        setLoading(false);
       } else if (event === "SIGNED_OUT") {
         console.log("사용자 로그아웃됨");
         setUser(null);
@@ -121,8 +124,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log("초기 세션 확인됨");
         if (session?.user) {
           await fetchUserData(session.user);
+        } else {
+          setLoading(false);
         }
-        setLoading(false);
       }
     });
 
@@ -151,7 +155,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await fetchUserData(data.user);
       }
 
-      setLoading(false);
       return { error: null };
     } catch (error) {
       console.error("로그인 예외:", error);

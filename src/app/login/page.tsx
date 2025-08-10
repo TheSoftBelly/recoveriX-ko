@@ -22,6 +22,7 @@ export default function LoginPage() {
   // 이미 로그인된 사용자는 홈으로 리다이렉트
   useEffect(() => {
     if (mounted && user && !loading) {
+      console.log("로그인 완료, 홈으로 리다이렉트");
       window.location.href = "/";
     }
   }, [user, loading, mounted]);
@@ -37,10 +38,9 @@ export default function LoginPage() {
       if (error) {
         setError(error);
         setIsLoading(false);
-      } else {
-        // 로그인 성공 시 홈으로 리다이렉트
-        window.location.href = "/";
       }
+      // 로그인 성공 시에는 AuthContext의 loading 상태를 기다림
+      // 리다이렉트는 useEffect에서 처리됨
     } catch (error) {
       setError("로그인 중 오류가 발생했습니다.");
       setIsLoading(false);

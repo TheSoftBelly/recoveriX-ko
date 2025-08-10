@@ -18,8 +18,15 @@ export default function Header() {
 
   // 디버깅을 위한 로그
   useEffect(() => {
-    console.log("Header - loading:", loading, "user:", user?.name);
-  }, [loading, user]);
+    console.log(
+      "Header - loading:",
+      loading,
+      "user:",
+      user?.name,
+      "mounted:",
+      mounted
+    );
+  }, [loading, user, mounted]);
 
   const handleLogout = async () => {
     await signOut();
