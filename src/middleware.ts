@@ -16,10 +16,7 @@ export async function middleware(req: NextRequest) {
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        return Array.from(req.cookies.entries()).map(([name, value]) => ({
-          name,
-          value: value.valueOf(),
-        }));
+        return [];
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
