@@ -281,7 +281,7 @@ export default async function MainPage() {
                 <div className={styles.therapyItem}>
                   <div className={styles.therapyIcon}>
                     <Image
-                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy1.png"
+                      src="https://recoverix.com/wp-content/uploads/2022/05/therapy1.png"
                       alt="Motor Imagery"
                       width={80}
                       height={80}
