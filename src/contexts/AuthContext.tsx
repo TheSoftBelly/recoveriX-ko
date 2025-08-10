@@ -273,13 +273,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      setLoading(true);
-      await supabase.auth.signOut();
+      console.log("로그아웃 시작");
+      // 즉시 사용자 상태 초기화 (UI 즉시 업데이트)
       setUser(null);
+      setLoading(false);
+      console.log("사용자 상태 즉시 초기화 완료");
+
+      // Supabase 로그아웃 실행
+      await supabase.auth.signOut();
+      console.log("Supabase 로그아웃 완료");
     } catch (error) {
       console.error("Error signing out:", error);
-    } finally {
-      setLoading(false);
+      // 에러가 발생해도 사용자 상태는 이미 초기화됨
     }
   };
 

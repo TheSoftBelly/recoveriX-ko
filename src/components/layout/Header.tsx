@@ -29,10 +29,13 @@ export default function Header() {
   }, [loading, user, mounted]);
 
   const handleLogout = async () => {
-    await signOut();
+    console.log("Header: 로그아웃 버튼 클릭됨");
     setShowUserMenu(false);
+    await signOut();
+    console.log("Header: 로그아웃 완료");
+    // 페이지 새로고침으로 상태 완전 초기화
     if (mounted) {
-      window.location.href = "/";
+      window.location.reload();
     }
   };
 
