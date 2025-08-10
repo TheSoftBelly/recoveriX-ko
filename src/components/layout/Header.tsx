@@ -31,8 +31,10 @@ export default function Header({ user: initialUser }: HeaderProps) {
     // 현재 사용자 상태 확인
     const checkUser = async () => {
       try {
-        const { data: { user: authUser } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user: authUser },
+        } = await supabase.auth.getUser();
+
         if (authUser) {
           // users 테이블에서 사용자 정보 가져오기
           const { data: userData } = await supabase
@@ -48,13 +50,14 @@ export default function Header({ user: initialUser }: HeaderProps) {
             const newUser = {
               id: authUser.id,
               email: authUser.email || "",
-              name: authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
+              name:
+                authUser.user_metadata?.name ||
+                authUser.email?.split("@")[0] ||
+                "",
               role: "user" as const,
             };
 
-            const { error } = await supabase
-              .from("users")
-              .insert(newUser);
+            const { error } = await supabase.from("users").insert(newUser);
 
             if (!error) {
               setUser(newUser);
@@ -77,17 +80,17 @@ export default function Header({ user: initialUser }: HeaderProps) {
     }
 
     // 인증 상태 변경 감지
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === "SIGNED_IN" && session?.user) {
-          // 로그인 시 사용자 정보 가져오기
-          checkUser();
-        } else if (event === "SIGNED_OUT") {
-          // 로그아웃 시 사용자 정보 제거
-          setUser(null);
-        }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session?.user) {
+        // 로그인 시 사용자 정보 가져오기
+        checkUser();
+      } else if (event === "SIGNED_OUT") {
+        // 로그아웃 시 사용자 정보 제거
+        setUser(null);
       }
-    );
+    });
 
     return () => subscription.unsubscribe();
   }, [supabase, initialUser]);
@@ -137,9 +140,7 @@ export default function Header({ user: initialUser }: HeaderProps) {
       {/* 인증 섹션 */}
       <div className={styles.authSection}>
         {isLoading ? (
-          <div className={styles.authLoading}>
-            로딩 중...
-          </div>
+          <div className={styles.authLoading}>로딩 중...</div>
         ) : user ? (
           <div className={styles.userMenu}>
             <button

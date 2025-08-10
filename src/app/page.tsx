@@ -8,11 +8,13 @@ import styles from "@/styles/pages/HomePage.module.scss";
 export default async function MainPage() {
   // 사용자 정보 가져오기
   let userData = null;
-  
+
   try {
     const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     if (user) {
       const { data, error } = await supabase
         .from("users")

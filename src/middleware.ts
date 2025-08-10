@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  
+
   // Supabase 클라이언트 생성
   const supabase = createMiddlewareClient({ req, res });
 
@@ -18,11 +18,11 @@ export async function middleware(req: NextRequest) {
   // 보호된 경로들
   const protectedPaths = ["/profile", "/admin"];
   const adminOnlyPaths = ["/admin"];
-  
+
   const pathname = req.nextUrl.pathname;
 
   // 관리자 전용 페이지 보호
-  if (adminOnlyPaths.some(path => pathname.startsWith(path))) {
+  if (adminOnlyPaths.some((path) => pathname.startsWith(path))) {
     if (!user) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
@@ -40,7 +40,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // 일반 보호된 페이지
-  if (protectedPaths.some(path => pathname.startsWith(path)) && !user) {
+  if (protectedPaths.some((path) => pathname.startsWith(path)) && !user) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 

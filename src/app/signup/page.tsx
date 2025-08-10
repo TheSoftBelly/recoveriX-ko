@@ -19,7 +19,8 @@ export default function SignupPage() {
   const supabase = createSupabaseClient();
 
   const validatePassword = (password: string) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
     return passwordRegex.test(password);
   };
 
@@ -37,7 +38,9 @@ export default function SignupPage() {
     }
 
     if (!validatePassword(password)) {
-      setError("비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.");
+      setError(
+        "비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다."
+      );
       setIsLoading(false);
       return;
     }
@@ -80,7 +83,7 @@ export default function SignupPage() {
         }
 
         setSuccess("회원가입이 완료되었습니다! 이메일 인증 후 로그인해주세요.");
-        
+
         // 3초 후 로그인 페이지로 이동
         setTimeout(() => {
           router.push("/login");
@@ -137,15 +140,9 @@ export default function SignupPage() {
                 <p className={styles.formSubtitle}>
                   Enter your Credentials to access your account
                 </p>
-                {error && (
-                  <div className={styles.errorMessage}>
-                    {error}
-                  </div>
-                )}
+                {error && <div className={styles.errorMessage}>{error}</div>}
                 {success && (
-                  <div className={styles.successMessage}>
-                    {success}
-                  </div>
+                  <div className={styles.successMessage}>{success}</div>
                 )}
               </div>
 
@@ -220,8 +217,8 @@ export default function SignupPage() {
               </div>
 
               {/* 회원가입 버튼 */}
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className={styles.signupButton}
                 disabled={isLoading}
               >
@@ -236,8 +233,8 @@ export default function SignupPage() {
 
               {/* 소셜 로그인 버튼들 */}
               <div className={styles.socialButtons}>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className={styles.googleButton}
                   onClick={handleGoogleSignup}
                   disabled={isLoading}
@@ -245,8 +242,8 @@ export default function SignupPage() {
                   <div className={styles.socialIcon}></div>
                   구글로 간편 회원가입하기
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className={styles.appleButton}
                   disabled={isLoading}
                 >

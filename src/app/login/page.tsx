@@ -45,7 +45,10 @@ export default function LoginPage() {
           await supabase.from("users").insert({
             id: data.user.id,
             email: data.user.email || "",
-            name: data.user.user_metadata?.name || data.user.email?.split("@")[0] || "",
+            name:
+              data.user.user_metadata?.name ||
+              data.user.email?.split("@")[0] ||
+              "",
             role: "user",
           });
         }
@@ -104,11 +107,7 @@ export default function LoginPage() {
                 <p className={styles.formSubtitle}>
                   계정에 액세스하려면 자격 증명을 입력하세요
                 </p>
-                {error && (
-                  <div className={styles.errorMessage}>
-                    {error}
-                  </div>
-                )}
+                {error && <div className={styles.errorMessage}>{error}</div>}
               </div>
 
               {/* 이메일 필드 */}
@@ -168,8 +167,8 @@ export default function LoginPage() {
               </div>
 
               {/* 로그인 버튼 */}
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className={styles.loginButton}
                 disabled={isLoading}
               >
@@ -184,8 +183,8 @@ export default function LoginPage() {
 
               {/* 소셜 로그인 버튼들 */}
               <div className={styles.socialButtons}>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className={styles.googleButton}
                   onClick={handleGoogleLogin}
                   disabled={isLoading}
@@ -193,8 +192,8 @@ export default function LoginPage() {
                   <div className={styles.socialIcon}></div>
                   구글로 간편 로그인하기
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className={styles.appleButton}
                   disabled={isLoading}
                 >

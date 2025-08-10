@@ -3,16 +3,16 @@ import { createClient } from "@supabase/supabase-js";
 
 export const createSupabaseClient = () => {
   // 환경 변수가 있는 경우 사용, 없는 경우 기본값 사용
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
   if (supabaseUrl && supabaseAnonKey) {
     return createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: true,
-        detectSessionInUrl: true
-      }
+        detectSessionInUrl: true,
+      },
     });
   }
 
