@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Lock, Globe } from "lucide-react";
 import { createSupabaseClient } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const questionSchema = z.object({
   title: z
@@ -71,7 +71,7 @@ export default function QuestionForm({ user, onSuccess }: QuestionFormProps) {
       reset();
       setIsPrivate(false);
       onSuccess?.();
-      router.refresh();
+      // router.refresh();
     } catch (error) {
       console.error("질문 등록 실패:", error);
       alert("질문 등록에 실패했습니다. 다시 시도해주세요.");

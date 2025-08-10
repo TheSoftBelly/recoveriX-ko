@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Header from "@/components/layout/Header";
 import styles from "@/styles/pages/QuestionDetailPage.module.scss";
 

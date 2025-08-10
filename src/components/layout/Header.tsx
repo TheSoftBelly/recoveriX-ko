@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createSupabaseClient } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import styles from "@/styles/components/Header.module.scss";
 import type { User } from "@supabase/supabase-js";
 
@@ -105,7 +105,7 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setShowUserMenu(false);
-    router.refresh();
+    // router.refresh();
   };
 
   return (

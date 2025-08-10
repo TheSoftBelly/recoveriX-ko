@@ -62,7 +62,7 @@ export default async function MainPage() {
             <div className={styles.mediaLogos}>
               <div className={styles.mediaLogo}>
                 <Image
-                  src="/forbes-1.svg"
+                  src="https://recoverix.com/wp-content/uploads/2023/10/forbes-1.svg"
                   alt="Forbes"
                   width={240}
                   height={123}
@@ -71,7 +71,7 @@ export default async function MainPage() {
               </div>
               <div className={styles.mediaLogo}>
                 <Image
-                  src="/newyorkweekly-1.svg"
+                  src="https://recoverix.com/wp-content/uploads/2023/10/newyorkweekly-1.svg"
                   alt="New York Weekly"
                   width={240}
                   height={123}
@@ -80,7 +80,7 @@ export default async function MainPage() {
               </div>
               <div className={styles.mediaLogo}>
                 <Image
-                  src="/thesciencetimes-1.svg"
+                  src="https://recoverix.com/wp-content/uploads/2023/10/thesciencetimes-1.svg"
                   alt="The Science Times"
                   width={240}
                   height={123}
@@ -89,7 +89,7 @@ export default async function MainPage() {
               </div>
               <div className={styles.mediaLogo}>
                 <Image
-                  src="/benzinga-1.svg"
+                  src="https://recoverix.com/wp-content/uploads/2023/10/benzinga-1.svg"
                   alt="Benzinga"
                   width={240}
                   height={123}
@@ -240,8 +240,13 @@ export default async function MainPage() {
         <section className={styles.ceoSection}>
           <div className={styles.ceoContainer}>
             <div className={styles.ceoImage}>
-              <div className={styles.ceoAvatar}></div>
-              <div className={styles.ceoPhoto}></div>
+              <Image
+                src="https://recoverix.com/wp-content/uploads/2022/05/christoph-guger-monochrom.jpg"
+                alt="Dr. Christoph Guger"
+                width={200}
+                height={200}
+                className={styles.ceoPhoto}
+              />
             </div>
             <div className={styles.ceoText}>
               <p className={styles.ceoQuote}>
@@ -274,9 +279,14 @@ export default async function MainPage() {
             <div className={styles.therapyListContainer}>
               <div className={styles.therapyList}>
                 <div className={styles.therapyItem}>
-                  <div
-                    className={`${styles.therapyIcon} ${styles.therapy1}`}
-                  ></div>
+                  <div className={styles.therapyIcon}>
+                    <Image
+                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy1.png"
+                      alt="Motor Imagery"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
                   <h3 className={styles.therapyItemTitle}>모터 이미지(MI)</h3>
                   <p className={styles.therapyItemDescription}>
                     손이나 발의 움직임을 상상해 보세요. recoveriX는 운동
@@ -294,9 +304,14 @@ export default async function MainPage() {
                   </p>
                 </div>
                 <div className={styles.therapyItem}>
-                  <div
-                    className={`${styles.therapyIcon} ${styles.therapy2}`}
-                  ></div>
+                  <div className={styles.therapyIcon}>
+                    <Image
+                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy2.png"
+                      alt="Virtual Reality"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
                   <h3 className={styles.therapyItemTitle}>가상현실 (VR)</h3>
                   <p className={styles.therapyItemDescription}>
                     화면의 시뮬레이션을 통해 모터 이미지를 볼 수 있습니다.
@@ -311,9 +326,14 @@ export default async function MainPage() {
                   </p>
                 </div>
                 <div className={styles.therapyItem}>
-                  <div
-                    className={`${styles.therapyIcon} ${styles.therapy3}`}
-                  ></div>
+                  <div className={styles.therapyIcon}>
+                    <Image
+                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy3.png"
+                      alt="Electrical Stimulation"
+                      width={80}
+                      height={80}
+                    />
+                  </div>
                   <h3 className={styles.therapyItemTitle}>전기 자극(FES)</h3>
                   <p className={styles.therapyItemDescription}>
                     이 자극을 위해 예를 들어 손목의 배측 굴곡근이나 다리에 두
@@ -340,8 +360,13 @@ export default async function MainPage() {
         <section className={styles.testimonialSection}>
           <div className={styles.testimonialContainer}>
             <div className={styles.testimonialImage}>
-              <div className={styles.testimonialAvatar}></div>
-              <div className={styles.testimonialPhoto}></div>
+              <Image
+                src="https://recoverix.com/wp-content/uploads/2022/05/review-image.png"
+                alt="Patient Testimonial"
+                width={200}
+                height={200}
+                className={styles.testimonialPhoto}
+              />
             </div>
             <div className={styles.testimonialText}>
               <p className={styles.testimonialQuote}>
@@ -365,10 +390,10 @@ export default async function MainPage() {
           <div className={styles.appContainer}>
             <div className={styles.appImage}>
               <Image
-                src="/images/recoverix-at-home-app.png"
+                src="https://recoverix.com/wp-content/uploads/2023/11/recoveriX-at-Home-Android-Screen-02.jpg"
                 alt="recoveriX at Home 앱"
-                fill
-                sizes="(max-width: 768px) 350px, (max-width: 480px) 280px, 400px"
+                width={400}
+                height={600}
                 style={{ objectFit: "contain" }}
               />
             </div>
@@ -403,7 +428,13 @@ export default async function MainPage() {
         {/* 세계지도 섹션 */}
         <section className={styles.mapSection}>
           <div className={styles.mapContainer}>
-            <div className={styles.mapImage}></div>
+            <Image
+              src="https://recoverix.com/wp-content/uploads/2022/07/new-worldmap-2024-new.png"
+              alt="recoveriX World Map"
+              width={800}
+              height={400}
+              className={styles.mapImage}
+            />
             <a href="#" className={styles.mapLink}>
               당신 근처의 recoveriX
             </a>
@@ -414,7 +445,14 @@ export default async function MainPage() {
       {/* 푸터 */}
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
-          <div className={styles.footerLogo}></div>
+          <div className={styles.footerLogo}>
+            <Image
+              src="https://recoverix.com/wp-content/themes/recoverix/img/recoverix-logo-white.svg"
+              alt="recoveriX Logo"
+              width={200}
+              height={36}
+            />
+          </div>
           <div className={styles.footerLinks}>
             <Link href="/news" className={styles.footerLink}>
               소식

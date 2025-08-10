@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { createSupabaseClient } from "@/lib/supabase";
@@ -65,7 +65,7 @@ export default function LoginPage() {
         }
 
         router.push("/");
-        router.refresh();
+        // router.refresh();
       }
     } catch (err) {
       setError("로그인 중 오류가 발생했습니다.");

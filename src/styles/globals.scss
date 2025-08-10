@@ -1,3 +1,6 @@
+// Google Fonts import
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 // SCSS 변수 정의
 $color-primary: #1fb184;
 $color-primary-hover: #15845e;
@@ -19,12 +22,22 @@ $color-gray-700: #374151;
 $color-gray-800: #1f2937;
 $color-gray-900: #111827;
 
+// 폰트 변수
+$font-family-inter: "Inter", sans-serif;
+
 // 브레이크포인트
 $breakpoint-sm: 640px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
 $breakpoint-2xl: 1536px;
+
+// 전역 폰트 설정
+body {
+  font-family: $font-family-inter;
+  font-weight: 400;
+  line-height: 1.6;
+}
 
 // 믹스인과 함수들만 포함
 
@@ -66,7 +79,7 @@ $breakpoint-2xl: 1536px;
   border: 1px solid #d9d9d9;
   border-radius: 10px;
   padding: 8px 10px;
-  font-family: "Inter", sans-serif;
+  font-family: $font-family-inter;
 
   &:focus {
     outline: none;
