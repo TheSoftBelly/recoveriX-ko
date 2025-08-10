@@ -77,53 +77,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log("사용자 정보 가져오기 시도:", authUser.id);
       setLoading(true);
 
-      const { data: userData, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", authUser.id)
-        .single();
+      console.log("Supabase 쿼리 실행 중...");
+
+      let userData, error;
+      try {
+        const result = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", authUser.id)
+          .single();
+        userData = result.data;
+        error = result.error;
+      } catch (fetchError) {
+        console.error("Supabase 쿼리 실행 중 예외 발생:", fetchError);
+        error = { code: "FETCH_ERROR", message: "쿼리 실행 실패" };
+      }
+
+      console.log("Supabase 쿼리 결과:", { userData, error });
+
+      // 기본 사용자 정보 생성
+      const fallbackUser = {
+        id: authUser.id,
+        email: authUser.email || "",
+        name:
+          authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
+        role: "user" as const,
+      };
 
       if (error && error.code === "PGRST116") {
         console.log("사용자가 users 테이블에 없음, 새로 생성");
         // 사용자가 users 테이블에 없으면 생성
-        const newUser = {
-          id: authUser.id,
-          email: authUser.email || "",
-          name:
-            authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
-          role: "user" as const,
-        };
-
-        const { error: insertError } = await supabase
-          .from("users")
-          .insert(newUser);
-        if (!insertError) {
-          console.log("새 사용자 생성 성공:", newUser);
-          setUser(newUser);
-        } else {
-          console.error("새 사용자 생성 실패:", insertError);
-          // 생성 실패 시에도 기본 사용자 정보로 설정
-          setUser(newUser);
+        try {
+          const { error: insertError } = await supabase
+            .from("users")
+            .insert(fallbackUser);
+          if (!insertError) {
+            console.log("새 사용자 생성 성공:", fallbackUser);
+            setUser(fallbackUser);
+          } else {
+            console.error("새 사용자 생성 실패:", insertError);
+            setUser(fallbackUser);
+          }
+        } catch (insertError) {
+          console.error("사용자 생성 중 예외 발생:", insertError);
+          setUser(fallbackUser);
         }
       } else if (userData) {
         console.log("기존 사용자 정보 가져오기 성공:", userData);
         setUser(userData);
-      } else if (error) {
+      } else {
+        // 모든 에러 상황에서 fallback 사용자 정보 사용
         console.error("사용자 정보 가져오기 실패:", error);
-        console.error("에러 상세 정보:", {
-          code: error.code,
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-        });
-        // 에러 발생 시에도 기본 사용자 정보로 설정
-        const fallbackUser = {
-          id: authUser.id,
-          email: authUser.email || "",
-          name:
-            authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
-          role: "user" as const,
-        };
+        if (error) {
+          console.error("에러 상세 정보:", {
+            code: error.code,
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+          });
+        }
+        console.log("Fallback 사용자 정보로 설정:", fallbackUser);
         setUser(fallbackUser);
       }
     } catch (error) {
