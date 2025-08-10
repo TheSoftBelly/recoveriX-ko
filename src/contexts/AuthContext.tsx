@@ -102,15 +102,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(newUser);
         } else {
           console.error("새 사용자 생성 실패:", insertError);
+          // 생성 실패 시에도 기본 사용자 정보로 설정
+          setUser(newUser);
         }
       } else if (userData) {
         console.log("기존 사용자 정보 가져오기 성공:", userData);
         setUser(userData);
       } else if (error) {
         console.error("사용자 정보 가져오기 실패:", error);
+        console.error("에러 상세 정보:", {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+        });
+        // 에러 발생 시에도 기본 사용자 정보로 설정
+        const fallbackUser = {
+          id: authUser.id,
+          email: authUser.email || "",
+          name:
+            authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
+          role: "user" as const,
+        };
+        setUser(fallbackUser);
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
+      // 예외 발생 시에도 기본 사용자 정보로 설정
+      const fallbackUser = {
+        id: authUser.id,
+        email: authUser.email || "",
+        name:
+          authUser.user_metadata?.name || authUser.email?.split("@")[0] || "",
+        role: "user" as const,
+      };
+      setUser(fallbackUser);
     } finally {
       setLoading(false);
     }
