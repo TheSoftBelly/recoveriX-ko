@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { createSupabaseClient } from "@/lib/supabase";
@@ -16,7 +15,6 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -103,7 +101,7 @@ export default function SignupPage() {
         // 3초 후 로그인 페이지로 이동
         setTimeout(() => {
           if (mounted) {
-            router.push("/login");
+            window.location.href = "/login";
           }
         }, 3000);
       }

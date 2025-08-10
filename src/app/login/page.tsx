@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
 import { createSupabaseClient } from "@/lib/supabase";
@@ -14,7 +13,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -70,7 +68,7 @@ export default function LoginPage() {
         }
 
         if (mounted) {
-          router.push("/");
+          window.location.href = "/";
         }
       }
     } catch (err) {

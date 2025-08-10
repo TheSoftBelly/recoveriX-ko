@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createSupabaseClient } from "@/lib/supabase";
-import { useRouter } from "next/router";
 import styles from "@/styles/components/Header.module.scss";
 import type { User } from "@supabase/supabase-js";
 
@@ -25,8 +24,6 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const [user, setUser] = useState<UserData | null>(initialUser || null);
   const [isLoading, setIsLoading] = useState(!initialUser);
   const [mounted, setMounted] = useState(false);
-
-  const router = useRouter();
 
   const supabase = createSupabaseClient();
 
@@ -111,8 +108,8 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setShowUserMenu(false);
-    if (mounted && router) {
-      router.push("/");
+    if (mounted) {
+      window.location.href = "/";
     }
   };
 
