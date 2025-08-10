@@ -81,13 +81,13 @@ export default function MainPage() {
                 />
               </div>
               <div className={styles.mediaLogo}>
-        <Image
+                <Image
                   src="/benzinga-1.svg"
                   alt="Benzinga"
                   width={240}
                   height={123}
-          priority
-        />
+                  priority
+                />
               </div>
             </div>
           </div>
@@ -357,7 +357,7 @@ export default function MainPage() {
         <section className={styles.appSection}>
           <div className={styles.appContainer}>
             <div className={styles.appImage}>
-            <Image
+              <Image
                 src="/images/recoverix-at-home-app.png"
                 alt="recoveriX at Home 앱"
                 fill
@@ -399,8 +399,8 @@ export default function MainPage() {
             <div className={styles.mapImage}></div>
             <a href="#" className={styles.mapLink}>
               당신 근처의 recoveriX
-          </a>
-        </div>
+            </a>
+          </div>
         </section>
       </main>
 

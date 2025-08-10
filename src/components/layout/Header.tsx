@@ -34,10 +34,10 @@ export default function Header({ user }: HeaderProps) {
     <header className={styles.header}>
       {/* 로고 */}
       <Link href="/" className={styles.logoLink}>
-                <Image 
-          src="/recoveriX-logo.svg" 
-          alt="recoveriX" 
-          width={200} 
+        <Image
+          src="https://recoverix.com/wp-content/themes/recoverix/img/recoveriX-logo.svg"
+          alt="recoveriX"
+          width={200}
           height={36}
           priority
           className={styles.logo}

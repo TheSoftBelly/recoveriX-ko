@@ -8,10 +8,17 @@ const nextConfig: NextConfig = {
     // 이미지 최적화 완전 비활성화로 호환성 확보
     unoptimized: true,
     // 기본 로더 설정
-    loader: 'default',
-    // 도메인 설정 (필요 시)
-    domains: [],
-    remotePatterns: [],
+    loader: "default",
+    // 외부 도메인 허용
+    domains: ["recoverix.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "recoverix.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
   experimental: {
     optimizePackageImports: ["@heroicons/react"],
