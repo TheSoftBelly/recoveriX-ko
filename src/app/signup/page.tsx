@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
@@ -15,7 +15,12 @@ export default function SignupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   let supabase = null;
   try {
@@ -97,7 +102,9 @@ export default function SignupPage() {
 
         // 3초 후 로그인 페이지로 이동
         setTimeout(() => {
-          router.push("/login");
+          if (mounted) {
+            router.push("/login");
+          }
         }, 3000);
       }
     } catch (err) {

@@ -24,9 +24,15 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [user, setUser] = useState<UserData | null>(initialUser || null);
   const [isLoading, setIsLoading] = useState(!initialUser);
+  const [mounted, setMounted] = useState(false);
+
   const router = useRouter();
 
   const supabase = createSupabaseClient();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // 현재 사용자 상태 확인
@@ -105,7 +111,9 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setShowUserMenu(false);
-    // router.refresh();
+    if (mounted && router) {
+      router.push("/");
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
@@ -13,7 +13,12 @@ export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   let supabase = null;
   try {
@@ -64,8 +69,9 @@ export default function LoginPage() {
           });
         }
 
-        router.push("/");
-        // router.refresh();
+        if (mounted) {
+          router.push("/");
+        }
       }
     } catch (err) {
       setError("로그인 중 오류가 발생했습니다.");
