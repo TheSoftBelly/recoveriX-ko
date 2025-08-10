@@ -23,6 +23,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (mounted && user && !loading) {
       console.log("로그인 완료, 홈으로 리다이렉트");
+      setIsLoading(false); // 로그인 페이지 로딩 상태 해제
       window.location.href = "/";
     }
   }, [user, loading, mounted]);
@@ -38,9 +39,10 @@ export default function LoginPage() {
       if (error) {
         setError(error);
         setIsLoading(false);
+      } else {
+        // 로그인 성공 시 로딩 상태 유지 (AuthContext에서 처리)
+        console.log("로그인 성공, AuthContext 상태 변화 대기 중");
       }
-      // 로그인 성공 시에는 AuthContext의 loading 상태를 기다림
-      // 리다이렉트는 useEffect에서 처리됨
     } catch (error) {
       setError("로그인 중 오류가 발생했습니다.");
       setIsLoading(false);
@@ -48,14 +50,16 @@ export default function LoginPage() {
   };
 
   // 이미 로그인된 경우 로딩 표시
-  if (loading || (mounted && user)) {
+  if (loading || (mounted && user) || isLoading) {
     return (
       <div className={styles.pageContainer}>
         <Header />
         <main className={styles.main}>
           <div className={styles.loginContainer}>
             <div className={styles.loginForm}>
-              <div className={styles.loadingMessage}>로그인 중...</div>
+              <div className={styles.loadingMessage}>
+                {loading ? "인증 상태 확인 중..." : "로그인 중..."}
+              </div>
             </div>
           </div>
         </main>

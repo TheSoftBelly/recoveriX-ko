@@ -198,6 +198,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // 로그인 성공 시 사용자 정보 가져오기
       if (data.user) {
         await fetchUserData(data.user);
+      } else {
+        setLoading(false);
       }
 
       return { error: null };
