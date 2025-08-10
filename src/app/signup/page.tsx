@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import { createSupabaseClient } from "@/lib/supabase";
 import styles from "@/styles/pages/SignupPage.module.scss";
 
 export default function SignupPage() {
@@ -10,11 +12,109 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validatePassword = (password: string) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 회원가입 로직 구현
-    console.log("Signup attempt:", { nickname, email, password, agreeToTerms });
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    // 유효성 검사
+    if (!nickname.trim()) {
+      setError("닉네임을 입력해주세요.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError("비밀번호는 8~16자의 영문 대소문자, 숫자, 특수문자를 포함해야 합니다.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!agreeToTerms) {
+      setError("개인정보 제공 동의가 필요합니다.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Supabase Auth로 회원가입
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name: nickname,
+          },
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data.user) {
+        // 사용자 정보를 users 테이블에 저장
+        const { error: insertError } = await supabase.from("users").insert({
+          id: data.user.id,
+          email: data.user.email || "",
+          name: nickname,
+          role: "user",
+        });
+
+        if (insertError) {
+          console.error("User table insert error:", insertError);
+          // 에러가 있어도 회원가입은 성공으로 처리 (Auth는 이미 완료됨)
+        }
+
+        setSuccess("회원가입이 완료되었습니다! 이메일 인증 후 로그인해주세요.");
+        
+        // 3초 후 로그인 페이지로 이동
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
+      }
+    } catch (err) {
+      setError("회원가입 중 오류가 발생했습니다.");
+      console.error("Signup error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError("Google 회원가입 중 오류가 발생했습니다.");
+      console.error("Google signup error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -37,6 +137,16 @@ export default function SignupPage() {
                 <p className={styles.formSubtitle}>
                   Enter your Credentials to access your account
                 </p>
+                {error && (
+                  <div className={styles.errorMessage}>
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className={styles.successMessage}>
+                    {success}
+                  </div>
+                )}
               </div>
 
               {/* 닉네임 필드 */}
@@ -110,8 +220,12 @@ export default function SignupPage() {
               </div>
 
               {/* 회원가입 버튼 */}
-              <button type="submit" className={styles.signupButton}>
-                Sign up / 회원가입
+              <button 
+                type="submit" 
+                className={styles.signupButton}
+                disabled={isLoading}
+              >
+                {isLoading ? "회원가입 중..." : "Sign up / 회원가입"}
               </button>
 
               {/* 구분선 */}
@@ -122,13 +236,22 @@ export default function SignupPage() {
 
               {/* 소셜 로그인 버튼들 */}
               <div className={styles.socialButtons}>
-                <button type="button" className={styles.googleButton}>
+                <button 
+                  type="button" 
+                  className={styles.googleButton}
+                  onClick={handleGoogleSignup}
+                  disabled={isLoading}
+                >
                   <div className={styles.socialIcon}></div>
-                  구글로 간편 로그인하기
+                  구글로 간편 회원가입하기
                 </button>
-                <button type="button" className={styles.appleButton}>
+                <button 
+                  type="button" 
+                  className={styles.appleButton}
+                  disabled={isLoading}
+                >
                   <div className={styles.socialIcon}></div>
-                  애플로 간편 로그인하기
+                  애플로 간편 회원가입하기 (준비중)
                 </button>
               </div>
 

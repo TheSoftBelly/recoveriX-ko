@@ -1,27 +1,32 @@
-// import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
 import Header from "@/components/layout/Header";
 import VideoCarousel from "@/components/VideoCarousel";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/pages/HomePage.module.scss";
 
-export default function MainPage() {
-  // 사용자 정보를 가져오는 부분을 임시로 비활성화하여 타입 에러 해결
-  const userData = null;
-
-  // const supabase = await createSupabaseServerClient();
-  // const { data: { user } } = await supabase.auth.getUser();
-  // let userData = null;
-  // if (user) {
-  //   const { data, error } = await supabase
-  //     .from("users")
-  //     .select("*")
-  //     .eq("id", user.id)
-  //     .single();
-  //   if (!error && data) {
-  //     userData = data;
-  //   }
-  // }
+export default async function MainPage() {
+  // 사용자 정보 가져오기
+  let userData = null;
+  
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+      if (!error && data) {
+        userData = data;
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    userData = null;
+  }
 
   return (
     <div className={styles.pageContainer}>

@@ -1,19 +1,87 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import { createSupabaseClient } from "@/lib/supabase";
 import styles from "@/styles/pages/LoginPage.module.scss";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const supabase = createSupabaseClient();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 로그인 로직 구현
-    console.log("Login attempt:", { email, password, rememberMe });
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data.user) {
+        // 사용자 정보를 users 테이블에서 확인/생성
+        const { data: userData, error: userError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", data.user.id)
+          .single();
+
+        if (userError && userError.code === "PGRST116") {
+          // 사용자가 users 테이블에 없으면 생성
+          await supabase.from("users").insert({
+            id: data.user.id,
+            email: data.user.email || "",
+            name: data.user.user_metadata?.name || data.user.email?.split("@")[0] || "",
+            role: "user",
+          });
+        }
+
+        router.push("/");
+        router.refresh();
+      }
+    } catch (err) {
+      setError("로그인 중 오류가 발생했습니다.");
+      console.error("Login error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError("Google 로그인 중 오류가 발생했습니다.");
+      console.error("Google login error:", err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -36,6 +104,11 @@ export default function LoginPage() {
                 <p className={styles.formSubtitle}>
                   계정에 액세스하려면 자격 증명을 입력하세요
                 </p>
+                {error && (
+                  <div className={styles.errorMessage}>
+                    {error}
+                  </div>
+                )}
               </div>
 
               {/* 이메일 필드 */}
@@ -95,8 +168,12 @@ export default function LoginPage() {
               </div>
 
               {/* 로그인 버튼 */}
-              <button type="submit" className={styles.loginButton}>
-                Login / 로그인
+              <button 
+                type="submit" 
+                className={styles.loginButton}
+                disabled={isLoading}
+              >
+                {isLoading ? "로그인 중..." : "Login / 로그인"}
               </button>
 
               {/* 구분선 */}
@@ -107,13 +184,22 @@ export default function LoginPage() {
 
               {/* 소셜 로그인 버튼들 */}
               <div className={styles.socialButtons}>
-                <button type="button" className={styles.googleButton}>
+                <button 
+                  type="button" 
+                  className={styles.googleButton}
+                  onClick={handleGoogleLogin}
+                  disabled={isLoading}
+                >
                   <div className={styles.socialIcon}></div>
                   구글로 간편 로그인하기
                 </button>
-                <button type="button" className={styles.appleButton}>
+                <button 
+                  type="button" 
+                  className={styles.appleButton}
+                  disabled={isLoading}
+                >
                   <div className={styles.socialIcon}></div>
-                  애플로 간편 로그인하기
+                  애플로 간편 로그인하기 (준비중)
                 </button>
               </div>
 

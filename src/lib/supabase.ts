@@ -1,6 +1,22 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@supabase/supabase-js";
 
 export const createSupabaseClient = () => {
+  // 환경 변수가 있는 경우 사용, 없는 경우 기본값 사용
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+  if (supabaseUrl && supabaseAnonKey) {
+    return createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+      }
+    });
+  }
+
+  // 기본 auth-helpers 클라이언트 사용 (환경변수가 없는 경우)
   return createClientComponentClient();
 };
 
