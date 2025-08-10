@@ -16,7 +16,13 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
-  const supabase = createSupabaseClient();
+  
+  let supabase = null;
+  try {
+    supabase = createSupabaseClient();
+  } catch (err) {
+    console.warn("Supabase not configured:", err);
+  }
 
   const validatePassword = (password: string) => {
     const passwordRegex =
@@ -52,6 +58,11 @@ export default function SignupPage() {
     }
 
     try {
+      if (!supabase) {
+        setError("인증 시스템이 설정되지 않았습니다.");
+        return;
+      }
+
       // Supabase Auth로 회원가입
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -102,6 +113,11 @@ export default function SignupPage() {
     setError("");
 
     try {
+      if (!supabase) {
+        setError("인증 시스템이 설정되지 않았습니다.");
+        return;
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {

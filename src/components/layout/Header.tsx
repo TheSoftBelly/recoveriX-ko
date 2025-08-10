@@ -25,12 +25,24 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const [user, setUser] = useState<UserData | null>(initialUser || null);
   const [isLoading, setIsLoading] = useState(!initialUser);
   const router = useRouter();
-  const supabase = createSupabaseClient();
+  
+  let supabase = null;
+  try {
+    supabase = createSupabaseClient();
+  } catch (error) {
+    console.warn("Supabase not configured:", error);
+  }
 
   useEffect(() => {
     // 현재 사용자 상태 확인
     const checkUser = async () => {
       try {
+        if (!supabase) {
+          setUser(null);
+          setIsLoading(false);
+          return;
+        }
+
         const {
           data: { user: authUser },
         } = await supabase.auth.getUser();

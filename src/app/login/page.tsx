@@ -14,7 +14,13 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  const supabase = createSupabaseClient();
+  
+  let supabase = null;
+  try {
+    supabase = createSupabaseClient();
+  } catch (err) {
+    console.warn("Supabase not configured:", err);
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +28,11 @@ export default function LoginPage() {
     setError("");
 
     try {
+      if (!supabase) {
+        setError("인증 시스템이 설정되지 않았습니다.");
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -69,6 +80,11 @@ export default function LoginPage() {
     setError("");
 
     try {
+      if (!supabase) {
+        setError("인증 시스템이 설정되지 않았습니다.");
+        return;
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {

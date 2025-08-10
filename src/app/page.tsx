@@ -26,7 +26,7 @@ export default async function MainPage() {
       }
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.warn("Supabase not configured or error fetching user data:", error);
     userData = null;
   }
 

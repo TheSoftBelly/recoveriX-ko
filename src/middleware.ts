@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -6,7 +6,29 @@ export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
   // Supabase 클라이언트 생성
-  const supabase = createMiddlewareClient({ req, res });
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return res; // 환경 변수가 없으면 미들웨어를 건너뜀
+  }
+
+  const supabase = createServerClient(
+    supabaseUrl,
+    supabaseAnonKey,
+    {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            res.cookies.set(name, value, options);
+          });
+        },
+      },
+    }
+  );
 
   // 세션 새로고침
   await supabase.auth.getSession();
