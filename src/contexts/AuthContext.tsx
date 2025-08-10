@@ -97,6 +97,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (event === "SIGNED_OUT") {
         setUser(null);
         setLoading(false);
+      } else if (event === "TOKEN_REFRESHED") {
+        setLoading(false);
       }
     });
 
@@ -106,17 +108,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 로그인 함수
   const signIn = async (email: string, password: string) => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
+        setLoading(false);
         return { error: error.message };
       }
 
       return { error: null };
     } catch (error) {
+      setLoading(false);
       return { error: "로그인 중 오류가 발생했습니다." };
     }
   };
@@ -158,10 +163,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // 로그아웃 함수
   const signOut = async () => {
     try {
+      setLoading(true);
       await supabase.auth.signOut();
       setUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
+    } finally {
+      setLoading(false);
     }
   };
 

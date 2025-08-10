@@ -1,367 +1,255 @@
 .pageContainer {
   min-height: 100vh;
-  background-color: #fafcfa;
-}
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding-top: 80px; // 헤더 높이만큼 패딩 추가
 
-.loginMain {
-  display: flex;
-  min-height: calc(100vh - 127px); // Header 높이 제외
-}
-
-// 왼쪽 이미지 영역
-.imageContainer {
-  flex: 1;
-  max-width: 972px;
-  padding: 41px 0 0 20px;
+  @media (max-width: 1024px) {
+    padding-top: 70px;
+  }
 
   @media (max-width: 768px) {
-    display: none; // 모바일에서 숨김
+    padding-top: 65px;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 60px;
   }
 }
 
-.backgroundImage {
-  width: 100%;
-  height: 1081.42px;
-  background-image: url("https://recoverix.com/wp-content/uploads/2024/01/EEG-Cap-128-channel-g.SCARABEO-800x800px.svg");
-  background-size: stretch;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 12px;
-}
-
-// 오른쪽 로그인 폼 영역
-.loginContainer {
-  flex: 1;
+.main {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
-  background-color: #ffffff;
+  min-height: calc(100vh - 80px);
+  padding: 60px 20px; // 패딩 증가
+
+  @media (max-width: 1024px) {
+    min-height: calc(100vh - 70px);
+    padding: 50px 20px;
+  }
 
   @media (max-width: 768px) {
-    padding: 20px;
+    min-height: calc(100vh - 65px);
+    padding: 40px 16px;
+  }
+
+  @media (max-width: 480px) {
+    min-height: calc(100vh - 60px);
+    padding: 30px 12px;
   }
 }
 
-.loginForm {
+.loginContainer {
   width: 100%;
-  max-width: 404px;
+  max-width: 520px; // 폼 크기 증가
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-// 폼 헤더
-.formHeader {
-  margin-bottom: 48px;
+.loginForm {
+  padding: 56px 48px; // 패딩 증가
 
   @media (max-width: 768px) {
-    margin-bottom: 32px;
+    padding: 40px 32px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 32px 24px;
+  }
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 24px;
   }
 }
 
 .formTitle {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
   font-size: 32px;
-  line-height: 48px;
-  color: #000000;
-  margin: 0 0 8px 0;
+  color: #1a1a1a;
+  margin-bottom: 8px;
 
   @media (max-width: 768px) {
     font-size: 28px;
-    line-height: 42px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 24px;
   }
 }
 
 .formSubtitle {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
   font-size: 16px;
-  line-height: 24px;
-  color: #000000;
-  margin: 0;
+  color: #666666;
+  line-height: 1.5;
 
   @media (max-width: 768px) {
     font-size: 14px;
-    line-height: 21px;
   }
 }
 
-// 입력 필드 그룹
+.errorMessage {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #dc2626;
+  text-align: center;
+}
+
 .inputGroup {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 
   @media (max-width: 768px) {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 }
 
 .inputLabel {
   display: block;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
   font-size: 14px;
-  line-height: 21px;
-  color: #000000;
+  color: #1a1a1a;
   margin-bottom: 8px;
-}
-
-.passwordHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.forgotPassword {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 15px;
-  color: #0c2a92;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.inputWrapper {
-  position: relative;
 }
 
 .inputField {
   width: 100%;
-  height: 32px;
-  padding: 8px 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 10px;
-  background-color: #ffffff;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 10px;
-  line-height: 15px;
-  color: #000000;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: #d9d9d9;
-  }
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  color: #1a1a1a;
+  background: #ffffff;
+  transition: all 0.2s ease;
 
   &:focus {
     outline: none;
     border-color: #1fb184;
-    box-shadow: 0 0 0 2px rgba(31, 177, 132, 0.1);
+    box-shadow: 0 0 0 3px rgba(31, 177, 132, 0.1);
+  }
+
+  &:disabled {
+    background: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
   }
 }
 
-// 체크박스 그룹
-.checkboxGroup {
+.loginOptions {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 16px;
-  }
-}
-
-.checkbox {
-  width: 9px;
-  height: 9.96px;
-  margin-right: 11px;
-  border: 1px solid #000000;
-  border-radius: 2px;
-  accent-color: #1fb184;
-}
-
-.checkboxLabel {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 9px;
-  line-height: 13.5px;
-  color: #000000;
-  cursor: pointer;
-  user-select: none;
-}
-
-// 로그인 버튼
-.loginButton {
-  width: 100%;
-  height: 32px;
-  background-color: #1fb184;
-  border: 1px solid #1fb184;
-  border-radius: 10px;
-  color: #ffffff;
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 19.5px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-bottom: 20px;
-
-  &:hover {
-    background-color: #1a9d75;
-    border-color: #1a9d75;
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-
-  @media (max-width: 768px) {
-    margin-bottom: 16px;
-  }
-}
-
-// 구분선
-.divider {
-  position: relative;
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 16px;
-  }
-}
-
-.dividerLine {
-  height: 1px;
-  background-color: #f5f5f5;
-}
-
-.dividerText {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #ffffff;
-  padding: 0 10px;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 9px;
-  line-height: 13.5px;
-  color: #000000;
-}
-
-// 소셜 로그인 버튼들
-.socialButtons {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
+    align-items: flex-start;
     margin-bottom: 24px;
   }
 }
 
-.googleButton,
-.appleButton {
-  flex: 1;
-  height: 32px;
+.checkboxLabel {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: 1px solid #d9d9d9;
-  border-radius: 10px;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 18px;
+  gap: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #666666;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #1fb184;
+}
+
+.checkboxText {
+  font-size: 14px;
+}
+
+.forgotPassword {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #1fb184;
+  text-decoration: none;
+  transition: color 0.2s ease;
 
   &:hover {
-    background-color: #f8f9fa;
-    border-color: #bbb;
+    color: #15845e;
+    text-decoration: underline;
+  }
+}
+
+.loginButton {
+  width: 100%;
+  padding: 14px 24px;
+  background: #1fb184;
+  border: none;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+
+  &:hover:not(:disabled) {
+    background: #15845e;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(31, 177, 132, 0.3);
+  }
+
+  &:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 
   @media (max-width: 768px) {
-    justify-content: center;
-    padding: 0 16px;
+    padding: 12px 20px;
+    font-size: 15px;
+    margin-bottom: 20px;
   }
 }
 
-.socialIcon {
-  width: 24px;
-  height: 24px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
-.googleButton .socialIcon {
-  background-image: url("/icons/google.svg");
-}
-
-.appleButton .socialIcon {
-  background-image: url("/icons/apple.svg");
-}
-
-// 회원가입 링크
 .signupLink {
   text-align: center;
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
+  font-family: "Inter", sans-serif;
   font-size: 14px;
-  line-height: 21px;
-  color: #000000;
+  color: #666666;
 
-  a {
+  .signupText {
     color: #1fb184;
     text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
 
     &:hover {
+      color: #15845e;
       text-decoration: underline;
     }
   }
-}
-
-// 반응형 미디어 쿼리
-@media (max-width: 1024px) {
-  .imageContainer {
-    max-width: 600px;
-  }
-
-  .backgroundImage {
-    height: 800px;
-  }
-}
-
-@media (max-width: 768px) {
-  .loginMain {
-    min-height: calc(100vh - 100px);
-  }
-
-  .loginContainer {
-    padding: 20px 16px;
-  }
-
-  .loginForm {
-    max-width: 100%;
-  }
-}
-
-// 에러 및 성공 메시지
-.errorMessage {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-top: 12px;
-}
-
-.successMessage {
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #16a34a;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-top: 12px;
 }

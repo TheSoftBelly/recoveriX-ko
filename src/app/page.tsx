@@ -403,13 +403,6 @@ export default async function MainPage() {
         {/* 세계지도 섹션 */}
         <section className={styles.mapSection}>
           <div className={styles.mapContainer}>
-            <Image
-              src="https://recoverix.com/wp-content/uploads/2022/07/new-worldmap-2024-new.png"
-              alt="recoveriX World Map"
-              width={800}
-              height={400}
-              className={styles.mapImage}
-            />
             <a href="#" className={styles.mapLink}>
               당신 근처의 recoveriX
             </a>

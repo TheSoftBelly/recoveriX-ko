@@ -22,7 +22,7 @@
   width: 100%;
   min-height: 100vh;
   background: #ffffff;
-  padding-top: 80px;
+  padding-top: 80px; // 헤더 높이만큼 패딩 추가
   overflow-x: hidden;
   max-width: 100vw;
 
@@ -1547,6 +1547,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url("https://recoverix.com/wp-content/uploads/2022/07/new-worldmap-2024-new.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   @media (max-width: 768px) {
     height: auto;
@@ -1560,6 +1564,8 @@
   margin: 0 auto;
   padding: 0 60px;
   text-align: center;
+  position: relative;
+  z-index: 2;
 
   @media (max-width: 1024px) {
     padding: 0 40px;
@@ -1575,21 +1581,7 @@
 }
 
 .mapImage {
-  width: 100%;
-  max-width: 900px;
-  aspect-ratio: 2;
-  background-image: url("/images/new-worldmap-2024-new.png");
-  background-size: cover;
-  background-position: center;
-  margin: 0 auto 40px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 30px;
-  }
-
-  @media (max-width: 480px) {
-    margin-bottom: 24px;
-  }
+  display: none; // 이미지를 배경으로 사용하므로 숨김
 }
 
 .mapLink {
@@ -1607,10 +1599,12 @@
   color: #ffffff;
   text-decoration: none;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
   &:hover {
     background: #15845e;
     transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
   }
 
   @media (max-width: 768px) {
