@@ -16,7 +16,7 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const router = useRouter();
-  
+
   let supabase = null;
   try {
     supabase = createSupabaseClient();

@@ -25,7 +25,7 @@ export default function Header({ user: initialUser }: HeaderProps) {
   const [user, setUser] = useState<UserData | null>(initialUser || null);
   const [isLoading, setIsLoading] = useState(!initialUser);
   const router = useRouter();
-  
+
   let supabase = null;
   try {
     supabase = createSupabaseClient();
