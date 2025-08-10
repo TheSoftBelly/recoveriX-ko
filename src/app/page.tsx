@@ -283,8 +283,8 @@ export default async function MainPage() {
                     <Image
                       src="https://recoverix.com/wp-content/uploads/2022/05/therapy1.png"
                       alt="Motor Imagery"
-                      width={80}
-                      height={80}
+                      width={128}
+                      height={128}
                     />
                   </div>
                   <h3 className={styles.therapyItemTitle}>모터 이미지(MI)</h3>
@@ -306,10 +306,10 @@ export default async function MainPage() {
                 <div className={styles.therapyItem}>
                   <div className={styles.therapyIcon}>
                     <Image
-                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy2.png"
+                      src="https://recoverix.com/wp-content/uploads/2022/05/therapy2.png"
                       alt="Virtual Reality"
-                      width={80}
-                      height={80}
+                      width={128}
+                      height={128}
                     />
                   </div>
                   <h3 className={styles.therapyItemTitle}>가상현실 (VR)</h3>
@@ -328,10 +328,10 @@ export default async function MainPage() {
                 <div className={styles.therapyItem}>
                   <div className={styles.therapyIcon}>
                     <Image
-                      src="https://recoverix.com/wp-content/uploads/2024/01/therapy3.png"
+                      src="https://recoverix.com/wp-content/uploads/2022/05/therapy3.png"
                       alt="Electrical Stimulation"
-                      width={80}
-                      height={80}
+                      width={128}
+                      height={128}
                     />
                   </div>
                   <h3 className={styles.therapyItemTitle}>전기 자극(FES)</h3>
