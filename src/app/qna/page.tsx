@@ -7,18 +7,17 @@ import QuestionForm from "@/components/qna/QuestionForm";
 import QnaControls from "@/components/qna/QnaControls";
 import styles from "@/styles/pages/QnAPage.module.scss";
 
-// Define props for the page, including search params for filtering and pagination
-interface QnAPageProps {
-  searchParams: {
+const ITEMS_PER_PAGE = 10;
+
+const QnAPage = async ({
+  searchParams,
+}: {
+  searchParams?: {
     q?: string;
     filter?: "all" | "pending" | "answered";
     page?: string;
   };
-}
-
-const ITEMS_PER_PAGE = 10;
-
-const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
+}) => {
   const cookieStore = cookies();
 
   const supabase = createServerClient(
@@ -37,12 +36,11 @@ const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { q, filter: searchFilter, page } = searchParams;
+  const { q, filter: searchFilter, page } = searchParams || {};
   const searchQuery = q || "";
   const filter = searchFilter || "all";
   const currentPage = parseInt(page || "1", 10);
 
-  // Build the query to fetch questions
   let query = supabase.from("qna_posts").select(
     `
       id,
@@ -67,7 +65,6 @@ const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
     query = query.ilike("title", `%${searchQuery}%`);
   }
 
-  // Add pagination
   const start = (currentPage - 1) * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE - 1;
   query = query.range(start, end).order("created_at", { ascending: false });
@@ -76,7 +73,6 @@ const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
 
   if (error) {
     console.error("Error fetching questions:", error);
-    // You could render a proper error component here
     return <p>Error loading questions.</p>;
   }
 
@@ -102,7 +98,6 @@ const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
         <section className={styles.questionList}>
           {questions &&
             questions.map((q: any) => {
-              // Adapt the fetched data to match QuestionCardProps
               const questionForCard = {
                 id: q.id,
                 title: q.title,
@@ -132,7 +127,6 @@ const QnAPage: React.FC<QnAPageProps> = async ({ searchParams }) => {
             })}
         </section>
 
-        {/* Pagination controls */}
         <section className={styles.pagination}>
           {currentPage > 1 && (
             <Link
