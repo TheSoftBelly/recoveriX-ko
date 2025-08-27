@@ -153,12 +153,12 @@ create policy "Only admins can delete notices" on public.notices
 
 -- 트리거 함수: updated_at 자동 업데이트
 create or replace function public.handle_updated_at()
-returns trigger as $$
+returns trigger as $
 begin
   new.updated_at = timezone('utc'::text, now());
   return new;
 end;
-$$ language plpgsql;
+$ language plpgsql;
 
 -- qna_posts updated_at 트리거
 create trigger handle_updated_at_qna_posts
@@ -167,13 +167,13 @@ create trigger handle_updated_at_qna_posts
 
 -- 트리거 함수: 사용자 자동 생성
 create or replace function public.handle_new_user()
-returns trigger as $$
+returns trigger as $
 begin
   insert into public.users (id, name, email)
   values (new.id, coalesce(new.raw_user_meta_data->>'name', new.email), new.email);
   return new;
 end;
-$$ language plpgsql security definer;
+$ language plpgsql security definer;
 
 -- auth.users에서 사용자 생성 시 public.users에 자동 추가
 create trigger on_auth_user_created
@@ -186,3 +186,11 @@ create index if not exists idx_qna_posts_created_at on public.qna_posts(created_
 create index if not exists idx_qna_posts_status on public.qna_posts(status);
 create index if not exists idx_qna_comments_post_id on public.qna_comments(post_id);
 create index if not exists idx_qna_comments_author_id on public.qna_comments(author_id);
+
+-- 조회수 증가 함수
+create or replace function public.increment_views(post_id bigint)
+returns void as $
+  update public.qna_posts
+  set views = views + 1
+  where id = post_id;
+$ language sql;

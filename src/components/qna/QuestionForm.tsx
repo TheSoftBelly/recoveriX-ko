@@ -4,208 +4,170 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Lock, Globe } from "lucide-react";
-import { createSupabaseClient } from "@/lib/supabase";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext"; // ✅ AuthContext 사용
+import styles from "@/styles/pages/QnAPage.module.scss"; // 스타일 재사용
 
 const questionSchema = z.object({
-  title: z
-    .string()
-    .min(5, "제목은 5자 이상 입력해주세요")
-    .max(100, "제목은 100자 이하로 입력해주세요"),
-  content: z
-    .string()
-    .min(10, "내용은 10자 이상 입력해주세요")
-    .max(2000, "내용은 2000자 이하로 입력해주세요"),
+  title: z.string().min(5, "제목은 5자 이상이어야 합니다."),
+  content: z.string().min(10, "내용은 10자 이상이어야 합니다."),
   is_private: z.boolean(),
 });
 
 type QuestionFormData = z.infer<typeof questionSchema>;
 
-interface QuestionFormProps {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    role: "user" | "admin";
-  } | null;
-  onSuccess?: () => void;
-}
-
-export default function QuestionForm({ user, onSuccess }: QuestionFormProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isPrivate, setIsPrivate] = useState(false);
+export default function QuestionForm() {
   const router = useRouter();
-  const supabase = createSupabaseClient();
+  const [isPending, setIsPending] = useState(false);
+  const { user, loading, supabase } = useAuth(); // ✅ Context에서 supabase 가져오기
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<QuestionFormData>({
     resolver: zodResolver(questionSchema),
     defaultValues: {
+      title: "",
+      content: "",
       is_private: false,
     },
   });
 
-  const onSubmit = async (data: QuestionFormData) => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+  const isPrivate = watch("is_private");
 
-    setIsSubmitting(true);
+  const onSubmit = async (data: QuestionFormData) => {
+    console.log("폼 제출 데이터:", data);
+    setIsPending(true);
 
     try {
-      const { error } = await supabase.from("qna_posts").insert({
+      if (!user) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      if (!supabase) {
+        alert("Supabase 클라이언트가 초기화되지 않았습니다.");
+        return;
+      }
+
+      const insertData = {
         title: data.title,
         content: data.content,
-        author_id: user.id,
         is_private: data.is_private,
-      });
+        author_id: user.id,
+      };
 
-      if (error) throw error;
+      console.log("질문 등록 데이터:", insertData);
 
+      const { data: insertedData, error } = await supabase
+        .from("qna_posts")
+        .insert(insertData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error("질문 등록 에러:", error);
+        alert("질문 등록에 실패했습니다: " + error.message);
+        return;
+      }
+
+      console.log("질문 등록 성공:", insertedData);
+      alert("질문이 성공적으로 등록되었습니다!");
       reset();
-      setIsPrivate(false);
-      onSuccess?.();
-      // router.refresh();
-    } catch (error) {
-      console.error("질문 등록 실패:", error);
-      alert("질문 등록에 실패했습니다. 다시 시도해주세요.");
+      router.push("/qna");
+    } catch (err) {
+      console.error("예상치 못한 오류:", err);
+      alert(
+        "질문 등록 중 오류가 발생했습니다: " +
+          (err instanceof Error ? err.message : String(err))
+      );
     } finally {
-      setIsSubmitting(false);
+      setIsPending(false);
     }
   };
 
-  return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">새 질문 작성</h3>
+  // 로딩 중이면 로딩 표시
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* 제목 입력 */}
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            질문 제목
-          </label>
+  // 로그인하지 않은 경우
+  if (!user) {
+    return (
+      <section className={styles.questionForm}>
+        <p>질문을 등록하려면 로그인이 필요합니다.</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className={styles.questionForm}>
+      <h2 className={styles.formTitle}>새 질문 작성</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.inputGroup}>
           <input
-            type="text"
-            id="title"
             {...register("title")}
             placeholder="질문 제목을 입력해주세요..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className={styles.titleInput}
+            disabled={isPending}
           />
           {errors.title && (
-            <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+            <p className={styles.errorText}>{errors.title.message}</p>
           )}
         </div>
-
-        {/* 내용 입력 */}
-        <div>
-          <label
-            htmlFor="content"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            질문 내용
-          </label>
+        <div className={styles.inputGroup}>
           <textarea
-            id="content"
-            rows={6}
             {...register("content")}
             placeholder="질문 내용을 자세히 작성해주세요..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-vertical"
+            className={styles.contentInput}
+            rows={4}
+            disabled={isPending}
           />
           {errors.content && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.content.message}
-            </p>
+            <p className={styles.errorText}>{errors.content.message}</p>
           )}
         </div>
-
-        {/* 공개 설정 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Lock className="w-5 h-5 text-gray-400" />
-            <span className="text-sm font-medium text-gray-700">공개 설정</span>
-          </div>
-
-          <div className="flex rounded-md overflow-hidden border border-gray-300">
-            <button
-              type="button"
-              onClick={() => {
-                setIsPrivate(false);
-                register("is_private", { value: false });
-              }}
-              className={`
-                flex items-center space-x-2 px-4 py-2 text-sm font-medium transition-colors
-                ${
-                  !isPrivate
-                    ? "bg-emerald-600 text-white"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                }
-              `}
-            >
-              <Globe className="w-4 h-4" />
-              <span>공개</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setIsPrivate(true);
-                register("is_private", { value: true });
-              }}
-              className={`
-                flex items-center space-x-2 px-4 py-2 text-sm font-medium transition-colors
-                ${
-                  isPrivate
-                    ? "bg-orange-500 text-white"
-                    : "bg-gray-50 text-gray-700 hover:bg-gray-100"
-                }
-              `}
-            >
-              <Lock className="w-4 h-4" />
-              <span>비밀</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 설명 텍스트 */}
-        <div className="text-sm text-gray-500">
-          {isPrivate ? (
-            <div className="flex items-center space-x-1 text-orange-600">
-              <Lock className="w-4 h-4" />
-              <span>비밀글로 설정하면 작성자와 관리자만 볼 수 있습니다.</span>
+        <div className={styles.formActions}>
+          <div className={styles.privacySettings}>
+            <div className={styles.privacyLabel}>
+              <span className={styles.lockIcon}>🔒</span>
+              <span>공개 설정</span>
             </div>
-          ) : (
-            <div className="flex items-center space-x-1">
-              <Globe className="w-4 h-4" />
-              <span>공개글로 설정하면 모든 사용자가 볼 수 있습니다.</span>
+            <div className={styles.toggleGroup}>
+              <button
+                type="button"
+                className={`${styles.toggleButton} ${
+                  !isPrivate ? styles.active : ""
+                }`}
+                onClick={() => setValue("is_private", false)}
+                disabled={isPending}
+              >
+                공개
+              </button>
+              <button
+                type="button"
+                className={`${styles.toggleButton} ${
+                  isPrivate ? styles.active : ""
+                }`}
+                onClick={() => setValue("is_private", true)}
+                disabled={isPending}
+              >
+                비밀
+              </button>
             </div>
-          )}
-        </div>
-
-        {/* 등록 버튼 */}
-        <div className="flex justify-end">
+          </div>
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="bg-emerald-600 text-white px-6 py-2 rounded-md font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className={styles.submitButton}
+            disabled={isPending}
           >
-            {isSubmitting ? "등록 중..." : "질문 등록"}
+            {isPending ? "등록 중..." : "질문 등록"}
           </button>
         </div>
-
-        <input
-          type="hidden"
-          {...register("is_private")}
-          value={isPrivate ? "true" : "false"}
-        />
       </form>
-    </div>
+    </section>
   );
 }

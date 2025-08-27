@@ -13,13 +13,14 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
-    "@supabase/ssr": "^0.6.1",
+    "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.54.0",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.539.0",
-    "next": "13.5.6",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "next": "^15.5.2",
+    "nodemailer": "^7.0.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
     "sass": "^1.90.0",
     "zod": "^4.0.16"
@@ -28,11 +29,11 @@
     "@types/node": "^18",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.16",
     "eslint": "^8.57.0",
     "eslint-config-next": "13.5.6",
-    "tailwindcss": "^3.4.0",
-    "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
     "typescript": "^5"
   }
 }

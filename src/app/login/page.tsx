@@ -34,17 +34,15 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const { error } = await signIn(email, password);
-
-      if (error) {
-        setError(error);
-        setIsLoading(false);
-      } else {
-        // 로그인 성공 시 로딩 상태 유지 (AuthContext에서 처리)
-        console.log("로그인 성공, AuthContext 상태 변화 대기 중");
-      }
+      await signIn(email, password);
+      // 로그인 성공 시 로딩 상태 유지 (AuthContext에서 처리)
+      console.log("로그인 성공, AuthContext 상태 변화 대기 중");
     } catch (error) {
-      setError("로그인 중 오류가 발생했습니다.");
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("로그인 중 오류가 발생했습니다.");
+      }
       setIsLoading(false);
     }
   };

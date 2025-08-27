@@ -1,0 +1,147 @@
+.pageContainer {
+  min-height: 100vh;
+  background: #ffffff;
+  padding-top: 80px;
+
+  @media (max-width: 1024px) {
+    padding-top: 70px;
+  }
+
+  @media (max-width: 768px) {
+    padding-top: 65px;
+  }
+
+  @media (max-width: 480px) {
+    padding-top: 60px;
+  }
+}
+
+.profileMain {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px 24px;
+
+  @media (max-width: 768px) {
+    padding: 30px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 24px 12px;
+  }
+}
+
+.title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  background: linear-gradient(90deg, #7bc11b 0%, #0bad90 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  margin-bottom: 32px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+}
+
+.form {
+  background-color: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  padding: 24px;
+
+  max-width: 360px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (max-width: 480px) {
+    max-width: 280px;
+    padding: 16px;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #4d4d4d;
+}
+
+.input {
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #fafafa;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #000000;
+
+  &::placeholder {
+    color: #999999;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #1fb085;
+    background-color: #ffffff;
+  }
+
+  &[disabled] {
+    background-color: #eee;
+    cursor: not-allowed;
+  }
+}
+
+.button {
+  height: 44px;
+  background-color: #1fb085;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #1a9d75;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.message {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  margin-top: 1rem;
+
+  &.success {
+    color: green;
+  }
+
+  &.error {
+    color: red;
+  }
+}
