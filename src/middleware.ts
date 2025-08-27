@@ -5,18 +5,19 @@ import type { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  // Supabase 클라이언트 생성
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return res; // 환경 변수가 없으면 미들웨어를 건너뜀
+    return res; // 환경변수 없으면 미들웨어 건너뜀
   }
 
+  // 요청 쿠키를 Supabase에 전달해 인증 상태 파악
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        return [];
+        // 실제 요청 쿠키를 반환하도록 수정
+        return req.cookies.getAll();
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
@@ -26,17 +27,15 @@ export async function middleware(req: NextRequest) {
     },
   });
 
-  // 세션 새로고침
+  // 세션 및 사용자 정보 가져오기
   await supabase.auth.getSession();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // 보호된 경로들
-  const protectedPaths = ["/profile", "/admin"];
+  const protectedPaths = ["/admin"];
   const adminOnlyPaths = ["/admin"];
-
   const pathname = req.nextUrl.pathname;
 
   // 관리자 전용 페이지 보호
@@ -45,7 +44,6 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // 사용자 역할 확인
     const { data: userData } = await supabase
       .from("users")
       .select("role")
@@ -57,12 +55,12 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // 일반 보호된 페이지
+  // 로그인 필요 경로 보호
   if (protectedPaths.some((path) => pathname.startsWith(path)) && !user) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // 이미 로그인한 사용자가 로그인/회원가입 페이지에 접근하는 경우
+  // 로그인한 사용자가 로그인/회원가입 페이지에 접근시 홈으로 리다이렉트
   if ((pathname === "/login" || pathname === "/signup") && user) {
     return NextResponse.redirect(new URL("/", req.url));
   }
@@ -72,14 +70,6 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
