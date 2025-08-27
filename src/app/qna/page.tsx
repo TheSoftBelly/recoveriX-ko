@@ -34,7 +34,7 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
     {
       cookies: {
         async get(name: string) {
-          return cookieStore.get(name)?.value;
+          return (await cookieStore).get(name)?.value;
         },
       },
     }
