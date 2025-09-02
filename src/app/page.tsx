@@ -122,22 +122,8 @@ export default function MainPage() {
         {/* 새로운 시작 섹션 */}
         <section className={styles.contentSection}>
           <div className={styles.contentContainer}>
-            <div className={`${styles.contentGrid} ${styles.reverse}`}>
-              <div className={styles.contentImage}>
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className={styles.contentVideo}
-                >
-                  <source
-                    src="https://recoverix.com/wp-content/uploads/2024/04/web-Website-Video-1X1-Hand.mp4?_=2"
-                    type="video/mp4"
-                  />
-                </video>
-              </div>
-              <div className={`${styles.contentText} ${styles.textRight}`}>
+            <div className={styles.contentGrid}>
+              <div className={styles.contentText}>
                 <h2 className={styles.contentTitle}>새로운 시작을 해보세요</h2>
                 <h3 className={styles.contentSubtitle}>
                   재활에 늦은 때란 없습니다!
@@ -159,6 +145,20 @@ export default function MainPage() {
                 <button className={styles.contentButton}>
                   뇌졸증을 위한 recoveriX
                 </button>
+              </div>
+              <div className={styles.contentImage}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className={styles.contentVideo}
+                >
+                  <source
+                    src="https://recoverix.com/wp-content/uploads/2024/04/web-Website-Video-1X1-Hand.mp4?_=2"
+                    type="video/mp4"
+                  />
+                </video>
               </div>
             </div>
           </div>
