@@ -42,16 +42,28 @@ export default function Header() {
   return (
     <header className={styles.header}>
       {/* 로고 */}
-      <Link href="/" className={styles.logoLink}>
-        <Image
-          src="https://recoverix.com/wp-content/themes/recoverix/img/recoveriX-logo.svg"
-          alt="recoveriX"
-          width={200}
-          height={36}
-          priority
-          className={styles.logo}
-        />
-      </Link>
+      <div className={styles.logoContainer}>
+        <Link href="/" className={styles.logoLink}>
+          <Image
+            src="https://recoverix.com/wp-content/themes/recoverix/img/recoveriX-logo.svg"
+            alt="recoveriX"
+            width={200}
+            height={36}
+            priority
+            className={styles.logo}
+          />
+        </Link>
+        <Link href="https://www.gtec.at/" className={styles.logoLink}>
+          <Image
+            src="https://www.gtec.at/wp-content/themes/gtc/images/logo.svg"
+            alt="gtec"
+            width={200}
+            height={36}
+            priority
+            className={styles.logo}
+          />
+        </Link>
+      </div>
 
       {/* 데스크톱 네비게이션 */}
       <nav className={styles.nav}>

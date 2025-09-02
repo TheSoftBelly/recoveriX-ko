@@ -33,6 +33,20 @@
   }
 }
 
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    gap: 16px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 12px;
+  }
+}
+
 .logoLink {
   display: flex;
   align-items: center;
@@ -44,10 +58,9 @@
 }
 
 .logo {
-  width: auto;
-  height: auto;
   max-width: 200px;
   max-height: 36px;
+  object-fit: contain;
 
   @media (max-width: 1200px) {
     max-width: 180px;
@@ -60,12 +73,12 @@
   }
 
   @media (max-width: 768px) {
-    max-width: 140px;
+    max-width: 120px;
     max-height: 25px;
   }
 
   @media (max-width: 480px) {
-    max-width: 120px;
+    max-width: 100px;
     max-height: 22px;
   }
 }
@@ -211,8 +224,12 @@
   }
 
   @media (max-width: 768px) {
-    padding: 6px 16px;
-    font-size: 13px;
+    padding: 10px 5px;
+    font-size: 10px;
+  }
+  @media (max-width: 480px) {
+    padding: 7px 3px;
+    font-size: 7px;
   }
 }
 
@@ -239,8 +256,12 @@
   }
 
   @media (max-width: 768px) {
-    padding: 6px 16px;
-    font-size: 13px;
+    padding: 10px 5px;
+    font-size: 10px;
+  }
+  @media (max-width: 480px) {
+    padding: 7px 3px;
+    font-size: 7px;
   }
 }
 
