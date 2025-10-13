@@ -194,3 +194,308 @@
     font-size: 14px;
   }
 }
+
+// Hero Section
+.heroSection {
+  text-align: center;
+  margin-bottom: 80px;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%);
+  border-radius: 24px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 60px;
+    padding: 40px 24px;
+  }
+}
+
+// Section Header with Icon
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
+}
+
+.sectionIcon {
+  color: #1fb184;
+}
+
+// Updated Stat Cards
+.statCard {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdfa 100%);
+  border: 2px solid #d1fae5;
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(31, 177, 132, 0.2);
+    border-color: #1fb184;
+  }
+
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+  }
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+  border-radius: 16px;
+  color: white;
+  margin: 0 auto 24px;
+
+  @media (max-width: 768px) {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px;
+  }
+}
+
+.statDescription {
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 12px;
+  line-height: 1.6;
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+}
+
+// Evidence Section
+.evidenceSection {
+  margin: 80px 0;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+  border-radius: 24px;
+  text-align: center;
+
+  h2 {
+    color: white;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 768px) {
+    margin: 60px 0;
+    padding: 40px 24px;
+  }
+}
+
+.evidenceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.evidenceCard {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 40px 24px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-4px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 32px 20px;
+  }
+}
+
+.evidenceNumber {
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  font-size: 56px;
+  color: white;
+  margin-bottom: 16px;
+  line-height: 1;
+
+  @media (max-width: 768px) {
+    font-size: 48px;
+  }
+}
+
+.evidenceText {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+}
+
+// Benefits Section
+.benefitsSection {
+  margin: 80px 0;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  @media (max-width: 768px) {
+    margin: 60px 0;
+  }
+}
+
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+.benefitCard {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #1fb184;
+    box-shadow: 0 8px 24px rgba(31, 177, 132, 0.15);
+    transform: translateY(-4px);
+
+    .benefitIcon {
+      background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+      color: white;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 24px;
+  }
+}
+
+.benefitIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #f0fdfa;
+  border-radius: 12px;
+  color: #1fb184;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.benefitTitle {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+}
+
+.benefitText {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.7;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
+}
+
+// CTA Section
+.ctaSection {
+  margin-top: 80px;
+  padding: 60px 40px;
+  background: linear-gradient(135deg, #f0fdfa 0%, #d1fae5 100%);
+  border-radius: 24px;
+  text-align: center;
+
+  h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+
+    @media (max-width: 768px) {
+      font-size: 28px;
+    }
+  }
+
+  p {
+    font-size: 18px;
+    color: #475569;
+    margin-bottom: 32px;
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    margin-top: 60px;
+    padding: 40px 24px;
+  }
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(31, 177, 132, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(31, 177, 132, 0.4);
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px 32px;
+    font-size: 16px;
+  }
+}

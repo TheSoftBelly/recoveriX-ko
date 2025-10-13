@@ -9,11 +9,6 @@ import styles from "@/styles/pages/SignupPage.module.scss";
 // Next.js 앱 라우트에서 Node.js 런타임 사용 강제
 export const runtime = "nodejs";
 
-interface SignUpResult {
-  error: string | null;
-  success: boolean;
-}
-
 export default function SignupPage() {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
@@ -49,35 +44,19 @@ export default function SignupPage() {
     }
 
     try {
-      // signUp 함수가 반환하는 타입이 확실하지 않아 any로 임시 처리
-      const result = (await signUp(
-        email,
-        password,
-        nickname
-      )) as SignUpResult | void;
-
-      if (!result) {
-        setError("회원가입 중 오류가 발생했습니다.");
-        setIsLoading(false);
-        return;
-      }
-
-      if (result.error) {
-        setError(result.error);
-        setIsLoading(false);
-      } else if (result.success) {
-        setSuccess("회원가입이 완료되었습니다! 자동으로 로그인됩니다.");
-        // 회원가입 성공 후 자동 로그인 및 리다이렉트
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 2000);
-      } else {
-        setError("회원가입 중 오류가 발생했습니다.");
-        setIsLoading(false);
-      }
+      await signUp(email, password, nickname);
+      setSuccess("회원가입이 완료되었습니다! 자동으로 로그인됩니다.");
+      // 회원가입 성공 후 자동 로그인 및 리다이렉트
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
     } catch (error) {
       console.error(error);
-      setError("회원가입 중 오류가 발생했습니다.");
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("회원가입 중 오류가 발생했습니다.");
+      }
       setIsLoading(false);
     }
   };

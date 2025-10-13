@@ -52,6 +52,9 @@ export type Database = {
           author_id: string;
           is_private: boolean;
           status: "pending" | "answered";
+          is_answered: boolean;
+          priority: "low" | "normal" | "high";
+          assigned_admin: string | null;
           views: number;
           created_at: string;
           updated_at: string;
@@ -62,6 +65,9 @@ export type Database = {
           author_id: string;
           is_private?: boolean;
           status?: "pending" | "answered";
+          is_answered?: boolean;
+          priority?: "low" | "normal" | "high";
+          assigned_admin?: string | null;
           views?: number;
           created_at?: string;
           updated_at?: string;
@@ -73,6 +79,9 @@ export type Database = {
           author_id?: string;
           is_private?: boolean;
           status?: "pending" | "answered";
+          is_answered?: boolean;
+          priority?: "low" | "normal" | "high";
+          assigned_admin?: string | null;
           views?: number;
           created_at?: string;
           updated_at?: string;
@@ -85,6 +94,8 @@ export type Database = {
           content: string;
           author_id: string;
           is_admin: boolean;
+          is_admin_reply: boolean;
+          published_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -92,6 +103,8 @@ export type Database = {
           content: string;
           author_id: string;
           is_admin?: boolean;
+          is_admin_reply?: boolean;
+          published_at?: string | null;
           created_at?: string;
         };
         Update: {
@@ -100,6 +113,8 @@ export type Database = {
           content?: string;
           author_id?: string;
           is_admin?: boolean;
+          is_admin_reply?: boolean;
+          published_at?: string | null;
           created_at?: string;
         };
       };
@@ -119,6 +134,56 @@ export type Database = {
           id?: number;
           title?: string;
           content?: string;
+          created_at?: string;
+        };
+      };
+      notifications: {
+        Row: {
+          id: number;
+          type: string;
+          payload: any;
+          is_read: boolean;
+          created_at: string;
+        };
+        Insert: {
+          type: string;
+          payload?: any;
+          is_read?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          type?: string;
+          payload?: any;
+          is_read?: boolean;
+          created_at?: string;
+        };
+      };
+      audit_logs: {
+        Row: {
+          id: number;
+          actor_id: string;
+          action: string;
+          target_table: string;
+          target_id: string;
+          meta: any;
+          created_at: string;
+        };
+        Insert: {
+          actor_id: string;
+          action: string;
+          target_table: string;
+          target_id: string;
+          meta?: any;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          actor_id?: string;
+          action?: string;
+          target_table?: string;
+          target_id?: string;
+          meta?: any;
           created_at?: string;
         };
       };

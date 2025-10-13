@@ -1,6 +1,6 @@
 .pageContainer {
   min-height: 100vh;
-  background: #ffffff;
+  background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
   padding-top: 80px;
 
   @media (max-width: 1024px) {
@@ -18,73 +18,73 @@
 
 .main {
   min-height: calc(100vh - 80px);
-  padding: 60px 0;
+  padding: 80px 0;
 
   @media (max-width: 1024px) {
     min-height: calc(100vh - 70px);
-    padding: 50px 0;
+    padding: 60px 0;
   }
 
   @media (max-width: 768px) {
     min-height: calc(100vh - 65px);
-    padding: 40px 0;
+    padding: 50px 0;
   }
 
   @media (max-width: 480px) {
     min-height: calc(100vh - 60px);
-    padding: 30px 0;
+    padding: 40px 0;
   }
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 60px;
+  padding: 0 2rem;
 
   @media (max-width: 1024px) {
-    padding: 0 40px;
+    padding: 0 1.5rem;
   }
 
   @media (max-width: 768px) {
-    padding: 0 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0 16px;
+    padding: 0 1rem;
   }
 }
 
 .title {
   font-family: "Inter", sans-serif;
-  font-weight: 700;
-  font-size: 48px;
-  color: #1a1a1a;
-  margin-bottom: 20px;
+  font-weight: 800;
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
   text-align: center;
+  letter-spacing: -0.02em;
 
   @media (max-width: 768px) {
-    font-size: 36px;
+    font-size: 2.5rem;
   }
 
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: 2rem;
   }
 }
 
 .description {
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: 18px;
-  color: #666666;
+  font-size: 1.25rem;
+  color: #64748b;
   text-align: center;
-  margin-bottom: 60px;
-  max-width: 600px;
+  margin-bottom: 3rem;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
 
   @media (max-width: 768px) {
-    font-size: 16px;
-    margin-bottom: 40px;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
   }
 }
 
@@ -156,12 +156,14 @@
 }
 
 .contactForm {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
 
   @media (max-width: 768px) {
-    padding: 24px;
+    padding: 2rem;
   }
 }
 

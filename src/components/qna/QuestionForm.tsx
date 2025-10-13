@@ -33,7 +33,7 @@ export default function QuestionForm() {
     defaultValues: {
       title: "",
       content: "",
-      is_private: false,
+      is_private: true, // 기본값을 true로 변경 (비밀글만 가능)
     },
   });
 
@@ -134,29 +134,7 @@ export default function QuestionForm() {
           <div className={styles.privacySettings}>
             <div className={styles.privacyLabel}>
               <span className={styles.lockIcon}>🔒</span>
-              <span>공개 설정</span>
-            </div>
-            <div className={styles.toggleGroup}>
-              <button
-                type="button"
-                className={`${styles.toggleButton} ${
-                  !isPrivate ? styles.active : ""
-                }`}
-                onClick={() => setValue("is_private", false)}
-                disabled={isPending}
-              >
-                공개
-              </button>
-              <button
-                type="button"
-                className={`${styles.toggleButton} ${
-                  isPrivate ? styles.active : ""
-                }`}
-                onClick={() => setValue("is_private", true)}
-                disabled={isPending}
-              >
-                비밀
-              </button>
+              <span>모든 글은 비밀글로 작성됩니다</span>
             </div>
           </div>
           <button

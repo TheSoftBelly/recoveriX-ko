@@ -41,32 +41,33 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      {/* 로고 */}
-      <div className={styles.logoContainer}>
-        <Link href="/" className={styles.logoLink}>
-          <Image
-            src="https://recoverix.com/wp-content/themes/recoverix/img/recoveriX-logo.svg"
-            alt="recoveriX"
-            width={200}
-            height={36}
-            priority
-            className={styles.logo}
-          />
-        </Link>
-        <Link href="https://www.gtec.at/" className={styles.logoLink}>
-          <Image
-            src="https://www.gtec.at/wp-content/themes/gtc/images/logo.svg"
-            alt="gtec"
-            width={200}
-            height={36}
-            priority
-            className={styles.logo}
-          />
-        </Link>
-      </div>
+      <div className={styles.headerMain}>
+        {/* 로고 */}
+        <div className={styles.logoContainer}>
+          <Link href="/" className={styles.logoLink}>
+            <Image
+              src="https://recoverix.com/wp-content/themes/recoverix/img/recoveriX-logo.svg"
+              alt="recoveriX"
+              width={200}
+              height={36}
+              priority
+              className={styles.logo}
+            />
+          </Link>
+          <Link href="https://www.gtec.at/" className={styles.logoLink}>
+            <Image
+              src="https://www.gtec.at/wp-content/themes/gtc/images/logo.svg"
+              alt="gtec"
+              width={200}
+              height={36}
+              priority
+              className={styles.logo}
+            />
+          </Link>
+        </div>
 
-      {/* 데스크톱 네비게이션 */}
-      <nav className={styles.nav}>
+        {/* 데스크톱 네비게이션 */}
+        <nav className={styles.nav}>
         <Link href="/news" className={`${styles.navItem} ${styles.news}`}>
           소식
         </Link>
@@ -85,10 +86,10 @@ export default function Header() {
         <Link href="/contact" className={`${styles.navItem} ${styles.contact}`}>
           문의
         </Link>
-      </nav>
+        </nav>
 
-      {/* 인증 섹션 */}
-      <div className={styles.authSection}>
+        {/* 인증 섹션 */}
+        <div className={styles.authSection}>
         {!mounted ? (
           <div className={styles.authLoading}>초기화 중...</div>
         ) : loading ? (
@@ -167,11 +168,13 @@ export default function Header() {
             showMobileMenu ? styles.open : ""
           }`}
           onClick={() => setShowMobileMenu(!showMobileMenu)}
+          aria-label="모바일 메뉴"
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
+        </div>
       </div>
 
       {/* 모바일 메뉴 */}

@@ -71,15 +71,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [supabase]);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) throw error;
+
+    // users 테이블에서 role 가져오기
+    if (data.user) {
+      const { data: userData, error: dbError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", data.user.id)
+        .single();
+
+      if (!dbError && userData) {
+        setUser({
+          id: data.user.id,
+          email: data.user.email!,
+          name: userData.name || data.user.user_metadata?.name,
+          role: userData.role || "user",
+        });
+      }
+    }
   };
 
   const signUp = async (email: string, password: string, name?: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -87,6 +105,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       },
     });
     if (error) throw error;
+
+    // users 테이블에 사용자 정보 저장
+    if (data.user) {
+      const { error: dbError } = await supabase.from("users").insert({
+        id: data.user.id,
+        email: data.user.email!,
+        name: name || null,
+        role: "user",
+      });
+      if (dbError) console.error("users 테이블 삽입 오류:", dbError);
+    }
   };
 
   const signOut = async () => {

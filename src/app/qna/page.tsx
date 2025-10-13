@@ -2,6 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import QuestionCard from "@/components/qna/QuestionCard";
 import QuestionForm from "@/components/qna/QuestionForm";
 import QnaControls from "@/components/qna/QnaControls";
@@ -139,6 +140,8 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
           )}
         </section>
       </main>
+
+      <Footer />
     </div>
   );
 };

@@ -2,10 +2,10 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import "@/styles/globals.scss";
 
 export const metadata = {
-  title: "recoveriX - 뇌졸중 및 다발성 경화증 신경 재활",
+  title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
   description:
-    "recoveriX는 뇌가 스스로 재구성하여 잃어버린 운동 기능을 다시 학습하도록 돕는 뇌-컴퓨터 인터페이스 기술입니다.",
-  keywords: "뇌졸중, 다발성 경화증, 신경 재활, BCI, 뇌-컴퓨터 인터페이스",
+    "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중, 중풍, 편마비, 파킨슨병 환자의 재활과 뇌신경 회복을 돕습니다.",
+  keywords: "recoveriX, GTEC 재활기기, 뉴로솔루션즈, 첨단 뇌재활 장비, BCI 재활치료, 뇌졸중 재활, 중풍 재활, 편마비 재활, 파킨슨 재활, 뇌신경 회복, 뇌졸중 환자 재활, 뇌-컴퓨터 인터페이스",
   authors: [{ name: "g.tec medical engineering GmbH" }],
   creator: "g.tec medical engineering GmbH",
   publisher: "g.tec medical engineering GmbH",
@@ -19,9 +19,9 @@ export const metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "recoveriX - 뇌졸중 및 다발성 경화증 신경 재활",
+    title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
     description:
-      "recoveriX는 뇌가 스스로 재구성하여 잃어버린 운동 기능을 다시 학습하도록 돕는 뇌-컴퓨터 인터페이스 기술입니다.",
+      "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중 환자의 재활과 뇌신경 회복을 돕습니다.",
     url: "https://recoverix.com",
     siteName: "recoveriX",
     images: [

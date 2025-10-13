@@ -1,7 +1,13 @@
 "use client";
 
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import VideoCarousel from "@/components/VideoCarousel";
+import JsonLd, {
+  organizationSchema,
+  productSchema,
+  medicalTherapySchema,
+} from "@/components/SEO/JsonLd";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/pages/HomePage.module.scss";
@@ -9,27 +15,37 @@ import styles from "@/styles/pages/HomePage.module.scss";
 export default function MainPage() {
   return (
     <div className={styles.pageContainer}>
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={productSchema} />
+      <JsonLd data={medicalTherapySchema} />
+
       <Header />
 
       <main>
         {/* 메인 히어로 섹션 */}
         <section className={styles.heroSection}>
-          <video className={styles.heroVideo} autoPlay muted loop playsInline>
-            <source
-              src="https://recoverix.com/wp-content/uploads/2024/07/Final-231110-Recoverix-Awareness-Full-Ohne-Deutsche-Einblendung-smaller.mp4"
-              type="video/mp4"
-            />
-          </video>
-          <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>새로운 시작을 해보세요</h1>
-            <h2 className={`${styles.heroSubtitle} ${styles.noBreak}`}>
-              뇌졸중 및 다발성 경화증에 대한 신경 재활
-            </h2>
-            <p className={styles.heroDescription}>
-              recoveriX는 뇌가 스스로 재구성하여 잃어버린 운동 기능을 다시
-              학습하도록 돕는 뇌-컴퓨터 인터페이스 기술입니다.
-            </p>
+          <div className={styles.heroContainer}>
+            <div className={styles.heroContent}>
+              <h1 className={styles.heroTitle}>recoveriX</h1>
+              <h2 className={`${styles.heroSubtitle} ${styles.noBreak}`}>
+                가장 혁신적인 BCI 기술을 통한 뇌 신경 회복 솔루션
+              </h2>
+              <p className={styles.heroDescription}>
+                recoveriX는 뇌 가소성을 활성화하여 특히 뇌졸중, 다발성 경화증,
+                파킨슨병 환자의 운동기능 회복에 획기적입니다
+              </p>
+              <p className={styles.heroBadge}>
+                (Brain-Computer Interface: 뇌-컴퓨터 인터페이스)
+              </p>
+            </div>
+            <div className={styles.heroVideoContainer}>
+              <video autoPlay muted loop playsInline>
+                <source
+                  src="https://recoverix.com/wp-content/uploads/2024/07/Final-231110-Recoverix-Awareness-Full-Ohne-Deutsche-Einblendung-smaller.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
           </div>
         </section>
 
@@ -82,24 +98,26 @@ export default function MainPage() {
           <div className={styles.contentContainer}>
             <div className={styles.contentGrid}>
               <div className={styles.contentText}>
-                <h2 className={styles.contentTitle}>독립성을 극대화하세요</h2>
-                <h3 className={styles.contentSubtitle}>기능적 능력 향상</h3>
+                <h2 className={styles.contentTitle}>스스로 만들어낸 기적</h2>
+                <h3 className={styles.contentSubtitle}>
+                  마침내, 뇌가 몸을 움직이기 시작합니다
+                </h3>
                 <p className={styles.contentDescription}>
-                  뇌졸중, 다발성 경화증 또는 외상성 뇌 손상이 움직이는 능력에
-                  영향을 미치더라도 반드시 상실되는 것은 아닙니다! 이러한 이유로
-                  g.tec 의료 공학에서는 뇌가 스스로 재연결되도록 돕는 뇌-컴퓨터
-                  인터페이스 기술을 기반으로 한 독특한 재활 접근 방식인
-                  recoveriX 신경기술을 개발했습니다.
+                  사람의 뇌는 '뇌 가소성(Neuroplasticity)'이라는 놀라운 능력을
+                  가지고 있어, 손상된 부위의 기능을 다른 부위가 대체하거나
+                  새로운 신경 연결을 형성할 수 있습니다.
                 </p>
                 <p className={styles.contentDescription}>
-                  recoveriX는 손이나 발의 움직임을 상상하는 작업을 제공하는
-                  동시에 근육 자극과 시각적 시뮬레이션을 통해 실시간으로
-                  피드백을 제공합니다. 이 과정은 뇌 내의 신경가소성을 유도하여
-                  잃어버린 운동 기능을 다시 학습합니다.
+                  recoveriX는 뇌의 신경 가소성을 자극함으로써 뇌졸중 및 다발성
+                  경화증으로 인해 저하된 뇌 신경 간 연결성을 회복시키고, 운동
+                  기능을 향상시키는 첨단 뇌 재활 기술입니다.
                 </p>
-                <button className={styles.contentButton}>
-                  다발성 경화증을 위한 recoveriX
-                </button>
+                <p className={styles.contentDescription}>
+                  BCI(뇌-컴퓨터 인터페이스) 기술로 손과 발의 운동 이미지 상상,
+                  근육 자극 및 시각적 시뮬레이션 등의 3단계 반복 훈련을 통해 뇌
+                  신경을 회복시키고 손·팔·다리의 움직임을 눈에 띄게 향상시켜
+                  줍니다.
+                </p>
               </div>
               <div className={styles.contentImage}>
                 <video
@@ -124,27 +142,29 @@ export default function MainPage() {
           <div className={styles.contentContainer}>
             <div className={styles.contentGrid}>
               <div className={styles.contentText}>
-                <h2 className={styles.contentTitle}>새로운 시작을 해보세요</h2>
+                <h2 className={styles.contentTitle}>
+                  예전으로 다시 돌아갈 수 있는 기회
+                </h2>
                 <h3 className={styles.contentSubtitle}>
-                  재활에 늦은 때란 없습니다!
+                  뇌 회복의 시작, recoveriX와 함께 하세요
                 </h3>
                 <p className={styles.contentDescription}>
-                  recoveriX는 뇌졸중 또는 다발성 경화증 환자가 통증, 경직 및
-                  떨림을 감소시켜 운동 기능, 집중력, 수동적 관절 운동, 민감도,
-                  방광 조절, 성기능, 균형, 보행 및 얼굴, 신체 또는 사지의
-                  무감각을 더욱 개선하는 데 도움이 됩니다. 특히 환자가 피로를 덜
-                  느끼고 발이 얼거나 발이 떨어지는 현상이 감소한다는 점은
-                  놀랍습니다.
+                  recoveriX는 통증, 경직, 떨림을 완화하여 운동 기능은 물론
+                  집중력, 감각, 균형, 보행 능력까지 전반적인 운동기능을
+                  회복하는데 도움을 줍니다. 또한 재활 사례중에는 피로감이 줄고,
+                  발처짐 및 움직임 저하 증상이 개선되었다는 반응도 나타나고
+                  있습니다.
                 </p>
                 <p className={styles.contentDescription}>
-                  recoveriX는 더 빠르고 성공적인 회복을 위한 기회로 물리 및 작업
-                  치료를 보완합니다. 급성, 아급성, 만성 상태에서 사용할 수
-                  있습니다. 심지어 다발성 경화증 진단이나 뇌졸중 후 10년, 20년,
-                  30년 후에도 사용할 수 있습니다!
+                  recoveriX는 물리치료 등 기존 재활치료의 효과를 극대화하여,
+                  환자가 일상생활을 보다 원활하게 누릴 수 있도록 돕습니다.
                 </p>
-                <button className={styles.contentButton}>
-                  뇌졸증을 위한 recoveriX
-                </button>
+                <p className={styles.contentDescription}>
+                  또한 급성기부터 만성기까지 회복의 전 단계에서 효과적으로
+                  활용될 수 있으며, 다발성 경화증 진단을 받았거나 뇌졸중 발생 후
+                  10년, 20년, 심지어 30년이 지난 환자들에게도 희망을 주고
+                  있습니다.
+                </p>
               </div>
               <div className={styles.contentImage}>
                 <video
@@ -169,22 +189,18 @@ export default function MainPage() {
           <div className={styles.contentContainer}>
             <div className={styles.doctorGrid}>
               <div className={styles.doctorText}>
-                <h2 className={styles.contentTitle}>
-                  recoveriX에 대한 신경과 전문의의 의견
-                </h2>
+                <h2 className={styles.contentTitle}>Tim von Oertzen 박사</h2>
                 <h3 className={styles.contentSubtitle}>
-                  Tim von Oertzen 박사와의 인터뷰
+                  신경과 전문의로부터 인정받은 recoveriX
                 </h3>
                 <p className={styles.contentDescription}>
-                  최근 인터뷰에서 유명한 신경학자인 Tim von Oertzen 박사는
-                  뇌졸중 및 다발성 경화증 환자를 위한 recoveriX 신경 재활의
-                  이점을 강조했습니다. 그는 장애가 있는 사람들의 상지와 하지를
-                  훈련할 수 있는 recoveriX의 잠재력을 강조하면서 직접 경험한
-                  운동, 보행, 균형 및 움직임 제어의 상당한 개선을 언급했습니다.
+                  저명한 신경학자 팀 폰 오어첸 박사는 한 인터뷰에서, recoveriX가
+                  뇌졸중과 다발성 경화증 환자에게 큰 도움이 된다고 강조했습니다.
                 </p>
-                <button className={styles.contentButton}>
-                  뇌졸증을 위한 recoveriX
-                </button>
+                <p className={styles.contentDescription}>
+                  특히 상지 및 하지 훈련을 통해 보행, 균형, 그리고 움직임
+                  조절에서 눈에 띄는 개선 효과를 경험할 수 있다고 밝혔습니다.
+                </p>
               </div>
               <div className={styles.doctorImage}>
                 <iframe
@@ -412,53 +428,7 @@ export default function MainPage() {
         </section>
       </main>
 
-      {/* 푸터 */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-          <div className={styles.footerLogo} />
-          <div className={styles.footerLinks}>
-            <Link href="/news" className={styles.footerLink}>
-              소식
-            </Link>
-            <Link href="/faq" className={styles.footerLink}>
-              자주 묻는 질문
-            </Link>
-            <Link href="/results" className={styles.footerLink}>
-              치료결과
-            </Link>
-            <Link href="/about" className={styles.footerLink}>
-              회사소개
-            </Link>
-            <Link href="/contact" className={styles.footerLink}>
-              문의
-            </Link>
-          </div>
-
-          <div className={styles.footerSocial}>
-            <a href="#" className={styles.socialIcon}>
-              f
-            </a>
-            <a href="#" className={styles.socialIcon}>
-              t
-            </a>
-            <a href="#" className={styles.socialIcon}>
-              in
-            </a>
-            <a href="#" className={styles.socialIcon}>
-              yt
-            </a>
-            <a href="#" className={styles.socialIcon}>
-              ig
-            </a>
-          </div>
-
-          <div className={styles.footerCopyright}>
-            recoveriX는 g.tec medical engineering
-            <br />
-            GmbH의 제품입니다. 2025 © 판권 소유
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "@/styles/pages/AboutPage.module.scss";
+import { Award, Globe, Users, TrendingUp, Heart, Zap } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -9,79 +12,16 @@ export default function AboutPage() {
 
       <main className={styles.main}>
         <div className={styles.container}>
-          <h1 className={styles.title}>회사소개</h1>
-          <p className={styles.description}>
-            recoveriX를 개발한 g.tec medical engineering GmbH에 대해 알아보세요.
-          </p>
-
-          {/* 기존 g.tec 소개 섹션
-          <div className={styles.contentSection}>
-            <div className={styles.contentGrid}>
-              <div className={styles.contentText}>
-                <h2 className={styles.sectionTitle}>
-                  g.tec medical engineering GmbH
-                </h2>
-                <p className={styles.contentDescription}>
-                  g.tec medical engineering GmbH는 오스트리아 그라츠에 본사를 둔
-                  의료 공학 전문 기업입니다. 1999년 설립 이후, 뇌-컴퓨터
-                  인터페이스(BCI) 기술 분야에서 세계적인 선두주자로 자리잡고
-                  있습니다.
-                </p>
-                <p className={styles.contentDescription}>
-                  우리는 뇌졸중, 다발성 경화증, 외상성 뇌 손상 등 신경 장애로
-                  고통받는 환자들을 위한 혁신적인 재활 솔루션을 개발하고
-                  있습니다. recoveriX는 이러한 노력의 결과물로, 뇌의
-                  신경가소성을 활용하여 잃어버린 운동 기능을 회복시키는 획기적인
-                  치료법입니다.
-                </p>
-              </div>
-              <div className={styles.contentImage}>
-                <Image
-                  src="https://recoverix.com/wp-content/uploads/2022/05/christoph-guger-monochrom.jpg"
-                  alt="Dr. Christoph Guger"
-                  width={300}
-                  height={300}
-                  className={styles.ceoPhoto}
-                />
-              </div>
-            </div>
-          </div> */}
-
-          {/* 우리의 미션
-          <div className={styles.missionSection}>
-            <h2 className={styles.sectionTitle}>우리의 미션</h2>
-            <p className={styles.missionText}>
-              신경 장애로 인해 일상생활에 어려움을 겪는 환자들에게 희망을
-              제공하고, 최첨단 기술을 통해 삶의 질을 향상시키는 것입니다.
+          {/* Hero Section */}
+          <div className={styles.heroSection}>
+            <h1 className={styles.heroTitle}>회사소개</h1>
+            <p className={styles.heroDescription}>
+              recoveriX를 개발한 g.tec medical engineering GmbH와
+              국내 공식 파트너 뉴로솔루션즈를 소개합니다.
             </p>
-          </div> */}
-
-          {/* 핵심 가치 */}
-          <div className={styles.valuesSection}>
-            <h2 className={styles.sectionTitle}>핵심 가치</h2>
-            <div className={styles.valuesGrid}>
-              <div className={styles.valueItem}>
-                <h3 className={styles.valueTitle}>혁신</h3>
-                <p className={styles.valueDescription}>
-                  최신 기술과 연구를 바탕으로 혁신적인 의료 솔루션을 개발합니다.
-                </p>
-              </div>
-              <div className={styles.valueItem}>
-                <h3 className={styles.valueTitle}>환자 중심</h3>
-                <p className={styles.valueDescription}>
-                  환자의 안전과 치료 효과를 최우선으로 생각합니다.
-                </p>
-              </div>
-              <div className={styles.valueItem}>
-                <h3 className={styles.valueTitle}>과학적 근거</h3>
-                <p className={styles.valueDescription}>
-                  모든 치료법은 엄격한 임상 연구를 통해 검증됩니다.
-                </p>
-              </div>
-            </div>
           </div>
 
-          {/* 뉴로솔루션즈 인사말 섹션 추가 */}
+          {/* 뉴로솔루션즈 인사말 섹션 - 최상단으로 이동 */}
           <section className={styles.introSection}>
             <h2 className={styles.sectionTitle}>뉴로솔루션즈 인사말</h2>
             <p>
@@ -89,8 +29,8 @@ export default function AboutPage() {
               <br />
               저희 뉴로솔루션즈는{" "}
               <strong>
-                “재활의 기쁨과 건강한 몸과 마음, 그리고 가족의 행복한 삶에
-                기여하는 기업”
+                "재활의 기쁨과 건강한 몸과 마음, 그리고 가족의 행복한 삶에
+                기여하는 기업"
               </strong>
               을 비전으로 삼고, 오스트리아 G.Tec Medical Engineering GmbH와의
               공식 파트너십을 통해 최첨단 비침습 뇌컴퓨터인터페이스(BCI)기반
@@ -150,8 +90,134 @@ export default function AboutPage() {
               뉴로솔루션즈 대표이사 드림
             </p>
           </section>
+
+          {/* G.Tec 소개 섹션 */}
+          <div className={styles.gtecSection}>
+            <div className={styles.gtecGrid}>
+              <div className={styles.gtecText}>
+                <h2>g.tec medical engineering GmbH</h2>
+                <p>
+                  g.tec medical engineering GmbH는 오스트리아 그라츠에 본사를 둔
+                  의료 공학 전문 기업입니다. 1999년 설립 이후, 뇌-컴퓨터
+                  인터페이스(BCI) 기술 분야에서 세계적인 선두주자로 자리잡고
+                  있습니다.
+                </p>
+                <p>
+                  뇌졸중, 다발성 경화증, 외상성 뇌 손상, 파킨슨병 등 신경 장애로
+                  고통받는 환자들을 위한 혁신적인 재활 솔루션을 개발하고
+                  있습니다.
+                </p>
+              </div>
+              <div className={styles.statsGrid}>
+                <div className={styles.statCard}>
+                  <Globe className={styles.statIcon} size={32} />
+                  <div className={styles.statNumber}>60+</div>
+                  <div className={styles.statLabel}>개국 보급</div>
+                </div>
+                <div className={styles.statCard}>
+                  <Award className={styles.statIcon} size={32} />
+                  <div className={styles.statNumber}>700+</div>
+                  <div className={styles.statLabel}>연구 논문</div>
+                </div>
+                <div className={styles.statCard}>
+                  <TrendingUp className={styles.statIcon} size={32} />
+                  <div className={styles.statNumber}>25+</div>
+                  <div className={styles.statLabel}>년 전문성</div>
+                </div>
+                <div className={styles.statCard}>
+                  <Heart className={styles.statIcon} size={32} />
+                  <div className={styles.statNumber}>1000+</div>
+                  <div className={styles.statLabel}>환자 치료</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 제품별 섹션 */}
+          <div className={styles.productSection}>
+            <h2 className={styles.productTitle}>우리의 제품</h2>
+            <div className={styles.productCard}>
+              <div className={styles.productHeader}>
+                <Zap className={styles.productIcon} size={32} />
+                <div>
+                  <h3>recoveriX</h3>
+                  <p>
+                    recoveriX는 뇌의 신경가소성을 활용하여 잃어버린 운동 기능을
+                    회복시키는 획기적인 BCI 기반 재활 치료 시스템입니다.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.featureGrid}>
+                <div className={styles.featureItem}>
+                  <h4>뇌파 감지 기술</h4>
+                  <p>
+                    환자의 상상 움직임을 실시간으로 감지하여 치료에 활용합니다.
+                  </p>
+                </div>
+                <div className={styles.featureItem}>
+                  <h4>전기 자극 치료</h4>
+                  <p>
+                    근육에 정확한 전기 자극을 제공하여 신경망을 재연결합니다.
+                  </p>
+                </div>
+                <div className={styles.featureItem}>
+                  <h4>시각/촉각 피드백</h4>
+                  <p>
+                    다중 감각 피드백으로 뇌의 학습 효과를 극대화합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 핵심 가치 */}
+          <div className={styles.valuesSection}>
+            <h2 className={styles.sectionTitle}>핵심 가치</h2>
+            <div className={styles.valuesGrid}>
+              <div className={styles.valueItem}>
+                <h3 className={styles.valueTitle}>혁신</h3>
+                <p className={styles.valueDescription}>
+                  최신 기술과 연구를 바탕으로 혁신적인 의료 솔루션을 개발합니다.
+                </p>
+              </div>
+              <div className={styles.valueItem}>
+                <h3 className={styles.valueTitle}>환자 중심</h3>
+                <p className={styles.valueDescription}>
+                  환자의 안전과 치료 효과를 최우선으로 생각합니다.
+                </p>
+              </div>
+              <div className={styles.valueItem}>
+                <h3 className={styles.valueTitle}>과학적 근거</h3>
+                <p className={styles.valueDescription}>
+                  모든 치료법은 엄격한 임상 연구를 통해 검증됩니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* GMP 인증서 섹션 */}
+          <div className={styles.certificateSection}>
+            <h2 className={styles.sectionTitle}>인증서</h2>
+            <div className={styles.certificateCard}>
+              <h3>GMP 인증서</h3>
+              <p>
+                g.tec medical engineering GmbH의 GMP(Good Manufacturing Practice) 인증서를 확인하실 수 있습니다.
+              </p>
+              <a
+                href="/certificates/GMP-certificate-KTR-BAAFA-24242.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.pdfButton}
+              >
+                PDF 다운로드
+              </a>
+            </div>
+          </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -199,3 +199,7 @@ firebase-debug.*.log
 
 # Turbo
 .turbo
+
+# Documentation and AI guidance
+/docs/
+CLAUDE.md

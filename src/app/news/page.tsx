@@ -1,4 +1,5 @@
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import styles from "@/styles/pages/NewsPage.module.scss";
 
 export default function NewsPage() {
@@ -45,6 +46,8 @@ export default function NewsPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
