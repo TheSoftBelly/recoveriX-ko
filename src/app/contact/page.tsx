@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 import styles from "@/styles/pages/ContactPage.module.scss";
 
 export default function ContactPage() {
@@ -33,10 +34,21 @@ export default function ContactPage() {
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
-    // 실제 구현에서는 API 호출을 여기에 추가
     try {
-      // 시뮬레이션된 API 호출
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "문의 전송에 실패했습니다.");
+      }
+
       setSubmitStatus("success");
       setFormData({
         name: "",
@@ -45,7 +57,13 @@ export default function ContactPage() {
         subject: "",
         message: "",
       });
+
+      // 3초 후 성공 메시지 제거
+      setTimeout(() => {
+        setSubmitStatus("idle");
+      }, 5000);
     } catch (error) {
+      console.error("문의 전송 오류:", error);
       setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
@@ -217,6 +235,8 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

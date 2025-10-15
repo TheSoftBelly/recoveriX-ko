@@ -14,6 +14,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [agreeToPrivacy, setAgreeToPrivacy] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -39,6 +40,12 @@ export default function SignupPage() {
 
     if (!agreeToTerms) {
       setError("이용약관에 동의해주세요.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!agreeToPrivacy) {
+      setError("개인정보처리방침에 동의해주세요.");
       setIsLoading(false);
       return;
     }
@@ -164,10 +171,29 @@ export default function SignupPage() {
                     disabled={isLoading}
                   />
                   <span className={styles.checkboxText}>
-                    <Link href="/terms" className={styles.termsLink}>
+                    <Link href="/terms" className={styles.termsLink} target="_blank">
                       이용약관
                     </Link>
-                    에 동의합니다
+                    에 동의합니다 (필수)
+                  </span>
+                </label>
+              </div>
+
+              {/* 개인정보처리방침 동의 */}
+              <div className={styles.termsGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={agreeToPrivacy}
+                    onChange={(e) => setAgreeToPrivacy(e.target.checked)}
+                    className={styles.checkbox}
+                    disabled={isLoading}
+                  />
+                  <span className={styles.checkboxText}>
+                    <Link href="/privacy" className={styles.termsLink} target="_blank">
+                      개인정보처리방침
+                    </Link>
+                    에 동의합니다 (필수)
                   </span>
                 </label>
               </div>

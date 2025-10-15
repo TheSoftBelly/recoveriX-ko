@@ -23,6 +23,60 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Supabase 에러 메시지를 한국어로 변환하는 함수
+const translateAuthError = (error: any): string => {
+  if (!error?.message) {
+    return "인증 중 오류가 발생했습니다.";
+  }
+
+  const message = error.message.toLowerCase();
+
+  // 회원가입 관련 에러
+  if (message.includes("user already registered") || message.includes("already registered")) {
+    return "이미 가입된 이메일 주소입니다.";
+  }
+
+  // 로그인 관련 에러
+  if (message.includes("invalid login credentials") || message.includes("invalid credentials")) {
+    return "이메일 또는 비밀번호가 올바르지 않습니다.";
+  }
+
+  if (message.includes("email not confirmed")) {
+    return "이메일 인증이 완료되지 않았습니다. 이메일을 확인해주세요.";
+  }
+
+  // 비밀번호 관련 에러
+  if (message.includes("password") && message.includes("short")) {
+    return "비밀번호는 최소 8자 이상이어야 합니다.";
+  }
+
+  if (message.includes("password") && (message.includes("weak") || message.includes("strength"))) {
+    return "비밀번호가 너무 약합니다. 더 강력한 비밀번호를 사용해주세요.";
+  }
+
+  // 이메일 관련 에러
+  if (message.includes("invalid email")) {
+    return "올바른 이메일 형식이 아닙니다.";
+  }
+
+  if (message.includes("user not found") || message.includes("not found")) {
+    return "등록되지 않은 사용자입니다.";
+  }
+
+  // Rate limit 에러
+  if (message.includes("rate limit") || message.includes("too many requests")) {
+    return "너무 많은 요청이 발생했습니다. 잠시 후 다시 시도해주세요.";
+  }
+
+  // 네트워크 에러
+  if (message.includes("network") || message.includes("fetch")) {
+    return "네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.";
+  }
+
+  // 기타 에러
+  return "인증 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const supabase = createSupabaseClient();
   const [user, setUser] = useState<User | null>(null);
@@ -71,50 +125,61 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [supabase]);
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
 
-    // users 테이블에서 role 가져오기
-    if (data.user) {
-      const { data: userData, error: dbError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("id", data.user.id)
-        .single();
+      // users 테이블에서 role 가져오기
+      if (data.user) {
+        const { data: userData, error: dbError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", data.user.id)
+          .single();
 
-      if (!dbError && userData) {
-        setUser({
-          id: data.user.id,
-          email: data.user.email!,
-          name: userData.name || data.user.user_metadata?.name,
-          role: userData.role || "user",
-        });
+        if (!dbError && userData) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email!,
+            name: userData.name || data.user.user_metadata?.name,
+            role: userData.role || "user",
+          });
+        }
       }
+    } catch (error) {
+      throw new Error(translateAuthError(error));
     }
   };
 
   const signUp = async (email: string, password: string, name?: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name, role: "user" },
-      },
-    });
-    if (error) throw error;
-
-    // users 테이블에 사용자 정보 저장
-    if (data.user) {
-      const { error: dbError } = await supabase.from("users").insert({
-        id: data.user.id,
-        email: data.user.email!,
-        name: name || null,
-        role: "user",
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name, role: "user" },
+        },
       });
-      if (dbError) console.error("users 테이블 삽입 오류:", dbError);
+      if (error) throw error;
+
+      // users 테이블에 사용자 정보 저장
+      if (data.user) {
+        const { error: dbError } = await supabase.from("users").insert({
+          id: data.user.id,
+          email: data.user.email!,
+          name: name || null,
+          role: "user",
+        });
+        if (dbError) {
+          console.error("users 테이블 삽입 오류:", dbError);
+          throw new Error("회원 정보 저장 중 오류가 발생했습니다.");
+        }
+      }
+    } catch (error) {
+      throw new Error(translateAuthError(error));
     }
   };
 
