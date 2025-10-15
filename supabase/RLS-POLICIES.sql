@@ -58,6 +58,7 @@ WITH CHECK (
 -- 2. qna_posts 테이블 RLS 정책
 -- ============================================
 
+DROP POLICY IF EXISTS "Anyone can view public posts" ON public.qna_posts;
 DROP POLICY IF EXISTS "Users can view their own posts" ON public.qna_posts;
 DROP POLICY IF EXISTS "Admins can view all posts" ON public.qna_posts;
 DROP POLICY IF EXISTS "Users can create posts" ON public.qna_posts;
@@ -66,7 +67,13 @@ DROP POLICY IF EXISTS "Admins can update all posts" ON public.qna_posts;
 
 ALTER TABLE public.qna_posts ENABLE ROW LEVEL SECURITY;
 
--- 사용자는 자신의 게시글만 조회
+-- 누구나 비공개가 아닌 게시글 조회 가능 (비로그인 포함)
+CREATE POLICY "Anyone can view public posts"
+ON public.qna_posts
+FOR SELECT
+USING (is_private = false);
+
+-- 사용자는 자신의 게시글만 조회 (비공개 포함)
 CREATE POLICY "Users can view their own posts"
 ON public.qna_posts
 FOR SELECT

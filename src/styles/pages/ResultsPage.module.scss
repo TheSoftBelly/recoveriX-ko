@@ -57,17 +57,19 @@
 .title {
   font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 48px;
+  font-size: 40px;
   color: #1a1a1a;
   margin-bottom: 20px;
   text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   @media (max-width: 480px) {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
 
@@ -81,6 +83,9 @@
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-height: 1.6;
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -99,13 +104,19 @@
 .sectionTitle {
   font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 32px;
   color: #1a1a1a;
   margin-bottom: 20px;
   text-align: center;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
-    font-size: 28px;
+    font-size: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
   }
 }
 
@@ -120,6 +131,8 @@
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -189,6 +202,8 @@
   font-weight: 500;
   font-size: 16px;
   color: #1a1a1a;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -269,6 +284,8 @@
   color: #64748b;
   margin-top: 12px;
   line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 13px;
@@ -286,6 +303,17 @@
   h2 {
     color: white;
     margin-bottom: 48px;
+    font-size: 32px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 22px;
+    }
   }
 
   @media (max-width: 768px) {
@@ -342,6 +370,8 @@
   font-size: 18px;
   color: rgba(255, 255, 255, 0.95);
   margin: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 16px;
@@ -355,6 +385,17 @@
   h2 {
     text-align: center;
     margin-bottom: 48px;
+    font-size: 32px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+
+    @media (max-width: 768px) {
+      font-size: 24px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 22px;
+    }
   }
 
   @media (max-width: 768px) {
@@ -417,13 +458,19 @@
 .benefitTitle {
   font-family: "Inter", sans-serif;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
   color: #1a1a1a;
   margin-bottom: 12px;
   line-height: 1.4;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
-    font-size: 18px;
+    font-size: 17px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 16px;
   }
 }
 
@@ -434,6 +481,8 @@
   color: #64748b;
   line-height: 1.7;
   margin: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 
   @media (max-width: 768px) {
     font-size: 14px;
@@ -449,13 +498,19 @@
   text-align: center;
 
   h2 {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 800;
     color: #1a1a1a;
     margin-bottom: 16px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 
     @media (max-width: 768px) {
-      font-size: 28px;
+      font-size: 24px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 22px;
     }
   }
 
@@ -463,6 +518,8 @@
     font-size: 18px;
     color: #475569;
     margin-bottom: 32px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 
     @media (max-width: 768px) {
       font-size: 16px;
