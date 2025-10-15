@@ -43,7 +43,7 @@ export default function AdminQnaDetailPage() {
   const [loading, setLoading] = useState(true);
   const [priority, setPriority] = useState<"low" | "normal" | "high">("normal");
 
-  const postId = Number(params.id);
+  const postId = Number(params?.id);
 
   useEffect(() => {
     loadPost();
