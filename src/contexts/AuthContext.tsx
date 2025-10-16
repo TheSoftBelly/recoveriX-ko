@@ -136,13 +136,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               email: session.user.email,
             });
 
-            // public.users 테이블에서 role 가져오기
+            // public.users 테이블에서 role 가져오기 (3초 타임아웃)
             console.log("[AuthContext] users 테이블 조회 시작...");
-            const { data: userData, error: dbError } = await supabase
+
+            const dbQueryPromise = supabase
               .from("users")
               .select("*")
               .eq("id", session.user.id)
               .single();
+
+            const dbTimeoutPromise = new Promise((_, reject) => {
+              setTimeout(() => {
+                console.error("[AuthContext] users 테이블 조회 타임아웃 (3초)");
+                reject(new Error("Database query timeout"));
+              }, 3000);
+            });
+
+            let userData = null;
+            let dbError = null;
+
+            try {
+              const result = await Promise.race([dbQueryPromise, dbTimeoutPromise]) as any;
+              userData = result.data;
+              dbError = result.error;
+            } catch (timeoutError) {
+              console.error("[AuthContext] users 테이블 조회 실패 (타임아웃 또는 에러):", timeoutError);
+              dbError = timeoutError;
+            }
 
             console.log("[AuthContext] users 테이블 조회 결과:", {
               error: dbError,
@@ -150,12 +170,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
 
             if (dbError) {
-              console.error("[AuthContext] users 테이블 조회 오류:", {
-                message: dbError.message,
-                code: dbError.code,
-                details: dbError.details,
-                hint: dbError.hint,
-              });
+              console.error("[AuthContext] users 테이블 조회 오류");
+              if (dbError instanceof Error) {
+                console.error("[AuthContext] 오류 메시지:", dbError.message);
+              } else if (dbError && typeof dbError === 'object') {
+                console.error("[AuthContext] 오류 상세:", {
+                  message: (dbError as any).message,
+                  code: (dbError as any).code,
+                });
+              }
             }
 
             if (!dbError && userData) {
