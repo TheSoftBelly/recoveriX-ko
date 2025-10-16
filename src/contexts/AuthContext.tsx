@@ -84,13 +84,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // 세션 초기화
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
     const getSession = async () => {
       try {
+        console.log("[AuthContext] 세션 초기화 시작");
+
+        // 10초 타임아웃 설정
+        const timeoutPromise = new Promise((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error("Session timeout")), 10000);
+        });
+
+        const sessionPromise = supabase.auth.getSession();
+
         const {
           data: { session },
-        } = await supabase.auth.getSession();
+        } = await Promise.race([sessionPromise, timeoutPromise]) as any;
+
+        clearTimeout(timeoutId);
 
         if (session?.user) {
+          console.log("[AuthContext] 세션 발견:", session.user.id);
+
           // public.users 테이블에서 role 가져오기
           const { data: userData, error: dbError } = await supabase
             .from("users")
@@ -99,7 +114,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             .single();
 
           if (dbError) {
-            console.error("users 테이블 조회 오류 (세션 초기화):", {
+            console.error("[AuthContext] users 테이블 조회 오류:", {
               message: dbError.message,
               details: dbError.details,
               hint: dbError.hint,
@@ -108,7 +123,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
 
           if (!dbError && userData) {
-            console.log("사용자 정보 로드 성공:", {
+            console.log("[AuthContext] 사용자 정보 로드 성공:", {
               id: session.user.id,
               role: userData.role,
             });
@@ -121,7 +136,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           } else {
             // DB에 레코드가 없으면 user_metadata 사용 (fallback)
             console.warn(
-              "users 테이블에 레코드가 없습니다. user_metadata 사용:",
+              "[AuthContext] users 테이블에 레코드가 없습니다. user_metadata 사용:",
               session.user.id
             );
             setUser({
@@ -132,12 +147,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             });
           }
         } else {
+          console.log("[AuthContext] 세션 없음");
           setUser(null);
         }
       } catch (error) {
-        console.error("세션 초기화 중 예외 발생:", error);
+        console.error("[AuthContext] 세션 초기화 중 예외 발생:", error);
         setUser(null);
       } finally {
+        console.log("[AuthContext] 로딩 완료");
         setLoading(false);
       }
     };

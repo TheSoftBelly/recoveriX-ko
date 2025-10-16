@@ -16,12 +16,18 @@ export async function middleware(req: NextRequest) {
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
       getAll() {
-        // 실제 요청 쿠키를 반환하도록 수정
         return req.cookies.getAll();
       },
       setAll(cookiesToSet) {
         cookiesToSet.forEach(({ name, value, options }) => {
-          res.cookies.set(name, value, options);
+          // 쿠키 옵션 기본값 설정
+          const cookieOptions = {
+            ...options,
+            path: '/',
+            sameSite: 'lax' as const,
+            secure: process.env.NODE_ENV === 'production',
+          };
+          res.cookies.set(name, value, cookieOptions);
         });
       },
     },
