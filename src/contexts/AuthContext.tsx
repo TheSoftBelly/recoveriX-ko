@@ -87,94 +87,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return createSupabaseClient();
   }, []);
 
-  // 세션 초기화
+  // 세션 초기화 - onAuthStateChange만 사용 (getSession 타임아웃 우회)
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    console.log("[AuthContext] 세션 초기화 시작 (onAuthStateChange 방식)");
 
-    const getSession = async () => {
-      try {
-        console.log("[AuthContext] 세션 초기화 시작");
-
-        // 15초 타임아웃 설정 (10초에서 증가)
-        const timeoutPromise = new Promise((_, reject) => {
-          timeoutId = setTimeout(() => {
-            console.error("[AuthContext] getSession() 타임아웃 (15초 초과)");
-            reject(new Error("Session timeout"));
-          }, 15000);
-        });
-
-        console.log("[AuthContext] getSession() 호출 시작...");
-        const sessionPromise = supabase.auth.getSession();
-
-        const result = await Promise.race([sessionPromise, timeoutPromise]) as any;
-        console.log("[AuthContext] getSession() 응답 받음:", result ? "데이터 있음" : "데이터 없음");
-
-        clearTimeout(timeoutId);
-
-        const {
-          data: { session },
-        } = result;
-
-        if (session?.user) {
-          console.log("[AuthContext] 세션 발견:", session.user.id);
-
-          // public.users 테이블에서 role 가져오기
-          const { data: userData, error: dbError } = await supabase
-            .from("users")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
-
-          if (dbError) {
-            console.error("[AuthContext] users 테이블 조회 오류:", {
-              message: dbError.message,
-              details: dbError.details,
-              hint: dbError.hint,
-              code: dbError.code,
-            });
-          }
-
-          if (!dbError && userData) {
-            console.log("[AuthContext] 사용자 정보 로드 성공:", {
-              id: session.user.id,
-              role: userData.role,
-            });
-            setUser({
-              id: session.user.id,
-              email: session.user.email ?? "",
-              name: userData.name || session.user.user_metadata?.name,
-              role: userData.role ?? "user",
-            });
-          } else {
-            // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-            console.warn(
-              "[AuthContext] users 테이블에 레코드가 없습니다. user_metadata 사용:",
-              session.user.id
-            );
-            setUser({
-              id: session.user.id,
-              email: session.user.email ?? "",
-              name: session.user.user_metadata?.name,
-              role: session.user.user_metadata?.role ?? "user",
-            });
-          }
-        } else {
-          console.log("[AuthContext] 세션 없음");
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("[AuthContext] 세션 초기화 중 예외 발생:", error);
+    // 초기 상태: localStorage 체크로 빠르게 판단
+    let initialLoadComplete = false;
+    try {
+      const storedSession = localStorage.getItem('sb-akwisehgtrmytjhcilby-auth-token');
+      if (!storedSession) {
+        console.log("[AuthContext] 저장된 세션 없음 - 로그아웃 상태");
         setUser(null);
-      } finally {
-        console.log("[AuthContext] 로딩 완료");
+        setLoading(false);
+        initialLoadComplete = true;
+      } else {
+        console.log("[AuthContext] 저장된 세션 발견 - onAuthStateChange 대기");
+      }
+    } catch (e) {
+      console.error("[AuthContext] localStorage 접근 실패:", e);
+      setUser(null);
+      setLoading(false);
+      initialLoadComplete = true;
+    }
+
+    // 2초 후 강제로 로딩 완료 (세션이 로드되지 않아도)
+    const loadingTimeout = setTimeout(() => {
+      if (!initialLoadComplete) {
+        console.warn("[AuthContext] 2초 타임아웃 - 강제 로딩 완료");
         setLoading(false);
       }
-    };
-
-    getSession();
+    }, 2000);
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
+        console.log("[AuthContext] 인증 상태 변경:", event, session ? "세션 있음" : "세션 없음");
+        clearTimeout(loadingTimeout);
+
         try {
           if (session?.user) {
             // public.users 테이블에서 role 가져오기
@@ -185,16 +133,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               .single();
 
             if (dbError) {
-              console.error("users 테이블 조회 오류 (onAuthStateChange):", {
+              console.error("[AuthContext] users 테이블 조회 오류:", {
                 message: dbError.message,
-                details: dbError.details,
-                hint: dbError.hint,
                 code: dbError.code,
               });
             }
 
             if (!dbError && userData) {
-              console.log("인증 상태 변경 - 사용자 정보 로드:", {
+              console.log("[AuthContext] 사용자 정보 로드 성공:", {
                 id: session.user.id,
                 role: userData.role,
               });
@@ -206,10 +152,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               });
             } else {
               // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-              console.warn(
-                "users 테이블에 레코드가 없습니다 (onAuthStateChange). user_metadata 사용:",
-                session.user.id
-              );
+              console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용");
               setUser({
                 id: session.user.id,
                 email: session.user.email ?? "",
@@ -218,16 +161,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               });
             }
           } else {
+            console.log("[AuthContext] 세션 없음 - 로그아웃");
             setUser(null);
           }
         } catch (error) {
-          console.error("인증 상태 변경 처리 중 예외 발생:", error);
+          console.error("[AuthContext] 인증 상태 변경 처리 중 오류:", error);
           setUser(null);
+        } finally {
+          setLoading(false);
+          initialLoadComplete = true;
         }
       }
     );
 
     return () => {
+      clearTimeout(loadingTimeout);
       listener.subscription.unsubscribe();
     };
   }, [supabase]);

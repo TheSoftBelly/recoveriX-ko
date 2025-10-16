@@ -37,7 +37,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'storage-access=*, cookies=*',
+            value: 'storage-access=(self)',
           },
         ],
       },
