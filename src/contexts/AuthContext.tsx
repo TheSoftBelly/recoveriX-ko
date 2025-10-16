@@ -183,13 +183,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             console.log("[AuthContext] 세션 없음 - 로그아웃");
             setUser(null);
           }
-        } catch (error) {
+        } catch (error: unknown) {
           console.error("[AuthContext] 인증 상태 변경 처리 중 오류 (catch):", error);
-          console.error("[AuthContext] 오류 상세:", {
-            name: error?.name,
-            message: error?.message,
-            stack: error?.stack,
-          });
+          if (error instanceof Error) {
+            console.error("[AuthContext] 오류 상세:", {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+            });
+          } else {
+            console.error("[AuthContext] 오류 상세 (unknown):", String(error));
+          }
           setUser(null);
         } finally {
           console.log("[AuthContext] finally 블록 - 로딩 완료");
