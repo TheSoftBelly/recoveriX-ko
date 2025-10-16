@@ -22,8 +22,20 @@ export default function ResetPasswordPage() {
     const accessToken = hashParams.get("access_token");
     const type = hashParams.get("type");
 
-    if (!accessToken || type !== "recovery") {
+    console.log("Reset Password - URL Hash:", window.location.hash);
+    console.log("Reset Password - Access Token:", accessToken);
+    console.log("Reset Password - Type:", type);
+
+    // type이 recovery 또는 없을 때 허용 (Supabase 버전에 따라 다름)
+    if (!accessToken) {
       setError("유효하지 않은 비밀번호 재설정 링크입니다.");
+      console.error("Reset Password - No access token found");
+    } else if (type && type !== "recovery") {
+      setError("유효하지 않은 비밀번호 재설정 링크입니다.");
+      console.error("Reset Password - Invalid type:", type);
+    } else {
+      // 토큰이 있으면 세션 자동 설정 (Supabase가 처리)
+      console.log("Reset Password - Token valid, ready to reset password");
     }
   }, []);
 
@@ -47,14 +59,19 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
+      console.log("Reset Password - Attempting to update password...");
+
+      const { data, error: updateError } = await supabase.auth.updateUser({
         password: newPassword,
       });
+
+      console.log("Reset Password - Update result:", { data, error: updateError });
 
       if (updateError) {
         throw updateError;
       }
 
+      console.log("Reset Password - Password updated successfully");
       setSuccess(true);
 
       // 3초 후 로그인 페이지로 리다이렉트
@@ -63,6 +80,11 @@ export default function ResetPasswordPage() {
       }, 3000);
     } catch (error: any) {
       console.error("비밀번호 재설정 오류:", error);
+      console.error("비밀번호 재설정 오류 상세:", {
+        message: error.message,
+        status: error.status,
+        code: error.code,
+      });
 
       // 에러 메시지 한국어 변환
       let errorMessage = "비밀번호 재설정 중 오류가 발생했습니다.";
@@ -75,6 +97,8 @@ export default function ResetPasswordPage() {
           errorMessage = "비밀번호가 너무 약합니다. 더 강력한 비밀번호를 사용해주세요.";
         } else if (msg.includes("invalid") || msg.includes("expired")) {
           errorMessage = "비밀번호 재설정 링크가 만료되었거나 유효하지 않습니다.";
+        } else if (msg.includes("session") || msg.includes("not authenticated")) {
+          errorMessage = "세션이 만료되었습니다. 비밀번호 재설정을 다시 요청해주세요.";
         }
       }
 

@@ -102,7 +102,18 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
           </p>
         </div>
 
-        {user && <QuestionForm />}
+        {user ? (
+          <QuestionForm />
+        ) : (
+          <div className={styles.loginPrompt}>
+            <p className={styles.loginPromptText}>
+              질문을 등록하려면 로그인이 필요합니다.
+            </p>
+            <Link href="/login" className={styles.loginPromptButton}>
+              로그인하기
+            </Link>
+          </div>
+        )}
         <QnaControls />
 
         <section className={styles.questionList}>

@@ -81,6 +81,66 @@
   }
 }
 
+// 로그인 프롬프트 (비로그인 사용자용)
+.loginPrompt {
+  background: linear-gradient(135deg, #f0fdfa 0%, #f8fafc 100%);
+  border: 2px dashed #1fb085;
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+    margin-bottom: 20px;
+  }
+}
+
+.loginPromptText {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #475569;
+  margin: 0 0 16px 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
+.loginPromptButton {
+  display: inline-block;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #1fb184 0%, #0bad90 100%);
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(31, 177, 132, 0.2);
+
+  &:hover {
+    background: linear-gradient(135deg, #15845e 0%, #0a9478 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(31, 177, 132, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px 24px;
+  }
+}
+
 // 질문 작성 폼
 .questionForm {
   background-color: #ffffff;
