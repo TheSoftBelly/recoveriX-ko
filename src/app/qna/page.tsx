@@ -27,15 +27,15 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
     10
   );
 
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        async get(name: string) {
-          return (await cookieStore).get(name)?.value;
+        get(name: string) {
+          return cookieStore.get(name)?.value;
         },
       },
     }
@@ -56,7 +56,7 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
       status,
       is_private,
       users ( name ),
-      qna_comments ( count )
+      qna_comments ( id )
     `,
     { count: "exact" }
   );
@@ -69,7 +69,24 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
   query = query.range(start, end).order("created_at", { ascending: false });
 
   const { data: questions, error, count } = await query;
-  if (error) return <p>Error loading questions.</p>;
+
+  if (error) {
+    console.error("QnA 페이지 로딩 에러:", error);
+    return (
+      <div className={styles.pageContainer}>
+        <Header />
+        <main className={styles.qnaMain}>
+          <div className={styles.pageHeader}>
+            <h1 className={styles.pageTitle}>QnA 게시판</h1>
+            <p className={styles.pageDescription} style={{ color: "red" }}>
+              게시글을 불러오는 중 오류가 발생했습니다: {error.message}
+            </p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
 
@@ -102,7 +119,7 @@ const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
                 status: q.status,
                 views: q.views,
                 created_at: q.created_at,
-                comment_count: q.qna_comments[0]?.count || 0,
+                comment_count: q.qna_comments?.length || 0,
               }}
               currentUser={
                 user

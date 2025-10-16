@@ -85,35 +85,114 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 세션 초기화
   useEffect(() => {
     const getSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-      if (session?.user) {
-        setUser({
-          id: session.user.id,
-          email: session.user.email ?? "",
-          name: session.user.user_metadata?.name,
-          role: session.user.user_metadata?.role ?? "user",
-        });
-      } else {
+        if (session?.user) {
+          // public.users 테이블에서 role 가져오기
+          const { data: userData, error: dbError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("id", session.user.id)
+            .single();
+
+          if (dbError) {
+            console.error("users 테이블 조회 오류 (세션 초기화):", {
+              message: dbError.message,
+              details: dbError.details,
+              hint: dbError.hint,
+              code: dbError.code,
+            });
+          }
+
+          if (!dbError && userData) {
+            console.log("사용자 정보 로드 성공:", {
+              id: session.user.id,
+              role: userData.role,
+            });
+            setUser({
+              id: session.user.id,
+              email: session.user.email ?? "",
+              name: userData.name || session.user.user_metadata?.name,
+              role: userData.role ?? "user",
+            });
+          } else {
+            // DB에 레코드가 없으면 user_metadata 사용 (fallback)
+            console.warn(
+              "users 테이블에 레코드가 없습니다. user_metadata 사용:",
+              session.user.id
+            );
+            setUser({
+              id: session.user.id,
+              email: session.user.email ?? "",
+              name: session.user.user_metadata?.name,
+              role: session.user.user_metadata?.role ?? "user",
+            });
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("세션 초기화 중 예외 발생:", error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     getSession();
 
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session?.user) {
-          setUser({
-            id: session.user.id,
-            email: session.user.email ?? "",
-            name: session.user.user_metadata?.name,
-            role: session.user.user_metadata?.role ?? "user",
-          });
-        } else {
+      async (_event, session) => {
+        try {
+          if (session?.user) {
+            // public.users 테이블에서 role 가져오기
+            const { data: userData, error: dbError } = await supabase
+              .from("users")
+              .select("*")
+              .eq("id", session.user.id)
+              .single();
+
+            if (dbError) {
+              console.error("users 테이블 조회 오류 (onAuthStateChange):", {
+                message: dbError.message,
+                details: dbError.details,
+                hint: dbError.hint,
+                code: dbError.code,
+              });
+            }
+
+            if (!dbError && userData) {
+              console.log("인증 상태 변경 - 사용자 정보 로드:", {
+                id: session.user.id,
+                role: userData.role,
+              });
+              setUser({
+                id: session.user.id,
+                email: session.user.email ?? "",
+                name: userData.name || session.user.user_metadata?.name,
+                role: userData.role ?? "user",
+              });
+            } else {
+              // DB에 레코드가 없으면 user_metadata 사용 (fallback)
+              console.warn(
+                "users 테이블에 레코드가 없습니다 (onAuthStateChange). user_metadata 사용:",
+                session.user.id
+              );
+              setUser({
+                id: session.user.id,
+                email: session.user.email ?? "",
+                name: session.user.user_metadata?.name,
+                role: session.user.user_metadata?.role ?? "user",
+              });
+            }
+          } else {
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("인증 상태 변경 처리 중 예외 발생:", error);
           setUser(null);
         }
       }

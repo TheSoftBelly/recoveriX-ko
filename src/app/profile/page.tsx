@@ -7,15 +7,15 @@ import styles from "@/styles/pages/ProfilePage.module.scss";
 import Header from "@/components/layout/Header";
 
 const ProfilePage: React.FC = async () => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        async get(name: string) {
-          return (await cookieStore).get(name)?.value;
+        get(name: string) {
+          return cookieStore.get(name)?.value;
         },
       },
     }

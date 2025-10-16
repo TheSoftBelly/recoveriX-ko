@@ -216,6 +216,11 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
+
+  // formRow 내부의 inputGroup은 margin-bottom 제거 (중복 방지)
+  .inputGroup {
+    margin-bottom: 0;
+  }
 }
 
 .inputGroup {
