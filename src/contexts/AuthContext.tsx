@@ -124,16 +124,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }, 2000);
 
-    // 사용자 정보 로드 함수 (중복 제거)
-    const loadUserFromDB = async (userId: string, userEmail: string, userMetadata: any) => {
-      console.log("[AuthContext] users 테이블 조회 시작...");
+    // 사용자 정보 로드 함수 (타임아웃 + 재시도)
+    const loadUserFromDB = async (
+      userId: string,
+      userEmail: string,
+      userMetadata: any,
+      retryCount = 0
+    ) => {
+      const maxRetries = 2;
+      const timeoutMs = 3000;
+
+      console.log(`[AuthContext] users 테이블 조회 시작... (시도 ${retryCount + 1}/${maxRetries + 1})`);
 
       try {
-        const { data: userData, error: dbError } = await supabase
+        // 3초 타임아웃 적용
+        const dbQueryPromise = supabase
           .from("users")
           .select("*")
           .eq("id", userId)
           .single();
+
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("DB_TIMEOUT")), timeoutMs)
+        );
+
+        const { data: userData, error: dbError } = await Promise.race([
+          dbQueryPromise,
+          timeoutPromise,
+        ]) as any;
 
         console.log("[AuthContext] users 테이블 조회 결과:", {
           error: dbError,
@@ -162,15 +180,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             role: userMetadata?.role ?? "user",
           });
         }
-      } catch (error) {
-        console.error("[AuthContext] users 테이블 조회 중 예외 발생:", error);
-        // 에러 발생 시에도 fallback 사용
-        setUser({
-          id: userId,
-          email: userEmail,
-          name: userMetadata?.name,
-          role: userMetadata?.role ?? "user",
-        });
+      } catch (error: any) {
+        if (error?.message === "DB_TIMEOUT" && retryCount < maxRetries) {
+          // 타임아웃 발생 + 재시도 가능
+          console.warn(`[AuthContext] 타임아웃 (3초) - 1초 후 재시도...`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return loadUserFromDB(userId, userEmail, userMetadata, retryCount + 1);
+        } else {
+          // 재시도 실패 또는 다른 에러 → fallback 사용
+          console.error("[AuthContext] users 테이블 조회 최종 실패 - fallback 사용:", error);
+          setUser({
+            id: userId,
+            email: userEmail,
+            name: userMetadata?.name,
+            role: userMetadata?.role ?? "user",
+          });
+        }
       }
     };
 
