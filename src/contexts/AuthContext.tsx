@@ -147,9 +147,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
             const dbTimeoutPromise = new Promise((_, reject) => {
               setTimeout(() => {
-                console.error("[AuthContext] users 테이블 조회 타임아웃 (3초)");
+                console.error("[AuthContext] users 테이블 조회 타임아웃 (1초) - INITIAL_SESSION에서 재시도");
                 reject(new Error("Database query timeout"));
-              }, 3000);
+              }, 1000);
             });
 
             let userData = null;
