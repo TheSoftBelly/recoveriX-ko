@@ -234,7 +234,7 @@ export default function MainPage() {
           <div className={styles.ceoContainer}>
             <div className={styles.ceoImage}>
               <Image
-                src="/images/christoph-guger-monochrom.jpg"
+                src="https://recoverix.com/wp-content/uploads/2022/05/christoph-guger-monochrom.jpg"
                 alt="Dr. Christoph Guger"
                 width={200}
                 height={200}
@@ -354,7 +354,7 @@ export default function MainPage() {
           <div className={styles.testimonialContainer}>
             <div className={styles.testimonialImage}>
               <Image
-                src="/images/review-image.png"
+                src="https://recoverix.com/wp-content/uploads/2022/05/review-image.png"
                 alt="Patient Testimonial"
                 width={200}
                 height={200}
