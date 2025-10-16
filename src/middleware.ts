@@ -67,8 +67,14 @@ export async function middleware(req: NextRequest) {
   }
 
   // 로그인한 사용자가 로그인/회원가입 페이지에 접근시 홈으로 리다이렉트
+  // (비밀번호 재설정은 제외 - 임시 세션으로 로그인된 상태)
   if ((pathname === "/login" || pathname === "/signup") && user) {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // 비밀번호 재설정 페이지는 보호하지 않음 (임시 세션 허용)
+  if (pathname === "/reset-password") {
+    return res;
   }
 
   return res;

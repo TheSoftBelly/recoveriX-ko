@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const { supabase } = useAuth();
+  const { supabase, signOut } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -105,8 +105,13 @@ export default function ResetPasswordPage() {
       console.log("Reset Password - Password updated successfully");
       setSuccess(true);
 
+      // 비밀번호 변경 후 로그아웃 (임시 세션 종료)
+      console.log("Reset Password - Signing out...");
+      await signOut();
+
       // 3초 후 로그인 페이지로 리다이렉트
       setTimeout(() => {
+        console.log("Reset Password - Redirecting to login...");
         router.push("/login");
       }, 3000);
     } catch (error: any) {
@@ -217,7 +222,10 @@ export default function ResetPasswordPage() {
                   <h1 className={styles.formTitle}>비밀번호 재설정 완료</h1>
                   <div className={styles.successMessage}>
                     <p>비밀번호가 성공적으로 변경되었습니다.</p>
-                    <p>잠시 후 로그인 페이지로 이동합니다...</p>
+                    <p>새 비밀번호로 로그인해주세요.</p>
+                    <p className={styles.noteText}>
+                      잠시 후 로그인 페이지로 이동합니다...
+                    </p>
                   </div>
                 </div>
 
