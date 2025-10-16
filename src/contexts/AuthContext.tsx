@@ -32,12 +32,18 @@ const translateAuthError = (error: any): string => {
   const message = error.message.toLowerCase();
 
   // 회원가입 관련 에러
-  if (message.includes("user already registered") || message.includes("already registered")) {
+  if (
+    message.includes("user already registered") ||
+    message.includes("already registered")
+  ) {
     return "이미 가입된 이메일 주소입니다.";
   }
 
   // 로그인 관련 에러
-  if (message.includes("invalid login credentials") || message.includes("invalid credentials")) {
+  if (
+    message.includes("invalid login credentials") ||
+    message.includes("invalid credentials")
+  ) {
     return "이메일 또는 비밀번호가 올바르지 않습니다.";
   }
 
@@ -50,7 +56,10 @@ const translateAuthError = (error: any): string => {
     return "비밀번호는 최소 8자 이상이어야 합니다.";
   }
 
-  if (message.includes("password") && (message.includes("weak") || message.includes("strength"))) {
+  if (
+    message.includes("password") &&
+    (message.includes("weak") || message.includes("strength"))
+  ) {
     return "비밀번호가 너무 약합니다. 더 강력한 비밀번호를 사용해주세요.";
   }
 
@@ -100,11 +109,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const keys = Object.keys(localStorage);
       console.log("[AuthContext] localStorage 전체 키:", keys);
 
-      const supabaseKeys = keys.filter(k => k.startsWith('sb-'));
+      const supabaseKeys = keys.filter((k) => k.startsWith("sb-"));
       console.log("[AuthContext] sb- 키:", supabaseKeys);
 
       if (supabaseKeys.length > 0) {
-        console.log("[AuthContext] Supabase 세션 키 발견:", supabaseKeys.length, "개");
+        console.log(
+          "[AuthContext] Supabase 세션 키 발견:",
+          supabaseKeys.length,
+          "개"
+        );
         hasSession = true;
       } else {
         console.log("[AuthContext] Supabase 세션 키 없음");
@@ -124,91 +137,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }, 2000);
 
-    // 사용자 정보 로드 함수 (타임아웃 + 재시도)
-    const loadUserFromDB = async (
-      userId: string,
-      userEmail: string,
-      userMetadata: any,
-      retryCount = 0
-    ) => {
-      const maxRetries = 2;
-      const timeoutMs = 3000;
-
-      console.log(`[AuthContext] users 테이블 조회 시작... (시도 ${retryCount + 1}/${maxRetries + 1})`);
-
-      try {
-        // 3초 타임아웃 적용
-        const dbQueryPromise = supabase
-          .from("users")
-          .select("*")
-          .eq("id", userId)
-          .single();
-
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("DB_TIMEOUT")), timeoutMs)
-        );
-
-        const { data: userData, error: dbError } = await Promise.race([
-          dbQueryPromise,
-          timeoutPromise,
-        ]) as any;
-
-        console.log("[AuthContext] users 테이블 조회 결과:", {
-          error: dbError,
-          data: userData,
-        });
-
-        if (!dbError && userData) {
-          console.log("[AuthContext] 사용자 정보 로드 성공:", {
-            id: userId,
-            name: userData.name,
-            role: userData.role,
-          });
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userData.name || userMetadata?.name,
-            role: userData.role ?? "user",
-          });
-        } else {
-          // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-          console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용:", dbError);
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userMetadata?.name,
-            role: userMetadata?.role ?? "user",
-          });
-        }
-      } catch (error: any) {
-        if (error?.message === "DB_TIMEOUT" && retryCount < maxRetries) {
-          // 타임아웃 발생 + 재시도 가능
-          console.warn(`[AuthContext] 타임아웃 (3초) - 1초 후 재시도...`);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          return loadUserFromDB(userId, userEmail, userMetadata, retryCount + 1);
-        } else {
-          // 재시도 실패 또는 다른 에러 → fallback 사용
-          console.error("[AuthContext] users 테이블 조회 최종 실패 - fallback 사용:", error);
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userMetadata?.name,
-            role: userMetadata?.role ?? "user",
-          });
-        }
-      }
-    };
-
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log("[AuthContext] 인증 상태 변경:", event, session ? "세션 있음" : "세션 없음");
+        console.log(
+          "[AuthContext] 인증 상태 변경:",
+          event,
+          session ? "세션 있음" : "세션 없음"
+        );
         clearTimeout(loadingTimeout);
-
-        // ✅ INITIAL_SESSION은 스킵 (이미 SIGNED_IN에서 처리했으므로)
-        if (event === "INITIAL_SESSION" && initialLoadComplete) {
-          console.log("[AuthContext] INITIAL_SESSION 스킵 (이미 로드됨)");
-          return;
-        }
 
         try {
           if (session?.user) {
@@ -217,18 +153,98 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               email: session.user.email,
             });
 
-            // users 테이블에서 role 가져오기
-            await loadUserFromDB(
-              session.user.id,
-              session.user.email ?? "",
-              session.user.user_metadata
-            );
+            // public.users 테이블에서 role 가져오기 (3초 타임아웃)
+            console.log("[AuthContext] users 테이블 조회 시작...");
+
+            const dbQueryPromise = supabase
+              .from("users")
+              .select("*")
+              .eq("id", session.user.id)
+              .single();
+
+            const dbTimeoutPromise = new Promise((_, reject) => {
+              setTimeout(() => {
+                console.error("[AuthContext] users 테이블 조회 타임아웃 (3초)");
+                reject(new Error("Database query timeout"));
+              }, 3000);
+            });
+
+            let userData = null;
+            let dbError = null;
+
+            try {
+              const result = (await Promise.race([
+                dbQueryPromise,
+                dbTimeoutPromise,
+              ])) as any;
+              userData = result.data;
+              dbError = result.error;
+            } catch (timeoutError) {
+              console.error(
+                "[AuthContext] users 테이블 조회 실패 (타임아웃 또는 에러):",
+                timeoutError
+              );
+              dbError = timeoutError;
+            }
+
+            console.log("[AuthContext] users 테이블 조회 결과:", {
+              error: dbError,
+              data: userData,
+            });
+
+            if (dbError) {
+              console.error("[AuthContext] users 테이블 조회 오류");
+              if (dbError instanceof Error) {
+                console.error("[AuthContext] 오류 메시지:", dbError.message);
+              } else if (dbError && typeof dbError === "object") {
+                console.error("[AuthContext] 오류 상세:", {
+                  message: (dbError as any).message,
+                  code: (dbError as any).code,
+                });
+              }
+            }
+
+            if (!dbError && userData) {
+              console.log("[AuthContext] 사용자 정보 로드 성공:", {
+                id: session.user.id,
+                role: userData.role,
+              });
+              setUser({
+                id: session.user.id,
+                email: session.user.email ?? "",
+                name: userData.name || session.user.user_metadata?.name,
+                role: userData.role ?? "user",
+              });
+            } else {
+              // DB에 레코드가 없으면 user_metadata 사용 (fallback)
+              console.warn(
+                "[AuthContext] users 테이블 레코드 없음 - fallback 사용"
+              );
+              setUser({
+                id: session.user.id,
+                email: session.user.email ?? "",
+                name: session.user.user_metadata?.name,
+                role: session.user.user_metadata?.role ?? "user",
+              });
+            }
           } else {
             console.log("[AuthContext] 세션 없음 - 로그아웃");
             setUser(null);
           }
         } catch (error: unknown) {
-          console.error("[AuthContext] 인증 상태 변경 처리 중 오류 (catch):", error);
+          console.error(
+            "[AuthContext] 인증 상태 변경 처리 중 오류 (catch):",
+            error
+          );
+          if (error instanceof Error) {
+            console.error("[AuthContext] 오류 상세:", {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+            });
+          } else {
+            console.error("[AuthContext] 오류 상세 (unknown):", String(error));
+          }
           setUser(null);
         } finally {
           console.log("[AuthContext] finally 블록 - 로딩 완료");
