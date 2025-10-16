@@ -119,7 +119,9 @@ export default function QuestionForm() {
           )}
         </div>
         <div className={styles.inputGroup}>
+          <label htmlFor="content" className={styles.inputLabel}>질문 내용</label>
           <textarea
+            id="content"
             {...register("content")}
             placeholder="질문 내용을 자세히 작성해주세요..."
             className={styles.contentInput}

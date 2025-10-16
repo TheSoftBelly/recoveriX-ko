@@ -181,9 +181,11 @@ export default function SignupPage() {
 
               {/* 개인정보처리방침 동의 */}
               <div className={styles.termsGroup}>
-                <label className={styles.checkboxLabel}>
+                <label htmlFor="agreeToPrivacy" className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
+                    id="agreeToPrivacy"
+                    name="agreeToPrivacy"
                     checked={agreeToPrivacy}
                     onChange={(e) => setAgreeToPrivacy(e.target.checked)}
                     className={styles.checkbox}

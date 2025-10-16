@@ -78,8 +78,10 @@ export default function ReplyEditor({
   return (
     <form onSubmit={handleSubmit} className={styles.replyForm}>
       <div className={styles.formGroup}>
-        <label className={styles.label}>관리자 답변</label>
+        <label htmlFor="replyContent" className={styles.label}>관리자 답변</label>
         <textarea
+          id="replyContent"
+          name="replyContent"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="답변을 입력하세요..."

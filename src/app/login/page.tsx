@@ -120,16 +120,18 @@ export default function LoginPage() {
 
               {/* 로그인 옵션 */}
               <div className={styles.loginOptions}>
-                <label className={styles.checkboxLabel}>
+                <div className={styles.checkboxLabel}>
                   <input
                     type="checkbox"
+                    id="rememberMe"
+                    name="rememberMe"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className={styles.checkbox}
                     disabled={isLoading}
                   />
-                  <span className={styles.checkboxText}>로그인 상태 유지</span>
-                </label>
+                  <label htmlFor="rememberMe" className={styles.checkboxText}>로그인 상태 유지</label>
+                </div>
                 <Link href="/forgot-password" className={styles.forgotPassword}>
                   비밀번호를 잊으셨나요?
                 </Link>
