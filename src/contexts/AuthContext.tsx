@@ -128,49 +128,43 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const loadUserFromDB = async (userId: string, userEmail: string, userMetadata: any) => {
       console.log("[AuthContext] users 테이블 조회 시작...");
 
-      const dbQueryPromise = supabase
-        .from("users")
-        .select("*")
-        .eq("id", userId)
-        .single();
-
-      const dbTimeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
-          reject(new Error("Database query timeout"));
-        }, 3000); // ✅ 3초로 증가
-      });
-
-      let userData = null;
-      let dbError = null;
-
       try {
-        const result = await Promise.race([dbQueryPromise, dbTimeoutPromise]) as any;
-        userData = result.data;
-        dbError = result.error;
-      } catch (timeoutError) {
-        console.error("[AuthContext] users 테이블 조회 타임아웃 (3초):", timeoutError);
-        dbError = timeoutError;
-      }
+        const { data: userData, error: dbError } = await supabase
+          .from("users")
+          .select("*")
+          .eq("id", userId)
+          .single();
 
-      console.log("[AuthContext] users 테이블 조회 결과:", {
-        error: dbError,
-        data: userData,
-      });
+        console.log("[AuthContext] users 테이블 조회 결과:", {
+          error: dbError,
+          data: userData,
+        });
 
-      if (!dbError && userData) {
-        console.log("[AuthContext] 사용자 정보 로드 성공:", {
-          id: userId,
-          role: userData.role,
-        });
-        setUser({
-          id: userId,
-          email: userEmail,
-          name: userData.name || userMetadata?.name,
-          role: userData.role ?? "user",
-        });
-      } else {
-        // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-        console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용");
+        if (!dbError && userData) {
+          console.log("[AuthContext] 사용자 정보 로드 성공:", {
+            id: userId,
+            name: userData.name,
+            role: userData.role,
+          });
+          setUser({
+            id: userId,
+            email: userEmail,
+            name: userData.name || userMetadata?.name,
+            role: userData.role ?? "user",
+          });
+        } else {
+          // DB에 레코드가 없으면 user_metadata 사용 (fallback)
+          console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용:", dbError);
+          setUser({
+            id: userId,
+            email: userEmail,
+            name: userMetadata?.name,
+            role: userMetadata?.role ?? "user",
+          });
+        }
+      } catch (error) {
+        console.error("[AuthContext] users 테이블 조회 중 예외 발생:", error);
+        // 에러 발생 시에도 fallback 사용
         setUser({
           id: userId,
           email: userEmail,
