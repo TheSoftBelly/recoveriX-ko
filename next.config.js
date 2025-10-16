@@ -21,7 +21,7 @@ const nextConfig = {
       connect-src 'self' https://akwisehgtrmytjhcilby.supabase.co wss://akwisehgtrmytjhcilby.supabase.co;
       media-src 'self' https://recoverix.com;
       object-src 'none';
-      frame-src 'none';
+      frame-src https://www.youtube.com;
       base-uri 'self';
       form-action 'self';
       frame-ancestors 'none';
