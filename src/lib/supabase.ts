@@ -29,7 +29,7 @@ export const createSupabaseClient = () => {
     auth: {
       flowType: "pkce",
       autoRefreshToken: true,
-      detectSessionInUrl: true,
+      detectSessionInUrl: true, // URL의 토큰/code 자동 감지 (OAuth, 비밀번호 재설정 등)
       persistSession: true,
       storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     },

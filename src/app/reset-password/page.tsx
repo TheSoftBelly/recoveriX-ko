@@ -17,40 +17,58 @@ export default function ResetPasswordPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // URL에서 토큰 확인 (hash와 query params 모두 체크)
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const queryParams = new URLSearchParams(window.location.search);
+    const initializeReset = async () => {
+      // URL 파라미터 확인
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const queryParams = new URLSearchParams(window.location.search);
 
-    const accessToken = hashParams.get("access_token") || queryParams.get("access_token");
-    const type = hashParams.get("type") || queryParams.get("type");
-    const errorDescription = hashParams.get("error_description") || queryParams.get("error_description");
+      const code = queryParams.get("code");
+      const errorDescription = hashParams.get("error_description") || queryParams.get("error_description");
 
-    console.log("Reset Password - Full URL:", window.location.href);
-    console.log("Reset Password - URL Hash:", window.location.hash);
-    console.log("Reset Password - URL Search:", window.location.search);
-    console.log("Reset Password - Access Token:", accessToken ? "존재함" : "없음");
-    console.log("Reset Password - Type:", type);
-    console.log("Reset Password - Error Description:", errorDescription);
+      console.log("Reset Password - Full URL:", window.location.href);
+      console.log("Reset Password - Code:", code ? "존재함" : "없음");
+      console.log("Reset Password - Error:", errorDescription);
 
-    // Supabase에서 에러를 반환한 경우
-    if (errorDescription) {
-      setError(`비밀번호 재설정 링크가 유효하지 않습니다: ${errorDescription}`);
-      console.error("Reset Password - Supabase error:", errorDescription);
-      return;
-    }
+      // Supabase에서 에러를 반환한 경우
+      if (errorDescription) {
+        setError(`비밀번호 재설정 링크가 유효하지 않습니다: ${errorDescription}`);
+        console.error("Reset Password - Supabase error:", errorDescription);
+        return;
+      }
 
-    // type이 recovery 또는 없을 때 허용 (Supabase 버전에 따라 다름)
-    if (!accessToken) {
-      setError("유효하지 않은 비밀번호 재설정 링크입니다. 비밀번호 찾기를 다시 시도해주세요.");
-      console.error("Reset Password - No access token found");
-    } else if (type && type !== "recovery") {
-      setError("유효하지 않은 비밀번호 재설정 링크입니다.");
-      console.error("Reset Password - Invalid type:", type);
-    } else {
-      // 토큰이 있으면 세션 자동 설정 (Supabase가 처리)
-      console.log("Reset Password - Token valid, ready to reset password");
-    }
-  }, []);
+      // code가 있으면 Supabase가 자동으로 처리 (detectSessionInUrl: true)
+      // 1-2초 기다린 후 세션 확인
+      if (code) {
+        console.log("Reset Password - Code detected, waiting for auto session creation...");
+
+        // 잠시 대기 (Supabase가 자동으로 세션 생성)
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // 세션 확인
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+          console.log("Reset Password - Session created successfully, ready to reset password");
+          return;
+        } else {
+          console.error("Reset Password - Session not created after code exchange");
+          setError("비밀번호 재설정 세션을 생성할 수 없습니다.");
+          return;
+        }
+      }
+
+      // code도 없고 세션도 없으면 에러
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setError("유효하지 않은 비밀번호 재설정 링크입니다. 비밀번호 찾기를 다시 시도해주세요.");
+        console.error("Reset Password - No code or session found");
+      } else {
+        console.log("Reset Password - Existing session found, ready to reset password");
+      }
+    };
+
+    initializeReset();
+  }, [supabase]);
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
