@@ -124,10 +124,72 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }, 2000);
 
+    // 사용자 정보 로드 함수 (중복 제거)
+    const loadUserFromDB = async (userId: string, userEmail: string, userMetadata: any) => {
+      console.log("[AuthContext] users 테이블 조회 시작...");
+
+      const dbQueryPromise = supabase
+        .from("users")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+      const dbTimeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          reject(new Error("Database query timeout"));
+        }, 3000); // ✅ 3초로 증가
+      });
+
+      let userData = null;
+      let dbError = null;
+
+      try {
+        const result = await Promise.race([dbQueryPromise, dbTimeoutPromise]) as any;
+        userData = result.data;
+        dbError = result.error;
+      } catch (timeoutError) {
+        console.error("[AuthContext] users 테이블 조회 타임아웃 (3초):", timeoutError);
+        dbError = timeoutError;
+      }
+
+      console.log("[AuthContext] users 테이블 조회 결과:", {
+        error: dbError,
+        data: userData,
+      });
+
+      if (!dbError && userData) {
+        console.log("[AuthContext] 사용자 정보 로드 성공:", {
+          id: userId,
+          role: userData.role,
+        });
+        setUser({
+          id: userId,
+          email: userEmail,
+          name: userData.name || userMetadata?.name,
+          role: userData.role ?? "user",
+        });
+      } else {
+        // DB에 레코드가 없으면 user_metadata 사용 (fallback)
+        console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용");
+        setUser({
+          id: userId,
+          email: userEmail,
+          name: userMetadata?.name,
+          role: userMetadata?.role ?? "user",
+        });
+      }
+    };
+
     const { data: listener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log("[AuthContext] 인증 상태 변경:", event, session ? "세션 있음" : "세션 없음");
         clearTimeout(loadingTimeout);
+
+        // ✅ INITIAL_SESSION은 스킵 (이미 SIGNED_IN에서 처리했으므로)
+        if (event === "INITIAL_SESSION" && initialLoadComplete) {
+          console.log("[AuthContext] INITIAL_SESSION 스킵 (이미 로드됨)");
+          return;
+        }
 
         try {
           if (session?.user) {
@@ -136,87 +198,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               email: session.user.email,
             });
 
-            // public.users 테이블에서 role 가져오기 (3초 타임아웃)
-            console.log("[AuthContext] users 테이블 조회 시작...");
-
-            const dbQueryPromise = supabase
-              .from("users")
-              .select("*")
-              .eq("id", session.user.id)
-              .single();
-
-            const dbTimeoutPromise = new Promise((_, reject) => {
-              setTimeout(() => {
-                console.error("[AuthContext] users 테이블 조회 타임아웃 (1초) - INITIAL_SESSION에서 재시도");
-                reject(new Error("Database query timeout"));
-              }, 1000);
-            });
-
-            let userData = null;
-            let dbError = null;
-
-            try {
-              const result = await Promise.race([dbQueryPromise, dbTimeoutPromise]) as any;
-              userData = result.data;
-              dbError = result.error;
-            } catch (timeoutError) {
-              console.error("[AuthContext] users 테이블 조회 실패 (타임아웃 또는 에러):", timeoutError);
-              dbError = timeoutError;
-            }
-
-            console.log("[AuthContext] users 테이블 조회 결과:", {
-              error: dbError,
-              data: userData,
-            });
-
-            if (dbError) {
-              console.error("[AuthContext] users 테이블 조회 오류");
-              if (dbError instanceof Error) {
-                console.error("[AuthContext] 오류 메시지:", dbError.message);
-              } else if (dbError && typeof dbError === 'object') {
-                console.error("[AuthContext] 오류 상세:", {
-                  message: (dbError as any).message,
-                  code: (dbError as any).code,
-                });
-              }
-            }
-
-            if (!dbError && userData) {
-              console.log("[AuthContext] 사용자 정보 로드 성공:", {
-                id: session.user.id,
-                role: userData.role,
-              });
-              setUser({
-                id: session.user.id,
-                email: session.user.email ?? "",
-                name: userData.name || session.user.user_metadata?.name,
-                role: userData.role ?? "user",
-              });
-            } else {
-              // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-              console.warn("[AuthContext] users 테이블 레코드 없음 - fallback 사용");
-              setUser({
-                id: session.user.id,
-                email: session.user.email ?? "",
-                name: session.user.user_metadata?.name,
-                role: session.user.user_metadata?.role ?? "user",
-              });
-            }
+            // users 테이블에서 role 가져오기
+            await loadUserFromDB(
+              session.user.id,
+              session.user.email ?? "",
+              session.user.user_metadata
+            );
           } else {
             console.log("[AuthContext] 세션 없음 - 로그아웃");
             setUser(null);
           }
         } catch (error: unknown) {
           console.error("[AuthContext] 인증 상태 변경 처리 중 오류 (catch):", error);
-          if (error instanceof Error) {
-            console.error("[AuthContext] 오류 상세:", {
-              name: error.name,
-              message: error.message,
-              stack: error.stack,
-            });
-          } else {
-            console.error("[AuthContext] 오류 상세 (unknown):", String(error));
-          }
           setUser(null);
         } finally {
           console.log("[AuthContext] finally 블록 - 로딩 완료");
