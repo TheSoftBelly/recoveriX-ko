@@ -96,9 +96,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let hasSession = false;
 
     try {
-      // Supabase SSR은 여러 키를 사용할 수 있으므로 모든 키 확인
+      // localStorage의 모든 키 출력 (디버깅용)
       const keys = Object.keys(localStorage);
-      const supabaseKeys = keys.filter(k => k.startsWith('sb-') && k.includes('auth'));
+      console.log("[AuthContext] localStorage 전체 키:", keys);
+
+      const supabaseKeys = keys.filter(k => k.startsWith('sb-'));
+      console.log("[AuthContext] sb- 키:", supabaseKeys);
 
       if (supabaseKeys.length > 0) {
         console.log("[AuthContext] Supabase 세션 키 발견:", supabaseKeys.length, "개");
@@ -128,17 +131,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         try {
           if (session?.user) {
+            console.log("[AuthContext] 세션 사용자:", {
+              id: session.user.id,
+              email: session.user.email,
+            });
+
             // public.users 테이블에서 role 가져오기
+            console.log("[AuthContext] users 테이블 조회 시작...");
             const { data: userData, error: dbError } = await supabase
               .from("users")
               .select("*")
               .eq("id", session.user.id)
               .single();
 
+            console.log("[AuthContext] users 테이블 조회 결과:", {
+              error: dbError,
+              data: userData,
+            });
+
             if (dbError) {
               console.error("[AuthContext] users 테이블 조회 오류:", {
                 message: dbError.message,
                 code: dbError.code,
+                details: dbError.details,
+                hint: dbError.hint,
               });
             }
 
@@ -168,9 +184,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(null);
           }
         } catch (error) {
-          console.error("[AuthContext] 인증 상태 변경 처리 중 오류:", error);
+          console.error("[AuthContext] 인증 상태 변경 처리 중 오류 (catch):", error);
+          console.error("[AuthContext] 오류 상세:", {
+            name: error?.name,
+            message: error?.message,
+            stack: error?.stack,
+          });
           setUser(null);
         } finally {
+          console.log("[AuthContext] finally 블록 - 로딩 완료");
           setLoading(false);
           initialLoadComplete = true;
         }
