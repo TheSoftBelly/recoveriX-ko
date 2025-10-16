@@ -91,30 +91,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("[AuthContext] 세션 초기화 시작 (onAuthStateChange 방식)");
 
-    // 초기 상태: localStorage 체크로 빠르게 판단
+    // 초기 상태: localStorage에서 Supabase 토큰 확인
     let initialLoadComplete = false;
+    let hasSession = false;
+
     try {
-      const storedSession = localStorage.getItem('sb-akwisehgtrmytjhcilby-auth-token');
-      if (!storedSession) {
-        console.log("[AuthContext] 저장된 세션 없음 - 로그아웃 상태");
-        setUser(null);
-        setLoading(false);
-        initialLoadComplete = true;
+      // Supabase SSR은 여러 키를 사용할 수 있으므로 모든 키 확인
+      const keys = Object.keys(localStorage);
+      const supabaseKeys = keys.filter(k => k.startsWith('sb-') && k.includes('auth'));
+
+      if (supabaseKeys.length > 0) {
+        console.log("[AuthContext] Supabase 세션 키 발견:", supabaseKeys.length, "개");
+        hasSession = true;
       } else {
-        console.log("[AuthContext] 저장된 세션 발견 - onAuthStateChange 대기");
+        console.log("[AuthContext] Supabase 세션 키 없음");
       }
     } catch (e) {
       console.error("[AuthContext] localStorage 접근 실패:", e);
-      setUser(null);
-      setLoading(false);
-      initialLoadComplete = true;
     }
 
-    // 2초 후 강제로 로딩 완료 (세션이 로드되지 않아도)
+    // 2초 후 강제로 로딩 완료 (onAuthStateChange가 발생하지 않으면)
     const loadingTimeout = setTimeout(() => {
       if (!initialLoadComplete) {
         console.warn("[AuthContext] 2초 타임아웃 - 강제 로딩 완료");
         setLoading(false);
+        if (!hasSession) {
+          setUser(null);
+        }
       }
     }, 2000);
 
