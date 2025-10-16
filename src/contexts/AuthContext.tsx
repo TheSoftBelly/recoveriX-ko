@@ -137,94 +137,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }, 2000);
 
-    // 사용자 정보 로드 함수 (타임아웃 + 재시도)
-    const loadUserFromDB = async (
+    // ✅ JWT 기반 사용자 정보 로드 (DB 조회 제거)
+    const loadUserFromJWT = (
       userId: string,
       userEmail: string,
-      userMetadata: any,
-      retryCount = 0
+      userMetadata: any
     ) => {
-      const maxRetries = 2;
-      const timeoutMs = 3000;
+      console.log("[AuthContext] JWT에서 사용자 정보 로드");
 
-      console.log(
-        `[AuthContext] users 테이블 조회 시작... (시도 ${retryCount + 1}/${
-          maxRetries + 1
-        })`
-      );
+      const userData = {
+        id: userId,
+        email: userEmail,
+        name: userMetadata?.name || "사용자",
+        role: (userMetadata?.role ?? "user") as "user" | "admin",
+      };
 
-      try {
-        // 3초 타임아웃 적용
-        const dbQueryPromise = supabase
-          .from("users")
-          .select("*")
-          .eq("id", userId)
-          .single();
+      console.log("[AuthContext] 사용자 정보 로드 성공 (JWT):", {
+        name: userData.name,
+        role: userData.role,
+      });
 
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("DB_TIMEOUT")), timeoutMs)
-        );
-
-        const { data: userData, error: dbError } = (await Promise.race([
-          dbQueryPromise,
-          timeoutPromise,
-        ])) as any;
-
-        console.log("[AuthContext] users 테이블 조회 결과:", {
-          error: dbError,
-          data: userData,
-        });
-
-        if (!dbError && userData) {
-          console.log("[AuthContext] 사용자 정보 로드 성공:", {
-            id: userId,
-            name: userData.name,
-            role: userData.role,
-          });
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userData.name || userMetadata?.name,
-            role: userData.role ?? "user",
-          });
-        } else {
-          // DB에 레코드가 없으면 user_metadata 사용 (fallback)
-          console.warn(
-            "[AuthContext] users 테이블 레코드 없음 - fallback 사용:",
-            dbError
-          );
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userMetadata?.name,
-            role: userMetadata?.role ?? "user",
-          });
-        }
-      } catch (error: any) {
-        if (error?.message === "DB_TIMEOUT" && retryCount < maxRetries) {
-          // 타임아웃 발생 + 재시도 가능
-          console.warn(`[AuthContext] 타임아웃 (3초) - 1초 후 재시도...`);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          return loadUserFromDB(
-            userId,
-            userEmail,
-            userMetadata,
-            retryCount + 1
-          );
-        } else {
-          // 재시도 실패 또는 다른 에러 → fallback 사용
-          console.error(
-            "[AuthContext] users 테이블 조회 최종 실패 - fallback 사용:",
-            error
-          );
-          setUser({
-            id: userId,
-            email: userEmail,
-            name: userMetadata?.name,
-            role: userMetadata?.role ?? "user",
-          });
-        }
-      }
+      setUser(userData);
     };
 
     const { data: listener } = supabase.auth.onAuthStateChange(
@@ -249,8 +182,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               email: session.user.email,
             });
 
-            // users 테이블에서 role 가져오기
-            await loadUserFromDB(
+            // ✅ JWT에서 사용자 정보 로드 (DB 조회 없음)
+            loadUserFromJWT(
               session.user.id,
               session.user.email ?? "",
               session.user.user_metadata
@@ -281,29 +214,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
 
-      // users 테이블에서 role 가져오기
-      if (data.user) {
-        const { data: userData, error: dbError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("id", data.user.id)
-          .single();
-
-        if (!dbError && userData) {
-          setUser({
-            id: data.user.id,
-            email: data.user.email!,
-            name: userData.name || data.user.user_metadata?.name,
-            role: userData.role || "user",
-          });
-        }
-      }
+      // ✅ onAuthStateChange가 자동으로 JWT에서 사용자 정보 로드
+      // DB 조회 불필요!
     } catch (error) {
       throw new Error(translateAuthError(error));
     }
