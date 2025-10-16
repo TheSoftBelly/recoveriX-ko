@@ -9,7 +9,7 @@ export const createSupabaseServerClient = async () => {
     throw new Error("Missing Supabase environment variables");
   }
 
-  return createServerClient<Database>(supabaseUrl, supabaseAnonKey, {
+  const options = {
     cookies: {
       getAll() {
         return [];
@@ -18,13 +18,17 @@ export const createSupabaseServerClient = async () => {
         // Server-side cookie handling is not available in this version
       },
     },
-    cookieOptions: {
-      domain: '.recoverix.co.kr',
-      path: '/',
-      sameSite: 'lax',
-      secure: true
-    },
-  });
+    ...(process.env.NODE_ENV === 'production' && {
+      cookieOptions: {
+        domain: '.recoverix.co.kr',
+        path: '/',
+        sameSite: 'lax',
+        secure: true
+      },
+    }),
+  };
+
+  return createServerClient<Database>(supabaseUrl, supabaseAnonKey, options as any);
 };
 
 // 추가적인 유틸리티 함수들

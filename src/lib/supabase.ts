@@ -8,20 +8,24 @@ export const createSupabaseClient = () => {
     throw new Error("Missing Supabase environment variables");
   }
 
-  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+  const options = {
     auth: {
       flowType: "pkce",
       autoRefreshToken: true,
       detectSessionInUrl: true,
       persistSession: true,
     },
-    cookieOptions: {
-      domain: '.recoverix.co.kr',
-      path: '/',
-      sameSite: 'lax',
-      secure: true
-    },
-  });
+    ...(process.env.NODE_ENV === 'production' && {
+      cookieOptions: {
+        domain: '.recoverix.co.kr',
+        path: '/',
+        sameSite: 'lax',
+        secure: true
+      },
+    }),
+  };
+
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, options as any);
 };
 
 export type Database = {
