@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
 
 export async function POST(request: Request) {
   try {
@@ -33,24 +34,14 @@ export async function POST(request: Request) {
 
     const subjectText = subjectMap[subject] || subject;
 
-    // Nodemailer 설정
-    const nodemailer = require("nodemailer");
+    // Resend 초기화
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    // SMTP 설정 (환경변수에서 가져오기)
-    const transporter = nodemailer.createTransporter({
-      host: process.env.SMTP_HOST || "smtp.naver.com",
-      port: parseInt(process.env.SMTP_PORT || "587"),
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER || process.env.SMTP_FROM,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    });
-
-    // 이메일 내용 구성
-    const mailOptions = {
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: "jjoon1024@naver.com",
+    // 이메일 전송
+    const { data, error } = await resend.emails.send({
+      from: "recoveriX <onboarding@resend.dev>",
+      to: ["jjoon102426@gmail.com"],
+      replyTo: email,
       subject: `[recoveriX 문의] ${subjectText} - ${name}`,
       html: `
         <div style="font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
@@ -99,11 +90,17 @@ ${message}
           </div>
         </div>
       `,
-      replyTo: email, // 답장 시 문의자 이메일로 자동 설정
-    };
+    });
 
-    // 이메일 전송
-    await transporter.sendMail(mailOptions);
+    if (error) {
+      console.error("Resend 전송 오류:", error);
+      return NextResponse.json(
+        { error: "이메일 전송에 실패했습니다." },
+        { status: 500 }
+      );
+    }
+
+    console.log("이메일 전송 성공:", data);
 
     return NextResponse.json(
       { success: true, message: "문의가 성공적으로 전송되었습니다." },
@@ -112,16 +109,9 @@ ${message}
   } catch (error: any) {
     console.error("이메일 전송 오류:", error);
 
-    // 에러 타입에 따라 다른 메시지 반환
-    let errorMessage = "문의 전송 중 오류가 발생했습니다.";
-
-    if (error.code === "EAUTH") {
-      errorMessage = "이메일 인증에 실패했습니다. 관리자에게 문의해주세요.";
-    } else if (error.code === "ECONNECTION") {
-      errorMessage =
-        "이메일 서버에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.";
-    }
-
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json(
+      { error: "문의 전송 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
 }
