@@ -18,6 +18,12 @@ export const createSupabaseServerClient = async () => {
         // Server-side cookie handling is not available in this version
       },
     },
+    cookieOptions: {
+      domain: '.recoverix.co.kr',
+      path: '/',
+      sameSite: 'lax',
+      secure: true
+    },
   });
 };
 

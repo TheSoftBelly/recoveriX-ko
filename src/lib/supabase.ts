@@ -15,6 +15,12 @@ export const createSupabaseClient = () => {
       detectSessionInUrl: true,
       persistSession: true,
     },
+    cookieOptions: {
+      domain: '.recoverix.co.kr',
+      path: '/',
+      sameSite: 'lax',
+      secure: true
+    },
   });
 };
 
