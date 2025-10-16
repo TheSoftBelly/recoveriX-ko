@@ -17,18 +17,31 @@ export default function ResetPasswordPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // URL 해시에서 access_token 확인
+    // URL에서 토큰 확인 (hash와 query params 모두 체크)
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get("access_token");
-    const type = hashParams.get("type");
+    const queryParams = new URLSearchParams(window.location.search);
 
+    const accessToken = hashParams.get("access_token") || queryParams.get("access_token");
+    const type = hashParams.get("type") || queryParams.get("type");
+    const errorDescription = hashParams.get("error_description") || queryParams.get("error_description");
+
+    console.log("Reset Password - Full URL:", window.location.href);
     console.log("Reset Password - URL Hash:", window.location.hash);
-    console.log("Reset Password - Access Token:", accessToken);
+    console.log("Reset Password - URL Search:", window.location.search);
+    console.log("Reset Password - Access Token:", accessToken ? "존재함" : "없음");
     console.log("Reset Password - Type:", type);
+    console.log("Reset Password - Error Description:", errorDescription);
+
+    // Supabase에서 에러를 반환한 경우
+    if (errorDescription) {
+      setError(`비밀번호 재설정 링크가 유효하지 않습니다: ${errorDescription}`);
+      console.error("Reset Password - Supabase error:", errorDescription);
+      return;
+    }
 
     // type이 recovery 또는 없을 때 허용 (Supabase 버전에 따라 다름)
     if (!accessToken) {
-      setError("유효하지 않은 비밀번호 재설정 링크입니다.");
+      setError("유효하지 않은 비밀번호 재설정 링크입니다. 비밀번호 찾기를 다시 시도해주세요.");
       console.error("Reset Password - No access token found");
     } else if (type && type !== "recovery") {
       setError("유효하지 않은 비밀번호 재설정 링크입니다.");
