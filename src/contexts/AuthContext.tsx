@@ -78,9 +78,14 @@ const translateAuthError = (error: any): string => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const supabase = createSupabaseClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Supabase 클라이언트를 useMemo로 생성 (재생성 방지)
+  const supabase = React.useMemo(() => {
+    console.log("[AuthProvider] Supabase 클라이언트 생성");
+    return createSupabaseClient();
+  }, []);
 
   // 세션 초기화
   useEffect(() => {
@@ -90,18 +95,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         console.log("[AuthContext] 세션 초기화 시작");
 
-        // 10초 타임아웃 설정
+        // 15초 타임아웃 설정 (10초에서 증가)
         const timeoutPromise = new Promise((_, reject) => {
-          timeoutId = setTimeout(() => reject(new Error("Session timeout")), 10000);
+          timeoutId = setTimeout(() => {
+            console.error("[AuthContext] getSession() 타임아웃 (15초 초과)");
+            reject(new Error("Session timeout"));
+          }, 15000);
         });
 
+        console.log("[AuthContext] getSession() 호출 시작...");
         const sessionPromise = supabase.auth.getSession();
+
+        const result = await Promise.race([sessionPromise, timeoutPromise]) as any;
+        console.log("[AuthContext] getSession() 응답 받음:", result ? "데이터 있음" : "데이터 없음");
+
+        clearTimeout(timeoutId);
 
         const {
           data: { session },
-        } = await Promise.race([sessionPromise, timeoutPromise]) as any;
-
-        clearTimeout(timeoutId);
+        } = result;
 
         if (session?.user) {
           console.log("[AuthContext] 세션 발견:", session.user.id);

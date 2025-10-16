@@ -4,18 +4,39 @@ export const createSupabaseClient = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+  console.log("[Supabase] 클라이언트 생성 시작", {
+    url: supabaseUrl ? "✓" : "✗",
+    key: supabaseAnonKey ? "✓" : "✗",
+  });
+
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error("Missing Supabase environment variables");
   }
 
-  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+  // 스토리지 접근 가능 여부 확인 (클라이언트에서만)
+  if (typeof window !== 'undefined') {
+    try {
+      const testKey = "__supabase_test__";
+      localStorage.setItem(testKey, "test");
+      localStorage.removeItem(testKey);
+      console.log("[Supabase] localStorage 접근 가능");
+    } catch (e) {
+      console.error("[Supabase] localStorage 접근 불가:", e);
+    }
+  }
+
+  const client = createBrowserClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       flowType: "pkce",
       autoRefreshToken: true,
       detectSessionInUrl: true,
       persistSession: true,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     },
   });
+
+  console.log("[Supabase] 클라이언트 생성 완료");
+  return client;
 };
 
 export type Database = {

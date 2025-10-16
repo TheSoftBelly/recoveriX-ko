@@ -18,7 +18,7 @@ const nextConfig = {
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.youtube.com;
       img-src 'self' blob: data: https:;
       font-src 'self' data: https://fonts.gstatic.com;
-      connect-src 'self' https://akwisehgtrmytjhcilby.supabase.co wss://akwisehgtrmytjhcilby.supabase.co;
+      connect-src 'self' https://akwisehgtrmytjhcilby.supabase.co wss://akwisehgtrmytjhcilby.supabase.co https://*.supabase.co wss://*.supabase.co;
       media-src 'self' https://recoverix.com;
       object-src 'none';
       frame-src https://www.youtube.com;
@@ -34,6 +34,10 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value: cspHeader,
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'storage-access=*, cookies=*',
           },
         ],
       },
