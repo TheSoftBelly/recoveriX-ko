@@ -16,16 +16,13 @@ const ITEMS_PER_PAGE = 10;
 export const runtime = "nodejs"; // Supabase Node API 사용
 export const dynamic = "force-dynamic"; // searchParams 관련 타입 충돌 방지
 
-const QnAPage = async ({ searchParams }: { searchParams?: any }) => {
-  const q = typeof searchParams?.q === "string" ? searchParams.q : "";
+const QnAPage = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
+  const q = (searchParams?.q as string) ?? "";
   const filter =
     searchParams?.filter === "pending" || searchParams?.filter === "answered"
       ? searchParams.filter
       : "all";
-  const currentPage = parseInt(
-    typeof searchParams?.page === "string" ? searchParams.page : "1",
-    10
-  );
+  const currentPage = parseInt((searchParams?.page as string) ?? "1", 10);
 
   const cookieStore = await cookies();
 
