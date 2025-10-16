@@ -11,6 +11,20 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "script-src 'self' 'unsafe-eval' 'unsafe-inline' https:;",
+          },
+        ],
+      },
+    ]
+  },
+
   images: {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
