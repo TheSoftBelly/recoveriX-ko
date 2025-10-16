@@ -250,6 +250,7 @@
   color: #1a1a1a;
   background: #ffffff;
   transition: all 0.2s ease;
+  box-sizing: border-box; // ✅ 추가
 
   &:focus {
     outline: none;
@@ -268,8 +269,13 @@
   }
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 15px;
     padding: 10px 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 10px 12px;
   }
 }
 
@@ -284,6 +290,7 @@
   background: #ffffff;
   resize: vertical;
   transition: all 0.2s ease;
+  box-sizing: border-box; // ✅ 추가
 
   &:focus {
     outline: none;
@@ -302,8 +309,13 @@
   }
 
   @media (max-width: 768px) {
-    font-size: 14px;
+    font-size: 15px;
     padding: 10px 14px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+    padding: 10px 12px;
   }
 }
 

@@ -81,6 +81,7 @@
 }
 
 .input {
+  width: 100%; // ✅ 추가
   padding: 12px;
   border: 1px solid #cccccc;
   border-radius: 4px;
@@ -88,6 +89,7 @@
   font-family: "Inter", sans-serif;
   font-size: 14px;
   color: #000000;
+  box-sizing: border-box; // ✅ 추가
 
   &::placeholder {
     color: #999999;
@@ -102,6 +104,12 @@
   &[disabled] {
     background-color: #eee;
     cursor: not-allowed;
+  }
+
+  // ✅ 모바일 반응형 개선
+  @media (max-width: 480px) {
+    font-size: 13px;
+    padding: 10px;
   }
 }
 

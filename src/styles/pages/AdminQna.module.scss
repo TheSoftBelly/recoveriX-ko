@@ -63,7 +63,11 @@
 
   @media (min-width: 768px) {
     width: auto;
-    min-width: 300px;
+    max-width: 350px; // ✅ min-width에서 max-width로 변경
+  }
+
+  @media (min-width: 1024px) {
+    max-width: 400px;
   }
 }
 
@@ -83,6 +87,7 @@
   border-radius: 8px;
   font-size: 0.875rem;
   transition: all 0.2s ease;
+  box-sizing: border-box; // ✅ 추가
 
   &:focus {
     outline: none;
@@ -92,6 +97,12 @@
 
   &::placeholder {
     color: #9ca3af;
+  }
+
+  // ✅ 모바일 반응형 개선
+  @media (max-width: 480px) {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0.5rem 0.5rem 2.25rem;
   }
 }
 

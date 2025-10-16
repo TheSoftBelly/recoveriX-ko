@@ -350,10 +350,11 @@
 
 .searchBox {
   position: relative;
-  width: 400px;
+  width: 100%; // ✅ 기본값을 100%로 변경
+  max-width: 400px; // ✅ 큰 화면에서 최대 너비 제한
 
   @media (max-width: 768px) {
-    width: 100%;
+    max-width: 100%; // ✅ 작은 화면에서는 제한 없음
   }
 }
 
