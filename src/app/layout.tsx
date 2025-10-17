@@ -4,7 +4,7 @@ import "@/styles/globals.scss";
 export const metadata = {
   title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
   description:
-    "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중, 중풍, 편마비, 파킨슨병 환자의 재활과 뇌신경 회복을 돕습니다.",
+    "GTEC 재활기기 공식 파트너. BCI 기술로 뇌졸중, 중풍, 편마비, 파킨슨 환자 뇌신경 회복 지원",
   keywords:
     "recoveriX, GTEC 재활기기, 뉴로솔루션즈, 첨단 뇌재활 장비, BCI 재활치료, 뇌졸중 재활, 중풍 재활, 편마비 재활, 파킨슨 재활, 뇌신경 회복, 뇌졸중 환자 재활, 뇌-컴퓨터 인터페이스",
   authors: [{ name: "g.tec medical engineering GmbH" }],
@@ -22,7 +22,7 @@ export const metadata = {
   openGraph: {
     title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
     description:
-      "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중 환자의 재활과 뇌신경 회복을 돕습니다.",
+      "GTEC 재활기기 공식 파트너. BCI 기술로 뇌졸중, 중풍, 편마비, 파킨슨 환자 뇌신경 회복 지원",
     url: "https://www.recoverix.co.kr",
     siteName: "recoveriX Korea",
     images: [

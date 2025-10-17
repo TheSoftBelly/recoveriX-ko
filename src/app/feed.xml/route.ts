@@ -10,7 +10,7 @@ function generateRSS() {
     {
       title: "recoveriX Korea | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
       description:
-        "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중, 중풍, 편마비, 파킨슨병 환자의 재활과 뇌신경 회복을 돕습니다.",
+        "GTEC 재활기기 공식 파트너. BCI 기술로 뇌졸중, 중풍, 편마비, 파킨슨 환자 뇌신경 회복 지원",
       url: baseUrl,
       date: currentDate,
     },
@@ -58,7 +58,7 @@ function generateRSS() {
   <channel>
     <title>recoveriX Korea</title>
     <link>${baseUrl}</link>
-    <description>첨단 뇌재활 장비 · 뇌졸중 재활 전문 | GTEC 재활기기 공식 파트너</description>
+    <description>GTEC 재활기기 공식 파트너. BCI 기술로 뇌졸중, 중풍, 편마비, 파킨슨 환자 뇌신경 회복 지원</description>
     <language>ko</language>
     <lastBuildDate>${currentDate}</lastBuildDate>
     <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml"/>
