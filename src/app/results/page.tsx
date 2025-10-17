@@ -3,6 +3,22 @@ import Footer from "@/components/layout/Footer";
 import VideoCarousel from "@/components/VideoCarousel";
 import styles from "@/styles/pages/ResultsPage.module.scss";
 import { TrendingUp, Award, Users, Clock, Check } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "치료결과 | recoveriX Korea - 실제 환자 치료 사례 및 임상 데이터",
+  description:
+    "recoveriX 치료를 받은 환자들의 실제 전후 비교 영상과 임상 데이터를 확인하세요. 85% 환자 만족도, 70% 운동 기능 개선률, 700편 이상의 국제 학술 논문으로 검증된 치료 효과입니다.",
+  keywords:
+    "recoveriX 치료 효과, 뇌졸중 재활 결과, 다발성 경화증 치료 사례, 파킨슨 재활 임상 데이터, BCI 치료 성공률, 운동 기능 회복, 상지 운동 개선, 하지 운동 개선",
+  openGraph: {
+    title: "치료결과 | recoveriX Korea - 실제 환자 치료 사례 및 임상 데이터",
+    description:
+      "recoveriX 치료를 받은 환자들의 실제 전후 비교 영상과 임상 데이터를 확인하세요. 85% 환자 만족도, 70% 운동 기능 개선률.",
+    url: "https://www.recoverix.co.kr/results",
+    type: "website",
+  },
+};
 
 export default function ResultsPage() {
   return (

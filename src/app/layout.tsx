@@ -5,7 +5,8 @@ export const metadata = {
   title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
   description:
     "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중, 중풍, 편마비, 파킨슨병 환자의 재활과 뇌신경 회복을 돕습니다.",
-  keywords: "recoveriX, GTEC 재활기기, 뉴로솔루션즈, 첨단 뇌재활 장비, BCI 재활치료, 뇌졸중 재활, 중풍 재활, 편마비 재활, 파킨슨 재활, 뇌신경 회복, 뇌졸중 환자 재활, 뇌-컴퓨터 인터페이스",
+  keywords:
+    "recoveriX, GTEC 재활기기, 뉴로솔루션즈, 첨단 뇌재활 장비, BCI 재활치료, 뇌졸중 재활, 중풍 재활, 편마비 재활, 파킨슨 재활, 뇌신경 회복, 뇌졸중 환자 재활, 뇌-컴퓨터 인터페이스",
   authors: [{ name: "g.tec medical engineering GmbH" }],
   creator: "g.tec medical engineering GmbH",
   publisher: "g.tec medical engineering GmbH",
@@ -14,7 +15,7 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://recoverix.com"),
+  metadataBase: new URL("https://www.recoverix.co.kr"),
   alternates: {
     canonical: "/",
   },
@@ -22,14 +23,14 @@ export const metadata = {
     title: "recoveriX | 첨단 뇌재활 장비 · 뇌졸중 재활 전문",
     description:
       "recoveriX는 GTEC 재활기기와 뉴로솔루션즈의 첨단 BCI 재활치료 솔루션을 제공합니다. 뇌졸중 환자의 재활과 뇌신경 회복을 돕습니다.",
-    url: "https://recoverix.com",
-    siteName: "recoveriX",
+    url: "https://www.recoverix.co.kr",
+    siteName: "recoveriX Korea",
     images: [
       {
         url: "https://recoverix.com/wp-content/uploads/2022/05/recoverix-logo.png",
         width: 1200,
         height: 630,
-        alt: "recoveriX Logo",
+        alt: "recoveriX Korea - 첨단 뇌재활 장비",
       },
     ],
     locale: "ko_KR",
@@ -37,12 +38,15 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "recoveriX - 뇌졸중 및 다발성 경화증 신경 재활",
+    title: "recoveriX Korea - 뇌졸중 및 다발성 경화증 신경 재활",
     description:
       "recoveriX는 뇌가 스스로 재구성하여 잃어버린 운동 기능을 다시 학습하도록 돕는 뇌-컴퓨터 인터페이스 기술입니다.",
     images: [
       "https://recoverix.com/wp-content/uploads/2022/05/recoverix-logo.png",
     ],
+  },
+  other: {
+    "naver-site-verification": "ad8173a349b644bbb3a043eaabc75f26b44c8599",
   },
   robots: {
     index: true,
@@ -56,7 +60,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "zuLNlJ5PF07-5XTogsN9812Qa-paNTrs_FEpFof5SXk",
   },
 };
 

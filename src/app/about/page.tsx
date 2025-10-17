@@ -4,6 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/pages/AboutPage.module.scss";
 import { Award, Globe, Users, TrendingUp, Heart, Zap } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "회사소개 | recoveriX Korea - GTEC 재활기기 공식 파트너",
+  description:
+    "recoveriX를 개발한 g.tec medical engineering GmbH와 국내 공식 파트너 뉴로솔루션즈를 소개합니다. 25년 이상의 BCI 기술 전문성, 60개국 이상 보급, 700편 이상의 연구 논문으로 검증된 첨단 뇌재활 솔루션입니다.",
+  keywords:
+    "g.tec medical engineering, 뉴로솔루션즈, GTEC 재활기기, BCI 기술, 뇌컴퓨터인터페이스, 첨단 뇌재활 장비, 의료기기 인증, GMP 인증",
+  openGraph: {
+    title: "회사소개 | recoveriX Korea - GTEC 재활기기 공식 파트너",
+    description:
+      "recoveriX를 개발한 g.tec medical engineering GmbH와 국내 공식 파트너 뉴로솔루션즈를 소개합니다. 25년 이상의 BCI 기술 전문성.",
+    url: "https://www.recoverix.co.kr/about",
+    type: "website",
+  },
+};
 
 export default function AboutPage() {
   return (
